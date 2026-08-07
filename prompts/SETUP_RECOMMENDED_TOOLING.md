@@ -1,153 +1,109 @@
 # Setup Recommended Tooling
 
-Use this prompt once after cloning/copying Token-Efficient Spec Kit into a project.
+Use this prompt when the default external tooling is not initialized for the active coding harness.
 
 ```text
 Set up the Recommended Tooling Profile for this project.
 
-Recommended profile:
+IMPORTANT:
+Token-Efficient Spec Kit is already the core workflow and MUST remain the canonical orchestration/specification layer.
 
-Token-Efficient Spec Kit
-+ GitHub Spec Kit
-+ Superpowers
-+ Superpowers Implementation Bridge
+Recommended external tooling:
+
+Superpowers
 + gstack
 + Context7
 
-Your job is to install/configure these tools for the CURRENT coding harness and project without creating overlapping planning systems.
+GitHub Spec Kit is NOT part of the default installation.
+Do not install GitHub Spec Kit or the Spec Kit ↔ Superpowers bridge unless Optional Advanced Spec Mode is explicitly requested or the current project/phase has a documented need for formal deep specification.
 
 FIRST read:
-
 1. .specify/memory/constitution.md
 2. integrations/README.md
 3. integrations/PROFILES.md
 4. integrations/TOOLING_POLICY.md
-5. integrations/SPEC_KIT.md
-6. integrations/SUPERPOWERS.md
-7. integrations/GSTACK.md
-8. integrations/CONTEXT7.md
+5. integrations/SUPERPOWERS.md
+6. integrations/GSTACK.md
+7. integrations/CONTEXT7.md
 
 Then detect:
-
 - operating system;
-- current coding harness/agent when possible;
+- active coding harness/agent when possible;
 - existing installations;
 - repository state;
 - required runtimes/tools already installed.
 
-IMPORTANT:
+Before installing EACH external tool, verify its CURRENT OFFICIAL upstream installation instructions.
+Do not rely on stale commands when upstream changed.
 
-Installation methods for these projects change over time.
-Before installing EACH external tool, check its CURRENT OFFICIAL documentation/repository.
-Do not rely only on installation commands written in this repository when upstream has changed.
-
-Do not ask me to choose normal technical setup details.
-Choose the current recommended native integration for my harness.
-
-Ask only when:
-
-- authentication requires me to complete OAuth/login;
-- a system runtime/package manager is missing and installing it changes my machine globally;
-- an installer needs destructive overwrite permission;
+Ask the user only when:
+- OAuth/login requires user interaction;
+- a missing global runtime/package manager needs approval;
+- an installer requires destructive overwrite permission;
 - the active coding harness cannot be determined reliably.
 
-STEP 1 — GitHub Spec Kit
+STEP 1 — Superpowers
+- install using the current native/recommended mechanism for the active harness;
+- verify skills are discoverable;
+- ensure it does not replace Token-Efficient Project Brief / Architecture / Roadmap / phase docs with a competing canonical planning system.
 
-- Verify current official installation instructions.
-- Install/update the Specify CLI through the recommended supported method.
-- Verify with `specify version` or its current equivalent.
-- Initialize/integrate Spec Kit into the current project for the active coding harness.
-- Preserve the existing custom `.specify/memory/constitution.md` exactly unless an explicit migration is needed.
-- If init would overwrite it, back it up and restore it.
-- Do not delete existing project docs.
+STEP 2 — gstack
+- install using the current upstream-supported host mode;
+- verify discoverability;
+- prefer it as challenge/review/QA tooling;
+- do not enable a parallel canonical roadmap/planning flow by default.
 
-STEP 2 — Superpowers
+STEP 3 — Context7
+- configure using the best current native mode for the harness (MCP, CLI/skills or current equivalent);
+- never commit API keys, tokens or credentials;
+- verify access to fresh library/API docs.
 
-- Read current official `obra/superpowers` installation instructions for the active harness.
-- Use the native plugin/skills mechanism currently recommended upstream.
-- Do not install a second unrelated planning framework.
-- Verify Superpowers skills are discoverable in a new/current session as far as the harness allows.
+STEP 4 — Verify workflow ownership
 
-STEP 3 — Spec Kit ↔ Superpowers bridge
-
-- Search the current Spec Kit extension catalog for the Superpowers Implementation Bridge.
-- If `speckit-superpowers-bridge` is still the current accepted extension ID, install it through Spec Kit.
-- If the extension was renamed/replaced, use the current official catalog entry instead and document the change.
-- Verify the bridge does not replace Spec Kit as the canonical spec/plan/task source.
-
-STEP 4 — gstack
-
-- Read the current official `garrytan/gstack` installation/setup instructions.
-- Install for the active coding harness using the upstream-supported host mode.
-- Prefer namespaced gstack commands when practical because Superpowers/Spec Kit are also installed.
-- Do not vendor a large gstack checkout into application code unless current upstream team-mode instructions require it.
-- Check for duplicate skill registrations after setup.
-- Do not activate gstack autoplan as the canonical planning flow.
-
-STEP 5 — Context7
-
-- Read the current official `upstash/context7` installation instructions.
-- Configure Context7 using the best native mode for this harness: MCP or CLI/Skills.
-- Never commit credentials/API keys.
-- If OAuth/login is required, pause only for that interaction and then continue.
-
-STEP 6 — Project policy
-
-Ensure the effective workflow remains:
+Effective workflow must remain:
 
 User outcome
-→ Token-Efficient project brief/architecture
-→ Spec Kit specification + plan + tasks
-→ gstack challenge/review only when useful
-→ Superpowers implementation discipline
+→ Token-Efficient Project Brief
+→ Architecture
+→ Roadmap
+→ Current Phase
+→ 1–3 tasks
+→ Superpowers/native implementation
 → project tests
-→ gstack review/browser QA/release checks where relevant
-→ Spec Kit convergence
+→ selective gstack review/browser QA/release checks
+→ Token-Efficient convergence
+→ NEXT SESSION PROMPT
 
-Do not create parallel canonical plans from Superpowers or gstack.
+STEP 5 — Record status
 
-STEP 7 — Verification
-
-Verify as much as the active harness supports:
-
-- Specify CLI available;
-- Spec Kit integration detected;
-- existing Constitution preserved;
-- Superpowers installed/discoverable;
-- bridge installed if supported;
-- gstack installed/discoverable without duplicate skill names;
-- Context7 configured without committed secrets.
-
-Do not modify application/business code during this setup task.
-
-At the end create/update:
-
-`docs/project/TOOLING_STATUS.md`
-
-Keep it concise and include:
-
-- active harness;
+Create/update `docs/project/TOOLING_STATUS.md` with:
+- date checked;
 - OS;
-- installed tools;
-- versions where available;
-- installation mode;
-- verification status;
-- manual action still required, if any;
-- date checked.
+- active harness;
+- profile;
+- Superpowers status/version/mode if known;
+- gstack status/version/mode if known;
+- Context7 status/mode;
+- GitHub Spec Kit: Not installed by default / Advanced Mode enabled if applicable;
+- verification;
+- manual action still required.
 
-Final response format:
+Do not modify application/business code during tooling setup.
+
+Final response:
 
 RECOMMENDED TOOLING READY
 
-Harness:
-- ...
+Core:
+- Token-Efficient Spec Kit — READY
 
-Installed:
-- Spec Kit — ...
+External tooling:
 - Superpowers — ...
-- Superpowers bridge — ...
 - gstack — ...
 - Context7 — ...
+
+Optional Advanced Spec Mode:
+- GitHub Spec Kit — NOT ENABLED / ENABLED: ...
 
 Verification:
 - ...
@@ -156,5 +112,5 @@ Manual action required:
 - None
 or only genuine login/runtime/restart steps
 
-Do not start product implementation automatically after tooling setup.
+Do not start product implementation automatically after this setup-only task.
 ```
