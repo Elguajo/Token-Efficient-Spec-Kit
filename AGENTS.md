@@ -152,3 +152,65 @@ If complete, start the next roadmap phase in the new session.
 If project complete, route to release/audit or future `CHANGE_REQUEST` work.
 
 The user must not be forced to invent the next engineering prompt.
+
+## Project Doctor
+
+Use `prompts/PROJECT_DOCTOR.md` when the user wants a human-friendly status explanation or when the current next action is unclear.
+
+Project Doctor is diagnostic by default. It must not implement unrelated product work merely to improve the health report.
+
+## Workflow Self-Audit
+
+Use `prompts/AUDIT_WORKFLOW.md` after significant framework changes or when framework instructions appear contradictory.
+
+Self-Audit checks the workflow itself, not normal application code.
+Do not load it into every implementation session.
+
+## Framework versioning
+
+Current framework version lives in:
+
+```text
+VERSION
+```
+
+Material framework behavior changes must update:
+
+```text
+VERSION
+CHANGELOG.md
+```
+
+Use Semantic Versioning principles.
+
+## Safe framework updates
+
+Framework updates must follow:
+
+```text
+docs/system/WORKFLOW_UPDATE_POLICY.md
+prompts/UPDATE_WORKFLOW.md
+```
+
+Never blindly overwrite project-owned state.
+
+Project-owned includes:
+
+```text
+docs/project/*
+docs/phases/*
+docs/decisions/*
+application source code
+tests
+migrations
+credentials/secrets
+```
+
+Merge-sensitive files include:
+
+```text
+.specify/memory/constitution.md
+AGENTS.md
+```
+
+After a framework update, run Workflow Self-Audit before considering the update healthy.
