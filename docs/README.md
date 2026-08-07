@@ -27,6 +27,20 @@
 
 AI обязан обновлять этот файл после meaningful implementation/review sessions.
 
+### [system/PROJECT_DOCTOR.md](system/PROJECT_DOCTOR.md)
+
+Диагностика проекта человеческим языком:
+
+```text
+здоров ли проект?
+какая сейчас фаза?
+что уже сделано?
+что сломано или неизвестно?
+что делать дальше?
+```
+
+Entry point: [`../prompts/PROJECT_DOCTOR.md`](../prompts/PROJECT_DOCTOR.md).
+
 ### [system/SESSION_HANDOFF.md](system/SESSION_HANDOFF.md)
 
 Правила автоматического перехода между фазами и сессиями.
@@ -55,6 +69,26 @@ User Intent
 
 Token-Efficient Spec Kit является самостоятельным core workflow.
 
+### [system/WORKFLOW_SELF_AUDIT.md](system/WORKFLOW_SELF_AUDIT.md)
+
+Проверяет сам framework на:
+
+- противоречия;
+- stale docs/prompts;
+- duplicate ownership;
+- token/context creep;
+- broken handoff;
+- unsafe update rules;
+- version/changelog drift.
+
+Entry point: [`../prompts/AUDIT_WORKFLOW.md`](../prompts/AUDIT_WORKFLOW.md).
+
+### [system/WORKFLOW_UPDATE_POLICY.md](system/WORKFLOW_UPDATE_POLICY.md)
+
+Определяет безопасное обновление framework-файлов без уничтожения реального project state.
+
+Entry point: [`../prompts/UPDATE_WORKFLOW.md`](../prompts/UPDATE_WORKFLOW.md).
+
 ---
 
 # Project state
@@ -77,9 +111,31 @@ Token-Efficient Spec Kit является самостоятельным core wo
 | Продолжить работу | [`../prompts/CONTINUE_PROJECT.md`](../prompts/CONTINUE_PROJECT.md) |
 | Проверить/закрыть phase | [`../prompts/REVIEW_CURRENT_PHASE.md`](../prompts/REVIEW_CURRENT_PHASE.md) |
 | Не знаю следующий шаг | [`../prompts/GENERATE_NEXT_SESSION_PROMPT.md`](../prompts/GENERATE_NEXT_SESSION_PROMPT.md) |
+| Понять текущее состояние проекта | [`../prompts/PROJECT_DOCTOR.md`](../prompts/PROJECT_DOCTOR.md) |
 | Изменились требования | [`../prompts/CHANGE_REQUEST.md`](../prompts/CHANGE_REQUEST.md) |
 | Исправить bug | [`../prompts/BUG_FIX.md`](../prompts/BUG_FIX.md) |
+| Проверить сам workflow | [`../prompts/AUDIT_WORKFLOW.md`](../prompts/AUDIT_WORKFLOW.md) |
+| Безопасно обновить workflow | [`../prompts/UPDATE_WORKFLOW.md`](../prompts/UPDATE_WORKFLOW.md) |
+| Включить Optional Advanced Spec Mode | [`../prompts/ENABLE_ADVANCED_SPEC_MODE.md`](../prompts/ENABLE_ADVANCED_SPEC_MODE.md) |
 | Настроить default external tooling | [`../prompts/SETUP_RECOMMENDED_TOOLING.md`](../prompts/SETUP_RECOMMENDED_TOOLING.md) |
+
+---
+
+# Versioning
+
+Текущая версия framework:
+
+```text
+../VERSION
+```
+
+История изменений:
+
+```text
+../CHANGELOG.md
+```
+
+Значимые изменения framework behavior должны обновлять оба файла.
 
 ---
 
@@ -100,6 +156,15 @@ GitHub Spec Kit и Spec Kit ↔ Superpowers bridge — **Optional Advanced Spec 
 
 ---
 
+# Open-source project files
+
+- [`../CONTRIBUTING.md`](../CONTRIBUTING.md) — как предлагать изменения;
+- [`../SECURITY.md`](../SECURITY.md) — security policy;
+- [`../CHANGELOG.md`](../CHANGELOG.md) — история изменений;
+- [`../VERSION`](../VERSION) — текущая версия.
+
+---
+
 # Самый короткий путь
 
 ```text
@@ -110,6 +175,18 @@ GitHub Spec Kit и Spec Kit ↔ Superpowers bridge — **Optional Advanced Spec 
 5. Получить NEXT SESSION PROMPT
 6. Открыть новую сессию и вставить его
 7. Повторять до PROJECT COMPLETE
+```
+
+Если что-то непонятно:
+
+```text
+PROJECT_DOCTOR.md
+```
+
+Если кажется, что сам workflow начал противоречить себе:
+
+```text
+AUDIT_WORKFLOW.md
 ```
 
 Пользователю не требуется самостоятельно выбирать следующий phase или придумывать engineering prompts.
