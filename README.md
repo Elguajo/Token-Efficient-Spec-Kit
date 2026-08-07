@@ -2,331 +2,364 @@
 
 # Token-Efficient Spec Kit
 
-### Универсальный AI engineering workflow: меньше контекста, меньше токенов, сильнее результат.
+### Универсальный workflow для разработки с AI-агентами
 
-**Опиши, что хочешь получить. Пусть AI-агент сам выберет стек, архитектуру, roadmap и лучший путь реализации.**
+**Ты описываешь, что хочешь получить. Агент сам выбирает стек, проектирует архитектуру, разбивает работу на этапы и реализует проект небольшими проверяемыми шагами.**
 
-`Цель → Решения → Спеки → Маленькие задачи → Код → Проверка`
+`Цель → Спецификация → Архитектура → Задачи → Код → Проверка`
 
-[English version](README_EN.md)
+[English](README_EN.md) · [Руководство](docs/USAGE_GUIDE.md) · [Как работает workflow](docs/WORKFLOW.md) · [Интеграции](integrations/README.md)
 
 </div>
 
 ---
 
-## Что это
+## Что это такое
 
-**Token-Efficient Spec Kit** — лёгкий engineering layer для repository-aware AI coding agents.
+**Token-Efficient Spec Kit** — это компактный набор правил, prompts и документации для repository-aware AI coding agents.
 
-Вместо того чтобы каждый раз объяснять агенту весь проект или самому выбирать framework, database, auth, hosting и десятки других технических решений, ты задаёшь **желаемый результат**.
+Главная идея очень простая:
 
-Например:
+> **Пользователь отвечает за желаемый результат. AI-агент отвечает за инженерные решения.**
+
+Вместо такого диалога:
+
+```text
+— React или Vue?
+— PostgreSQL или MongoDB?
+— REST или GraphQL?
+— Vercel или AWS?
+— Как разбить проект на этапы?
+```
+
+ты можешь написать:
 
 ```text
 Хочу приложение, где дизайнеры смогут продавать digital assets.
 ```
 
-Дальше агент должен профессионально определить сам:
+А агент самостоятельно:
 
-- тип продукта;
-- пользователей и ключевые сценарии;
-- что можно разумно предположить, а что действительно требует вопроса;
-- рекомендуемый стек;
-- архитектуру и data model;
-- security boundaries;
-- сложность и риск проекта;
+1. поймёт продукт и пользователей;
+2. определит, что действительно нужно уточнить;
+3. выберет рекомендуемый стек;
+4. спроектирует архитектуру и данные;
+5. оценит сложность и риски;
+6. создаст roadmap;
+7. начнёт разработку небольшими задачами;
+8. проверит результат тестами и quality gates.
+
+Если решение можно профессионально принять без тебя — агент **не должен перекладывать этот выбор на пользователя**.
+
+---
+
+# Быстрый старт — 30 секунд
+
+### 1. Клонируй шаблон
+
+```bash
+git clone https://github.com/Elguajo/Token-Efficient-Spec-Kit.git my-project
+cd my-project
+```
+
+### 2. Открой проект в своём AI coding agent
+
+Подойдут repository-aware агенты, способные читать и изменять файлы проекта.
+
+### 3. Запусти
+
+```text
+prompts/START_NEW_PROJECT.md
+```
+
+Замени только:
+
+```text
+<WHAT_I_WANT>
+```
+
+на свою идею.
+
+Например:
+
+```text
+Хочу desktop-приложение для Windows и macOS,
+которое автоматически сортирует мои 3D-модели,
+создаёт превью и позволяет искать их по тегам.
+```
+
+**Всё.**
+
+`START_NEW_PROJECT.md` дальше сам проверит tooling, подготовит проектную документацию, выберет архитектуру и начнёт первый этап разработки, если нет реального блокера.
+
+> Отдельно запускать setup обычно не нужно. При необходимости стартовый prompt сам вызывает `SETUP_RECOMMENDED_TOOLING.md`.
+
+📖 Более подробная инструкция: **[docs/USAGE_GUIDE.md](docs/USAGE_GUIDE.md)**
+
+---
+
+## Что произойдёт автоматически
+
+```text
+ТВОЯ ИДЕЯ
+   │
+   ▼
+Проверка инструментов
+   │
+   ▼
+Понимание продукта
+   │
+   ▼
+PROJECT_BRIEF.md
+   │
+   ▼
+Выбор стека и архитектуры
+   │
+   ▼
+ARCHITECTURE.md
+   │
+   ▼
+ROADMAP.md + phase specs
+   │
+   ▼
+1–3 связанные задачи
+   │
+   ▼
+Реализация
+   │
+   ▼
+Тесты / Review / QA
+   │
+   ▼
+Сверка: spec ↔ code ↔ tests
+   │
+   ▼
+Следующий этап
+```
+
+Тебе не нужно каждый раз заново объяснять проект: его устойчивый контекст хранится в компактных canonical-файлах внутри репозитория.
+
+---
+
+## Почему Token-Efficient
+
+Большие AI-проекты часто начинают тратить контекст на повторное чтение:
+
+```text
+всей истории чата
++ всех завершённых этапов
++ всех решений
++ огромного master spec
++ повторяющихся research notes
++ дублирующих PRD
+```
+
+Здесь обычная coding-сессия читает только то, что действительно нужно сейчас:
+
+```text
+Constitution
++ Project Brief
++ Architecture
++ Engineering Rules
++ Current Phase
++ нужный ADR — если он относится к задаче
++ релевантный код и тесты
+```
+
+### Два основных правила
+
+> **Один факт → одно canonical место хранения.**
+
+> **Один implementation run → обычно 1–3 связанные задачи.**
+
+Это уменьшает лишний контекст и помогает агенту не терять принятые архитектурные решения по мере роста проекта.
+
+---
+
+## Как распределена ответственность
+
+### Ты определяешь
+
+- какой результат нужен;
+- обязательные функции и ограничения;
+- бизнес-решения, которые нельзя вывести технически;
+- субъективные предпочтения, если они для тебя важны.
+
+### AI-агент определяет
+
+- стек;
+- архитектуру;
+- database/storage/auth подход;
+- структуру проекта;
+- API и data model;
 - roadmap;
-- testing/deployment strategy;
-- следующие 1–3 задачи для реализации.
+- порядок реализации;
+- testing strategy;
+- технические оптимизации;
+- разумные UX/engineering решения, которые не были заданы явно.
 
-> **Пользователь задаёт результат. Агент принимает инженерные решения. Спеки сохраняют намерение. Маленький контекст экономит токены. Проверка сохраняет качество.**
+### Агент спрашивает тебя только когда
 
----
-
-## Главный workflow
-
-```text
-                    ┌──────────────────────┐
-                    │   ЖЕЛАЕМЫЙ РЕЗУЛЬТАТ │
-                    │    «Хочу сделать…»   │
-                    └──────────┬───────────┘
-                               │
-                               ▼
-                    ┌──────────────────────┐
-                    │      UNDERSTAND      │
-                    │ users · jobs · scope │
-                    └──────────┬───────────┘
-                               │
-                               ▼
-                    ┌──────────────────────┐
-                    │   CLASSIFY & ASSESS  │
-                    │ type · risk · size   │
-                    └──────────┬───────────┘
-                               │
-                               ▼
-                    ┌──────────────────────┐
-                    │   SENIOR DECISIONS   │
-                    │ stack · architecture │
-                    └──────────┬───────────┘
-                               │
-                               ▼
-                    ┌──────────────────────┐
-                    │       ROADMAP        │
-                    │ verifiable phases   │
-                    └──────────┬───────────┘
-                               │
-                               ▼
-                    ┌──────────────────────┐
-                    │    CURRENT PHASE     │
-                    │  1–3 cohesive tasks │
-                    └──────────┬───────────┘
-                               │
-                               ▼
-                    ┌──────────────────────┐
-                    │      IMPLEMENT       │
-                    │ code · migrate · test│
-                    └──────────┬───────────┘
-                               │
-                               ▼
-                    ┌──────────────────────┐
-                    │       CONVERGE       │
-                    │ spec ↔ code ↔ tests │
-                    └──────────┬───────────┘
-                               │
-                               └──────► следующий этап
-```
+- существуют два существенно разных продукта под одним описанием;
+- решение необратимо или разрушительно;
+- нужны OAuth/login/credentials;
+- стоимость радикально меняет архитектуру;
+- нужен юридический или бизнес-выбор;
+- невозможно безопасно продолжить без уточнения.
 
 ---
 
-## Почему это экономит токены
+# Recommended AI Engineering Profile
 
-Обычная рабочая сессия агента читает только:
-
-```text
-constitution
-+ project brief
-+ compact architecture
-+ engineering rules
-+ current phase
-+ relevant ADR — только если нужен
-+ relevant code/tests
-```
-
-И **не перечитывает по умолчанию**:
-
-```text
-все завершённые phases
-+ все ADR
-+ всю историю чата
-+ giant master specs
-+ repeated research dumps
-+ duplicate PRDs
-```
-
-Основное правило:
-
-> **Один факт — одно canonical место хранения. Один run — обычно 1–3 связанные задачи.**
-
----
-
-## Senior autonomy
-
-AI-agent не должен перекладывать обычные engineering decisions обратно на пользователя.
-
-Он не должен спрашивать:
-
-```text
-React или Vue?
-Postgres или MongoDB?
-Vercel или AWS?
-REST или GraphQL?
-```
-
-если это можно профессионально решить из требований проекта.
-
-Вместо этого агент:
-
-1. понимает задачу;
-2. проверяет текущий repository state;
-3. при необходимости сверяет актуальную официальную документацию;
-4. рассматривает реальные альтернативы;
-5. выбирает **один рекомендуемый вариант**;
-6. фиксирует решение только если оно действительно важно для будущей разработки.
-
-Вопрос пользователю нужен только если неизвестный параметр существенно меняет продукт, стоимость, compliance, security или требует необратимого действия.
-
----
-
-## Creative autonomy
-
-Агенту разрешено проявлять инициативу там, где пользователь не зафиксировал детали.
-
-Он может самостоятельно предложить и выбрать:
-
-- UX flows;
-- information architecture;
-- feature organization;
-- visual patterns;
-- API ergonomics;
-- data models;
-- onboarding;
-- loading / empty / error states;
-- developer tooling;
-- небольшие high-value improvements.
-
-Но креативность не даёт права незаметно менять явные требования пользователя.
-
----
-
-# Recommended AI Engineering Stack
-
-Для большинства серьёзных проектов используется **Recommended profile**:
+Для production-oriented проектов используется следующий набор:
 
 ```text
 Token-Efficient Spec Kit
         │
         ├── GitHub Spec Kit
         ├── Superpowers
-        ├── Superpowers Implementation Bridge
+        ├── Spec Kit ↔ Superpowers Bridge
         ├── gstack
         └── Context7
 ```
 
-Каждый инструмент имеет **отдельную ответственность**, чтобы они не создавали четыре параллельных workflow.
+Важно: инструменты **не должны выполнять одну и ту же работу параллельно**.
 
-### GitHub Spec Kit — WHAT
+| Инструмент | Ответственность |
+|---|---|
+| **Token-Efficient Spec Kit** | Контекст, правила проекта, архитектурная дисциплина и routing workflow |
+| **GitHub Spec Kit** | **WHAT** — specification, plan, tasks, анализ и convergence |
+| **Superpowers** | **HOW** — TDD, systematic debugging и implementation discipline |
+| **Spec Kit ↔ Superpowers Bridge** | Разделяет WHAT и HOW, чтобы planning не дублировался |
+| **gstack** | Challenge layer: engineering/design/code review, browser QA, release checks |
+| **Context7** | Свежая документация библиотек и API по необходимости |
 
-Canonical source для:
-
-```text
-specification
-clarification
-plan
-tasks
-analysis
-convergence
-```
-
-### Superpowers — HOW
-
-Используется для:
-
-```text
-TDD
-systematic debugging
-implementation discipline
-verification
-```
-
-### Superpowers Implementation Bridge
-
-Разделяет ответственность:
-
-```text
-Spec Kit = WHAT
-Superpowers = HOW
-```
-
-и предотвращает дублирование planning/execution layer.
-
-### gstack — Challenge & QA Layer
-
-Используется выборочно для:
-
-```text
-engineering review
-design review
-code review
-investigation
-browser QA
-release / ship checks
-cross-model challenge where available
-```
-
-По умолчанию **gstack не заменяет Spec Kit plan**.
-
-### Context7 — Fresh Documentation
-
-Подтягивает актуальную документацию библиотек/API тогда, когда она действительно нужна.
-
-Он не должен вызываться на каждое тривиальное изменение.
-
-Подробнее: [`integrations/README.md`](integrations/README.md)
+Подробнее о ролях и установке: **[integrations/README.md](integrations/README.md)**
 
 ---
 
-## Tooling Profiles
+## Workflow адаптируется под размер проекта
 
-### Minimal
+Не каждый проект должен генерировать десятки документов.
 
-```text
-Token-Efficient Spec Kit
-+ GitHub Spec Kit
-```
+| Уровень | Для чего | Процесс |
+|---|---|---|
+| **S — Small** | landing page, CLI, automation, небольшая feature | `Brief → Plan → Tasks → Implement → Verify` |
+| **M — Medium** | SaaS MVP, ecommerce, plugin + backend, internal tool | `Brief → Architecture → Roadmap → Phases → Implement → Converge` |
+| **L — Large / High-risk** | marketplace, payments, sensitive data, multi-role system | `Brief → Architecture → Risk → Roadmap → Small Specs → Quality Gates → Converge` |
 
-Для небольших проектов и быстрых prototypes.
-
-### Recommended — default
-
-```text
-Token-Efficient Spec Kit
-+ GitHub Spec Kit
-+ Superpowers
-+ Superpowers Bridge
-+ gstack
-+ Context7
-```
-
-Для production-oriented разработки.
-
-### Full / Experimental
-
-Дополнительные review/orchestration/governance инструменты подключаются только после отдельного решения.
-
-Больше инструментов ≠ автоматически выше качество. Overlapping frameworks быстро начинают тратить больше токенов, чем экономят.
+**High-risk не означает автоматически сложную архитектуру.** Он означает более строгую проверку.
 
 ---
 
-## Adaptive process
+# Как пользоваться после первого запуска
 
-Не каждому проекту нужен одинаковый уровень ceremony.
+Обычно тебе нужны всего несколько prompts:
 
-### S — Small
+| Ситуация | Что запускать |
+|---|---|
+| 🆕 Новый проект | [`prompts/START_NEW_PROJECT.md`](prompts/START_NEW_PROJECT.md) |
+| ▶️ Продолжить работу | [`prompts/CONTINUE_PROJECT.md`](prompts/CONTINUE_PROJECT.md) |
+| ✅ Проверить и закрыть текущий этап | [`prompts/REVIEW_CURRENT_PHASE.md`](prompts/REVIEW_CURRENT_PHASE.md) |
+| 🔄 Изменить требования | [`prompts/CHANGE_REQUEST.md`](prompts/CHANGE_REQUEST.md) |
+| 🐛 Исправить баг | [`prompts/BUG_FIX.md`](prompts/BUG_FIX.md) |
+| 🛠 Настроить инструменты вручную | [`prompts/SETUP_RECOMMENDED_TOOLING.md`](prompts/SETUP_RECOMMENDED_TOOLING.md) |
 
-```text
-Brief → Plan → Tasks → Implement → Verify
-```
+### Например, на следующий день
 
-Landing pages, CLI, simple automations, small features.
-
-### M — Medium
-
-```text
-Brief → Architecture → Roadmap → Phase Specs → Implement → Converge
-```
-
-SaaS MVP, ecommerce, plugin + backend, internal tools.
-
-### L — Large / High-risk
+Не нужно снова писать:
 
 ```text
-Brief
-→ Architecture
-→ Risk model
-→ Roadmap
-→ Small independent specs
-→ Selective quality gates
-→ Implementation batches
-→ Converge
+Мы вчера делали приложение...
+Стек был такой...
+Мы закончили вот это...
+Следующим хотели сделать...
 ```
 
-Marketplaces, multi-role systems, payments, sensitive data, critical migrations.
+Просто запускаешь:
 
-High Risk означает **больше проверок**, а не автоматически более сложную архитектуру.
+```text
+prompts/CONTINUE_PROJECT.md
+```
+
+Агент сам читает только текущий минимальный контекст и продолжает незавершённый phase.
 
 ---
 
-## Структура
+## Как агент выбирает технологии
+
+Он должен рекомендовать **один основной вариант**, а не отправлять пользователю меню из десяти стеков.
+
+Для важных решений используются примерно такие критерии:
+
+| Критерий | Базовый приоритет |
+|---|---:|
+| Соответствие требованиям | 25% |
+| Простота | 20% |
+| Поддерживаемость | 15% |
+| Зрелость экосистемы | 10% |
+| Безопасность | 10% |
+| Операционная сложность | 10% |
+| Стоимость | 5% |
+| Скорость разработки | 5% |
+
+Веса меняются в зависимости от проекта.
+
+- для prototype важнее скорость и обратимость решений;
+- для финансовых или чувствительных систем — security и data integrity;
+- для небольшого проекта не нужна архитектура уровня enterprise.
+
+> **Цель — не самый модный стек, а самое простое зрелое решение, которое правильно решает реальную задачу.**
+
+---
+
+## Creative autonomy
+
+Агенту разрешено проявлять инициативу, если пользователь не зафиксировал деталь.
+
+Он может самостоятельно предложить или улучшить:
+
+- UX flows;
+- information architecture;
+- структуру функций;
+- visual patterns;
+- API ergonomics;
+- data models;
+- onboarding;
+- loading / empty / error states;
+- developer experience;
+- небольшие high-value улучшения.
+
+Но он не имеет права незаметно менять явные требования пользователя.
+
+---
+
+## Quality Gates
+
+Код не считается готовым только потому, что агент его написал.
+
+В зависимости от проекта проверяются:
+
+```text
+lint
++ typecheck
++ tests
++ build
++ security negative tests
++ browser / e2e QA
++ acceptance criteria
+```
+
+Для auth, payments, permissions, private files, webhooks и destructive migrations негативные сценарии обязательны там, где они релевантны.
+
+---
+
+## Структура репозитория
+
+<details>
+<summary><strong>Показать структуру</strong></summary>
+
+<br />
 
 ```text
 .
@@ -335,6 +368,10 @@ High Risk означает **больше проверок**, а не автом
 │       └── constitution.md
 │
 ├── docs/
+│   ├── README.md
+│   ├── USAGE_GUIDE.md
+│   ├── WORKFLOW.md
+│   │
 │   ├── system/
 │   │   ├── OPERATING_MODEL.md
 │   │   ├── DECISION_FRAMEWORK.md
@@ -380,174 +417,57 @@ High Risk означает **больше проверок**, а не автом
 └── README_EN.md
 ```
 
----
-
-# Быстрый старт
-
-## 1. Клонируй шаблон
-
-```bash
-git clone https://github.com/Elguajo/Token-Efficient-Spec-Kit.git my-project
-cd my-project
-```
-
-## 2. Установи Recommended tooling
-
-Открой AI coding agent в repository и дай ему содержимое:
-
-```text
-prompts/SETUP_RECOMMENDED_TOOLING.md
-```
-
-Setup-agent сам должен:
-
-- определить текущий coding harness;
-- сверить **актуальные upstream installation docs**;
-- установить Spec Kit;
-- установить Superpowers;
-- подключить Spec Kit ↔ Superpowers bridge;
-- установить gstack;
-- настроить Context7;
-- сохранить существующий Constitution;
-- проверить отсутствие конфликтующих/duplicate skills;
-- записать состояние в `docs/project/TOOLING_STATUS.md`.
-
-Некоторые шаги могут потребовать только OAuth/login или установки отсутствующего system runtime — это единственные ситуации, где setup может остановиться и попросить пользователя вмешаться.
-
-## 3. Запусти новый проект
-
-Используй:
-
-```text
-prompts/START_NEW_PROJECT.md
-```
-
-Замени:
-
-```text
-<WHAT_I_WANT>
-```
-
-на описание желаемого результата.
-
-Например:
-
-```text
-Хочу desktop-приложение для Windows и macOS,
-которое автоматически организует мои CGI/3D assets,
-создаёт previews и позволяет искать их по тегам.
-```
-
-## 4. Продолжай маленькими batches
-
-Следующий run:
-
-```text
-prompts/CONTINUE_PROJECT.md
-```
-
-Проверка текущего phase:
-
-```text
-prompts/REVIEW_CURRENT_PHASE.md
-```
-
-Изменение требований:
-
-```text
-prompts/CHANGE_REQUEST.md
-```
-
-Bug fix:
-
-```text
-prompts/BUG_FIX.md
-```
+</details>
 
 ---
 
-## Как выбираются технологии
+## Документация
 
-Для важных технических решений агент оценивает примерно такие факторы:
-
-| Критерий | Базовый вес |
-|---|---:|
-| Соответствие требованиям | 25% |
-| Простота | 20% |
-| Поддерживаемость | 15% |
-| Экосистема / зрелость | 10% |
-| Безопасность | 10% |
-| Operational burden | 10% |
-| Стоимость | 5% |
-| Developer productivity | 5% |
-
-Вес адаптируется под задачу.
-
-Для prototype важнее скорость.
-
-Для financial/sensitive system безопасность и data integrity доминируют.
-
-Основной принцип:
-
-> **Не самый модный стек. Самый простой зрелый стек, который правильно решает реальную задачу.**
+| Документ | Для чего |
+|---|---|
+| **[Руководство по использованию](docs/USAGE_GUIDE.md)** | Пошагово: как реально работать с системой |
+| **[Workflow](docs/WORKFLOW.md)** | Что происходит внутри на каждом этапе |
+| **[Навигация по документации](docs/README.md)** | Карта всех документов проекта |
+| **[Integrations](integrations/README.md)** | Spec Kit, Superpowers, gstack и Context7 |
+| **[Constitution](.specify/memory/constitution.md)** | Неизменяемые инженерные правила |
 
 ---
 
-## Quality gates
+## 10 принципов
 
-Код не считается готовым только потому, что агент его написал.
-
-В зависимости от проекта нужны доказательства:
-
-```text
-lint
-+ typecheck
-+ tests
-+ build
-+ security negative tests
-+ browser/e2e QA
-+ acceptance criteria
-```
-
-Для auth, payments, permissions, private files, webhooks и destructive migrations negative tests обязательны там, где они релевантны.
-
----
-
-## 10 принципов за минуту
-
-1. **Outcome first** — пользователь описывает результат, не стек.
-2. **Senior autonomy** — агент принимает обычные technical decisions сам.
-3. **Ask only blockers** — не превращать разработку в анкету.
-4. **Simplicity first** — никакой premature distributed architecture.
-5. **Current information** — fast-changing APIs проверяются по свежим docs.
+1. **Outcome first** — пользователь описывает результат, а не стек.
+2. **Senior autonomy** — агент принимает обычные технические решения сам.
+3. **Ask only blockers** — разработка не превращается в анкету.
+4. **Simplicity first** — никакой преждевременной distributed architecture.
+5. **Current information** — быстро меняющиеся API проверяются по актуальным docs.
 6. **Small context** — только контекст текущей задачи.
-7. **Small batches** — обычно 1–3 связанные задачи за run.
-8. **Canonical docs** — один факт, одно основное место.
+7. **Small batches** — обычно 1–3 связанные задачи за один run.
+8. **Canonical docs** — один факт хранится в одном основном месте.
 9. **Security by design** — server authority, least privilege, negative tests.
-10. **Verification before completion** — spec ↔ code ↔ tests должны сходиться.
+10. **Verification before completion** — `spec ↔ code ↔ tests` должны сходиться.
 
 ---
 
 ## Чем этот проект не является
 
-Это **не**:
+Это не:
 
-- fixed technology stack;
-- giant PRD generator;
+- фиксированный technology stack;
+- генератор огромных PRD;
 - multi-agent role-play framework;
 - повод документировать каждое мелкое решение;
-- автоматическая гарантия качества AI-generated code;
-- система, где пять AI-frameworks одновременно управляют проектом.
+- система, где пять AI-frameworks одновременно пытаются руководить проектом;
+- гарантия качества AI-generated code без проверки.
 
-Это компактный operating layer, который даёт каждому инструменту чёткую роль и сохраняет project context управляемым.
+Это **компактный orchestration layer**, который помогает AI coding agents работать последовательно, автономно и с управляемым контекстом.
 
 ---
 
 <div align="center">
 
-### Опиши результат. Держи контекст маленьким. Пусть агент занимается инженерией.
+### Опиши результат. Остальное — инженерная работа агента.
 
-Начни с [`prompts/SETUP_RECOMMENDED_TOOLING.md`](prompts/SETUP_RECOMMENDED_TOOLING.md), затем [`prompts/START_NEW_PROJECT.md`](prompts/START_NEW_PROJECT.md).
+**[Начать новый проект →](prompts/START_NEW_PROJECT.md)**
 
 <br />
 
