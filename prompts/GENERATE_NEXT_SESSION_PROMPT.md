@@ -1,0 +1,57 @@
+# Generate Next Session Prompt
+
+Use this only when you want the AI agent to tell you exactly what to do in a fresh session without implementing more code now.
+
+````text
+Determine the correct next step for this project and generate a ready-to-copy prompt for a fresh AI session.
+
+Do NOT implement new product work in this task.
+
+Read only:
+1. .specify/memory/constitution.md
+2. docs/project/PROJECT_BRIEF.md
+3. docs/project/ARCHITECTURE.md
+4. docs/project/ROADMAP.md
+5. docs/system/SESSION_HANDOFF.md
+6. current phase file
+7. directly relevant verification/task state
+
+Inspect repository state and determine one status:
+
+- IN PROGRESS — current phase still has unmet acceptance criteria;
+- PHASE COMPLETE — current phase is done and the next roadmap phase should start;
+- PROJECT COMPLETE — implementation roadmap is complete.
+
+Then:
+1. choose the correct next action yourself;
+2. update `docs/project/NEXT_SESSION.md`;
+3. return only a concise status summary and the next-session prompt.
+
+If IN PROGRESS:
+- continue the same phase;
+- name the next 1–3 cohesive tasks.
+
+If PHASE COMPLETE:
+- identify the next roadmap phase;
+- do not start it now;
+- generate a prompt that starts it in a clean session.
+
+If PROJECT COMPLETE:
+- route to final audit/release if still needed;
+- otherwise explain that new functionality should begin through `prompts/CHANGE_REQUEST.md`.
+
+Return:
+
+STATUS: IN PROGRESS / PHASE COMPLETE / PROJECT COMPLETE
+
+NEXT ACTION:
+<one short description>
+
+NEXT SESSION PROMPT
+
+```text
+<ready-to-copy prompt>
+```
+
+The prompt must be self-sufficient but token-efficient: reference canonical repository files instead of repeating their contents.
+````
