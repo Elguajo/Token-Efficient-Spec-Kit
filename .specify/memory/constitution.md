@@ -1,6 +1,6 @@
 # Universal Engineering Constitution
 
-Version: 1.0
+Version: 1.1
 
 ## 1. Outcome first
 The user's desired outcome is primary. Preserve explicit constraints. If details are unspecified, choose sensible defaults.
@@ -36,6 +36,8 @@ Default read set: Constitution + Project Brief + compact Architecture + Engineer
 ## 11. Documentation economy
 Create only durable docs: Project Brief, Architecture, Roadmap, current phase spec, important ADRs, README. Avoid duplicate PRDs, duplicate specs, role-play docs and verbose status reports.
 
+`docs/project/NEXT_SESSION.md` is allowed as a tiny navigation/handoff document. It must not duplicate canonical project specifications.
+
 ## 12. Scope discipline
 Implement one phase or 1–3 cohesive tasks at a time. Do not implement unrelated future work while here.
 
@@ -50,3 +52,19 @@ Quality includes usability, accessibility, performance, error/loading/empty stat
 
 ## 16. User authority
 If the user explicitly chooses a valid alternative, follow it and adapt. Raise meaningful risks once, clearly.
+
+## 17. Session handoff
+The user must not need engineering knowledge to decide what to do after a coding session or completed phase.
+
+At the end of every meaningful implementation/review session, the agent must:
+
+1. determine whether the current phase is IN PROGRESS, COMPLETE, or the PROJECT is COMPLETE;
+2. decide the correct next action from the roadmap and acceptance criteria;
+3. update `docs/project/NEXT_SESSION.md` with a compact handoff;
+4. end the user-facing response with a ready-to-copy `NEXT SESSION PROMPT` for a fresh AI session.
+
+If the current phase is incomplete, the prompt continues that phase.
+If the phase is complete, the prompt starts the next roadmap phase.
+If the project is complete, the prompt routes to final release/audit or a future change-request flow.
+
+The handoff must reference canonical files instead of retelling the whole project, preserving token efficiency.
