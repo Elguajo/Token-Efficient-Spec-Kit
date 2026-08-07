@@ -8,7 +8,9 @@
 
 `Идея → Архитектура → Фазы → 1–3 задачи → Код → Проверка → Следующий prompt`
 
-[English](README_EN.md) · [Руководство](docs/USAGE_GUIDE.md) · [Workflow](docs/WORKFLOW.md) · [Интеграции](integrations/README.md)
+**Current version: `0.5.0`**
+
+[English](README_EN.md) · [Руководство](docs/USAGE_GUIDE.md) · [Workflow](docs/WORKFLOW.md) · [Интеграции](integrations/README.md) · [Changelog](CHANGELOG.md)
 
 </div>
 
@@ -242,7 +244,7 @@ Token-Efficient Spec Kit
 
 ---
 
-# GitHub Spec Kit — теперь optional
+# GitHub Spec Kit — optional Advanced Spec Mode
 
 GitHub Spec Kit **не нужен для обычной работы**.
 
@@ -259,9 +261,7 @@ Convergence
 Session Handoff
 ```
 
-Но GitHub Spec Kit остаётся полезным как **Advanced Spec Mode** для отдельных сложных фаз.
-
-Например:
+Но GitHub Spec Kit остаётся полезным для отдельных сложных фаз, например:
 
 ```text
 Payments
@@ -285,7 +285,11 @@ Superpowers
 = implementation discipline
 ```
 
-То есть он становится **инструментом по требованию**, а не фундаментом системы.
+Для включения:
+
+```text
+prompts/ENABLE_ADVANCED_SPEC_MODE.md
+```
 
 ---
 
@@ -329,6 +333,9 @@ High Risk означает больше доказательств качест�
 | Не знаю, что делать дальше | [`GENERATE_NEXT_SESSION_PROMPT.md`](prompts/GENERATE_NEXT_SESSION_PROMPT.md) |
 | Меняю требования | [`CHANGE_REQUEST.md`](prompts/CHANGE_REQUEST.md) |
 | Исправляю bug | [`BUG_FIX.md`](prompts/BUG_FIX.md) |
+| Хочу понять состояние проекта | [`PROJECT_DOCTOR.md`](prompts/PROJECT_DOCTOR.md) |
+| Проверяю сам workflow на противоречия | [`AUDIT_WORKFLOW.md`](prompts/AUDIT_WORKFLOW.md) |
+| Обновляю workflow безопасно | [`UPDATE_WORKFLOW.md`](prompts/UPDATE_WORKFLOW.md) |
 
 В нормальном процессе тебе чаще всего понадобится только:
 
@@ -343,6 +350,119 @@ NEXT SESSION PROMPT
 ↓
 PROJECT COMPLETE
 ```
+
+---
+
+# Project Doctor — «что происходит с проектом?»
+
+Если ты не понимаешь текущее состояние repository, запусти:
+
+```text
+prompts/PROJECT_DOCTOR.md
+```
+
+Он не начинает новую разработку, а объясняет человеческим языком:
+
+```text
+Health: HEALTHY / NEEDS ATTENTION / BLOCKED / UNKNOWN
+Current phase
+Что уже сделано
+Что осталось
+Какие проверки проходят или падают
+Есть ли проблема с workflow/tooling
+Что делать дальше
+NEXT SESSION PROMPT
+```
+
+То есть это кнопка **«объясни мне состояние проекта и скажи следующий шаг»**.
+
+Подробнее: [Project Doctor Protocol](docs/system/PROJECT_DOCTOR.md)
+
+---
+
+# Workflow Self-Audit
+
+Сам framework тоже может со временем начать противоречить себе.
+
+После значимых изменений запусти:
+
+```text
+prompts/AUDIT_WORKFLOW.md
+```
+
+Audit проверяет:
+
+- согласованность Constitution / AGENTS / README / prompts;
+- ownership инструментов;
+- default vs optional tooling;
+- Session Handoff;
+- token efficiency;
+- stale paths/links;
+- safe update boundaries;
+- VERSION / CHANGELOG consistency.
+
+Audit **не переписывает framework автоматически** — он сначала показывает проблемы и минимальные рекомендуемые исправления.
+
+Подробнее: [Workflow Self-Audit](docs/system/WORKFLOW_SELF_AUDIT.md)
+
+---
+
+# Безопасное обновление workflow
+
+Проект может обновлять Token-Efficient Spec Kit до новой версии, не уничтожая реальные project docs.
+
+Используй:
+
+```text
+prompts/UPDATE_WORKFLOW.md
+```
+
+Updater разделяет файлы на три класса:
+
+```text
+Framework-managed
+→ system docs / prompts / integrations / templates
+
+Merge-sensitive
+→ Constitution / AGENTS.md
+
+Project-owned
+→ PROJECT_BRIEF / ARCHITECTURE / ROADMAP
+→ phases / ADRs
+→ source code / tests / migrations
+```
+
+**Project-owned файлы нельзя автоматически перезаписывать template defaults.**
+
+После update автоматически требуется Workflow Self-Audit.
+
+Подробнее: [Safe Workflow Update Policy](docs/system/WORKFLOW_UPDATE_POLICY.md)
+
+---
+
+# Версионирование
+
+Текущая версия хранится в:
+
+```text
+VERSION
+```
+
+История изменений:
+
+```text
+CHANGELOG.md
+```
+
+Проект использует Semantic Versioning:
+
+```text
+MAJOR.MINOR.PATCH
+```
+
+- `PATCH` — исправления без изменения workflow contract;
+- `MINOR` — новые совместимые capabilities;
+- `MAJOR` — breaking изменения workflow/file contracts.
 
 ---
 
@@ -371,7 +491,13 @@ lint
 - **Как работает система внутри:** [docs/WORKFLOW.md](docs/WORKFLOW.md)
 - **Что делать дальше:** [docs/project/NEXT_SESSION.md](docs/project/NEXT_SESSION.md)
 - **Переход между сессиями:** [docs/system/SESSION_HANDOFF.md](docs/system/SESSION_HANDOFF.md)
+- **Project Doctor:** [docs/system/PROJECT_DOCTOR.md](docs/system/PROJECT_DOCTOR.md)
+- **Workflow Self-Audit:** [docs/system/WORKFLOW_SELF_AUDIT.md](docs/system/WORKFLOW_SELF_AUDIT.md)
+- **Safe Updates:** [docs/system/WORKFLOW_UPDATE_POLICY.md](docs/system/WORKFLOW_UPDATE_POLICY.md)
 - **Интеграции:** [integrations/README.md](integrations/README.md)
+- **История версий:** [CHANGELOG.md](CHANGELOG.md)
+- **Contributing:** [CONTRIBUTING.md](CONTRIBUTING.md)
+- **Security:** [SECURITY.md](SECURITY.md)
 
 ---
 
