@@ -1,5 +1,26 @@
 # AGENTS.md — Token-Efficient Spec Kit
 
+## Core ownership
+
+Token-Efficient Spec Kit is the canonical project workflow.
+It owns:
+
+```text
+intent
+Project Brief
+Architecture
+Roadmap
+phases
+phase tasks
+acceptance criteria
+context routing
+quality routing
+convergence
+session handoff
+```
+
+External tools are optional capabilities, not project-level sources of truth.
+
 ## Default read set
 
 For normal implementation read only:
@@ -25,7 +46,7 @@ Choose one recommended default instead of making the user select routine technol
 
 ## Creative autonomy
 
-Improve unspecified UX, product and implementation details when this improves the requested outcome.
+Improve unspecified UX, product and implementation details when this supports the requested outcome.
 Never override explicit user constraints.
 
 ## Complexity
@@ -44,41 +65,53 @@ Usually implement only 1–3 cohesive tasks per run.
 
 ## Recommended tooling profile
 
-When the Recommended profile is installed, responsibilities are separated:
-
 ```text
 Token-Efficient Spec Kit
-→ project intent, architecture, context discipline
-
-GitHub Spec Kit
-→ canonical specification, plan, tasks, analysis, convergence
+→ CORE: WHAT + orchestration + context + handoff
 
 Superpowers
-→ implementation discipline, TDD, systematic debugging, verification
-
-Superpowers Implementation Bridge
-→ prevents duplicate planning/execution ownership
+→ HOW: implementation discipline, TDD, systematic debugging, verification
 
 gstack
-→ engineering/design challenge, code review, browser QA, release checks
+→ challenge/review layer: engineering/design review, code review, browser QA, release checks
 
 Context7
 → fresh library/API documentation on demand
 ```
 
-Read `integrations/TOOLING_POLICY.md` only when the current task invokes or configures one of these tools.
+### Optional Advanced Spec Mode
 
-### Important ownership rule
+GitHub Spec Kit is not part of the default profile.
+Enable it only when the current phase benefits from formal deep specification.
 
-Do not create parallel canonical plans.
+Examples:
 
-If an accepted Spec Kit spec/plan/tasks already exist:
+```text
+payments
+complex authorization
+multi-tenancy boundaries
+public API contracts
+critical migrations
+large ambiguous cross-system features
+```
 
-- do not replace them with Superpowers brainstorming/planning;
-- do not replace them with gstack autoplan;
-- use gstack as a review/challenge layer;
-- use Superpowers for implementation discipline;
-- use Context7 only when fresh docs are useful.
+When enabled:
+
+```text
+Token-Efficient Spec Kit = project-level source of truth
+GitHub Spec Kit = optional deep phase-level spec/planning
+Superpowers = HOW
+Spec Kit ↔ Superpowers bridge = optional coordination only
+```
+
+Do not create a second project roadmap or duplicate canonical project docs.
+
+## Tooling policy
+
+Read `integrations/TOOLING_POLICY.md` only when configuring/invoking integrations or when ownership is ambiguous.
+
+Installed does not mean always loaded.
+Invoke a tool only when the task benefits from it.
 
 ## Security-sensitive work
 
@@ -107,17 +140,15 @@ Do not weaken tests, access control or security just to achieve green status.
 
 ## Session handoff — mandatory
 
-The user may not know what the next engineering step should be. The agent owns that decision.
-
 At the end of every meaningful coding/review session:
 
 1. classify status as `IN PROGRESS`, `PHASE COMPLETE`, or `PROJECT COMPLETE`;
-2. decide the next action from the current phase acceptance criteria and roadmap;
+2. decide the next action from current acceptance criteria and roadmap;
 3. update `docs/project/NEXT_SESSION.md`;
-4. end the response with a ready-to-copy `NEXT SESSION PROMPT` for a fresh AI session.
+4. end with a ready-to-copy `NEXT SESSION PROMPT` for a fresh AI session.
 
-If the phase is incomplete, the prompt continues the same phase.
-If complete, the prompt starts the next roadmap phase.
-If the project is complete, route to release/audit or future `CHANGE_REQUEST` work.
+If the phase is incomplete, continue the same phase.
+If complete, start the next roadmap phase in the new session.
+If project complete, route to release/audit or future `CHANGE_REQUEST` work.
 
-The handoff must remain token-efficient: reference canonical files instead of repeating the whole project.
+The user must not be forced to invent the next engineering prompt.
