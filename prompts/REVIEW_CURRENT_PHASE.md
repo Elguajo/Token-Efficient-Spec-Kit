@@ -1,6 +1,6 @@
 # Review / Converge Current Phase
 
-```text
+````text
 Review the current implementation against the current phase spec.
 
 Read only:
@@ -62,10 +62,11 @@ Next action:
 - ...
 
 NEXT SESSION PROMPT
+
 ```text
 <ready-to-copy prompt for a fresh AI session>
 ```
 
 The NEXT SESSION PROMPT is mandatory.
 Do not make the user figure out which phase or prompt to run next.
-```
+````
