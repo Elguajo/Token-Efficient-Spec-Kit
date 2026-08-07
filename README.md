@@ -4,9 +4,9 @@
 
 ### Универсальный workflow для разработки с AI-агентами
 
-**Ты описываешь результат. AI-агент сам выбирает стек, проектирует архитектуру, ведёт проект по фазам и в конце каждой сессии говорит тебе, что делать дальше.**
+**Ты описываешь результат. AI сам выбирает стек, проектирует архитектуру, ведёт проект по фазам, проверяет качество и в конце каждой сессии говорит, что делать дальше.**
 
-`Идея → Спеки → Архитектура → Фазы → Код → Проверка → Следующий prompt`
+`Идея → Архитектура → Фазы → 1–3 задачи → Код → Проверка → Следующий prompt`
 
 [English](README_EN.md) · [Руководство](docs/USAGE_GUIDE.md) · [Workflow](docs/WORKFLOW.md) · [Интеграции](integrations/README.md)
 
@@ -14,44 +14,33 @@
 
 ---
 
-## Зачем это нужно
+## Что это
 
-При работе с AI coding agents быстро появляется две проблемы:
+**Token-Efficient Spec Kit — самостоятельный AI Engineering Workflow.**
 
-1. агент начинает перечитывать слишком много контекста и тратить токены;
-2. человеку без опыта разработки непонятно, **что просить у AI дальше**.
+Он не требует, чтобы пользователь разбирался в разработке или заранее выбирал framework, database, hosting, auth и другие технические детали.
 
-Token-Efficient Spec Kit решает обе.
-
-> **Пользователь отвечает за то, что хочет получить. Агент отвечает за инженерные решения и следующий шаг.**
-
-Вместо:
-
-```text
-React или Vue?
-PostgreSQL или MongoDB?
-REST или GraphQL?
-Как разбить проект?
-Что теперь делать?
-```
-
-ты можешь написать:
+Ты можешь написать:
 
 ```text
 Хочу приложение, где дизайнеры смогут продавать digital assets.
 ```
 
-Дальше агент сам:
+Дальше AI самостоятельно:
 
-- понимает продукт и пользователей;
-- уточняет только реальные blockers;
-- выбирает рекомендуемый stack;
-- проектирует architecture и data model;
-- создаёт roadmap и phases;
-- реализует работу маленькими проверяемыми batches;
-- запускает tests / reviews / QA;
-- определяет следующий шаг;
-- выдаёт готовый prompt для новой AI-сессии.
+1. понимает продукт и пользователей;
+2. задаёт только действительно необходимые вопросы;
+3. выбирает один рекомендуемый стек;
+4. проектирует архитектуру и data model;
+5. создаёт roadmap и phases;
+6. берёт только 1–3 связанные задачи за сессию;
+7. пишет код и tests;
+8. запускает review / QA по необходимости;
+9. проверяет acceptance criteria;
+10. определяет следующий шаг;
+11. выдаёт готовый prompt для новой AI-сессии.
+
+> **Пользователь отвечает за желаемый результат. AI отвечает за инженерные решения и навигацию по проекту.**
 
 ---
 
@@ -64,7 +53,7 @@ git clone https://github.com/Elguajo/Token-Efficient-Spec-Kit.git my-project
 cd my-project
 ```
 
-### 2. Открой проект в repository-aware AI coding agent
+### 2. Открой его в repository-aware AI coding agent
 
 Например Codex, Claude Code, Cursor или другом совместимом coding harness.
 
@@ -88,40 +77,36 @@ prompts/START_NEW_PROJECT.md
 создаёт previews и позволяет искать их по тегам.
 ```
 
-**Всё остальное агент должен организовать сам.**
+**После этого workflow должен вести проект сам.**
 
 ---
 
-## Что произойдёт автоматически
+## Как проходит работа
 
 ```mermaid
 flowchart TD
-    A[Ты описываешь результат] --> B[Tooling bootstrap]
-    B --> C[Project Brief]
-    C --> D[Architecture]
-    D --> E[Roadmap]
-    E --> F[Current Phase]
-    F --> G[Spec / Plan / Tasks]
-    G --> H[1–3 задачи]
-    H --> I[Implementation]
-    I --> J[Tests / Review / QA]
-    J --> K{Phase готов?}
-    K -- Нет --> L[Prompt продолжить текущую фазу]
-    K -- Да --> M[Prompt начать следующую фазу]
-    L --> N[Новая AI-сессия]
-    M --> N
-    N --> F
+    A[Ты описываешь результат] --> B[Project Brief]
+    B --> C[Architecture]
+    C --> D[Roadmap]
+    D --> E[Current Phase]
+    E --> F[1–3 задачи]
+    F --> G[Implementation]
+    G --> H[Tests / Review / QA]
+    H --> I{Phase готов?}
+    I -- Нет --> J[Prompt продолжить текущую фазу]
+    I -- Да --> K[Prompt начать следующую фазу]
+    J --> L[Новая AI-сессия]
+    K --> L
+    L --> E
 ```
 
-Агент хранит project knowledge в repository, поэтому новую сессию не нужно начинать с пересказа всей истории.
+Project knowledge хранится в repository, а не только в истории чата.
 
 ---
 
-# Самая важная идея: AI сам говорит, что делать дальше
+# Главная особенность — AI сам говорит, что делать дальше
 
-Проект делится на **phases**.
-
-В конце каждой meaningful coding/review session агент обязан определить состояние:
+В конце каждой meaningful coding/review session AI обязан определить:
 
 ```text
 IN PROGRESS
@@ -129,37 +114,34 @@ PHASE COMPLETE
 PROJECT COMPLETE
 ```
 
-После этого он создаёт:
+После этого он создаёт **NEXT SESSION PROMPT**.
+
+Ты просто:
 
 ```text
-NEXT SESSION PROMPT
+получил prompt
+→ открыл новую сессию
+→ вставил prompt
+→ продолжил работу
 ```
 
-который можно **просто скопировать и вставить в новую AI-сессию**.
+Не нужно самому понимать:
 
-### Если фаза ещё не закончена
+```text
+какой phase следующий?
+пора ли тестировать?
+что осталось?
+нужен ли review?
+что написать AI завтра?
+```
 
-Следующий prompt продолжит текущую фазу и укажет следующие 1–3 задачи.
-
-### Если фаза закончена
-
-AI сам посмотрит `ROADMAP.md`, определит следующий этап и подготовит prompt для его старта.
-
-### Если весь проект закончен
-
-AI направит тебя в final audit / release / deployment либо предложит использовать `CHANGE_REQUEST` для новой функции.
-
-Кроме ответа в чате, текущий handoff сохраняется в:
+Текущий handoff также хранится в:
 
 ```text
 docs/project/NEXT_SESSION.md
 ```
 
-То есть в любой момент можно открыть этот файл и получить ответ на вопрос:
-
-> **«Что мне делать дальше?»**
-
-Если по какой-то причине handoff не был создан, есть fallback:
+Если handoff потерялся:
 
 ```text
 prompts/GENERATE_NEXT_SESSION_PROMPT.md
@@ -171,7 +153,7 @@ prompts/GENERATE_NEXT_SESSION_PROMPT.md
 
 ## Почему это экономит токены
 
-Обычная coding-сессия читает только минимальный контекст:
+Обычная сессия читает только:
 
 ```text
 Constitution
@@ -179,11 +161,11 @@ Constitution
 + Architecture
 + Engineering Rules
 + Current Phase
-+ Relevant ADR
-+ Relevant code/tests
++ relevant ADR
++ relevant code/tests
 ```
 
-И **не перечитывает по умолчанию**:
+Она **не перечитывает по умолчанию**:
 
 ```text
 все завершённые phases
@@ -193,17 +175,15 @@ Constitution
 повторяющиеся research dumps
 ```
 
-Главный принцип:
-
 > **Один факт — одно canonical место. Одна сессия — обычно 1–3 связанные задачи.**
 
 ---
 
 # Senior autonomy
 
-AI-agent должен самостоятельно принимать обычные engineering decisions.
+AI не должен перекладывать обычные engineering decisions на пользователя.
 
-Он не должен спрашивать тебя:
+Он не должен спрашивать:
 
 ```text
 React или Vue?
@@ -212,26 +192,15 @@ Vercel или AWS?
 REST или GraphQL?
 ```
 
-если ответ можно профессионально определить из требований проекта.
+если это можно профессионально определить из требований.
 
-Вопрос нужен только когда неизвестный параметр реально меняет:
-
-- сам продукт;
-- стоимость;
-- security;
-- compliance;
-- business rules;
-- необратимое действие.
-
-Во всех остальных случаях агент выбирает **один рекомендуемый вариант** и продолжает работу.
+Вопрос пользователю нужен только когда неизвестный параметр реально меняет продукт, стоимость, security, compliance, business rules или требует необратимого действия.
 
 ---
 
 ## Creative autonomy
 
-Агенту разрешено проявлять инициативу там, где детали не зафиксированы.
-
-Он может самостоятельно улучшать:
+AI может самостоятельно улучшать незаданные детали:
 
 - UX flows;
 - information architecture;
@@ -249,107 +218,137 @@ REST или GraphQL?
 
 # Recommended AI Engineering Profile
 
-Для production-oriented проектов default profile:
+Наш workflow является core сам по себе.
+
+Default:
 
 ```text
 Token-Efficient Spec Kit
-├── GitHub Spec Kit
 ├── Superpowers
-├── Superpowers Implementation Bridge
 ├── gstack
 └── Context7
 ```
 
-Инструменты не должны конкурировать друг с другом.
-
-| Инструмент | Ответственность |
+| Инструмент | Роль |
 |---|---|
-| **Token-Efficient Spec Kit** | Intent, architecture, phases, context discipline, handoff |
-| **GitHub Spec Kit** | **WHAT** — specification, plan, tasks, convergence |
-| **Superpowers** | **HOW** — TDD, implementation, systematic debugging |
-| **Superpowers Bridge** | Не даёт Spec Kit и Superpowers дублировать planning |
-| **gstack** | Engineering/design review, browser QA, release checks |
+| **Token-Efficient Spec Kit** | **CORE** — intent, architecture, roadmap, phases, tasks, context, convergence, handoff |
+| **Superpowers** | **HOW** — TDD, implementation discipline, systematic debugging |
+| **gstack** | Challenge / review / browser QA / release checks |
 | **Context7** | Свежая документация libraries/API по необходимости |
 
-`START_NEW_PROJECT.md` проверяет tooling state и запускает setup автоматически, если Recommended profile ещё не настроен.
+`START_NEW_PROJECT.md` автоматически проверяет tooling state и запускает default setup, если нужно.
 
 Подробнее: [integrations/README.md](integrations/README.md)
 
 ---
 
-## Процесс адаптируется под размер проекта
+# GitHub Spec Kit — теперь optional
+
+GitHub Spec Kit **не нужен для обычной работы**.
+
+Наш workflow уже самостоятельно выполняет project-level:
+
+```text
+Brief
+Architecture
+Roadmap
+Phases
+Tasks
+Acceptance Criteria
+Convergence
+Session Handoff
+```
+
+Но GitHub Spec Kit остаётся полезным как **Advanced Spec Mode** для отдельных сложных фаз.
+
+Например:
+
+```text
+Payments
+Complex Authorization
+Multi-tenancy
+Public API contracts
+Critical migrations
+Large ambiguous integrations
+```
+
+Тогда:
+
+```text
+Token-Efficient Spec Kit
+= project-level source of truth
+
+GitHub Spec Kit
+= optional deep specification inside current phase
+
+Superpowers
+= implementation discipline
+```
+
+То есть он становится **инструментом по требованию**, а не фундаментом системы.
+
+---
+
+## Процесс адаптируется под проект
 
 ### S — Small
 
 ```text
-Brief → Plan → Tasks → Implement → Verify
+Brief → Tasks → Implement → Verify
 ```
-
-Для landing pages, небольших CLI, automations и маленьких features.
 
 ### M — Medium
 
 ```text
-Brief → Architecture → Roadmap → Phase Specs → Implement → Converge
+Brief → Architecture → Roadmap → Phases → Implement → Converge
 ```
 
-Для SaaS MVP, ecommerce, plugin + backend, internal tools.
-
-### L — Large / High-risk
+### L / High-risk
 
 ```text
 Brief
 → Architecture
-→ Risk model
 → Roadmap
-→ Small specs
-→ Selective quality gates
-→ Implementation batches
+→ Small phases
+→ Stronger quality gates
+→ optional Advanced Spec Mode where useful
 → Converge
 ```
 
-Для marketplaces, payments, multi-role systems, sensitive data и critical migrations.
-
-**High Risk означает больше проверок, а не автоматически более сложную архитектуру.**
+High Risk означает больше доказательств качества, а не автоматически больше frameworks.
 
 ---
 
 # Как работать каждый день
 
-Тебе достаточно знать несколько entry points:
-
 | Ситуация | Что использовать |
 |---|---|
 | Начинаю новый проект | [`START_NEW_PROJECT.md`](prompts/START_NEW_PROJECT.md) |
-| Хочу продолжить текущую работу | [`CONTINUE_PROJECT.md`](prompts/CONTINUE_PROJECT.md) |
-| Хочу проверить и закрыть phase | [`REVIEW_CURRENT_PHASE.md`](prompts/REVIEW_CURRENT_PHASE.md) |
-| Не понимаю, что делать дальше | [`GENERATE_NEXT_SESSION_PROMPT.md`](prompts/GENERATE_NEXT_SESSION_PROMPT.md) |
-| Хочу изменить требования | [`CHANGE_REQUEST.md`](prompts/CHANGE_REQUEST.md) |
-| Нужно исправить bug | [`BUG_FIX.md`](prompts/BUG_FIX.md) |
+| Продолжаю работу | [`CONTINUE_PROJECT.md`](prompts/CONTINUE_PROJECT.md) |
+| Проверяю/закрываю phase | [`REVIEW_CURRENT_PHASE.md`](prompts/REVIEW_CURRENT_PHASE.md) |
+| Не знаю, что делать дальше | [`GENERATE_NEXT_SESSION_PROMPT.md`](prompts/GENERATE_NEXT_SESSION_PROMPT.md) |
+| Меняю требования | [`CHANGE_REQUEST.md`](prompts/CHANGE_REQUEST.md) |
+| Исправляю bug | [`BUG_FIX.md`](prompts/BUG_FIX.md) |
 
-Но в нормальном процессе даже это упрощается:
+В нормальном процессе тебе чаще всего понадобится только:
 
 ```text
-Session 1
-   ↓
-AI делает работу
-   ↓
-AI выдаёт NEXT SESSION PROMPT
-   ↓
-ты открываешь новую сессию
-   ↓
-вставляешь prompt
-   ↓
-Session 2
+START_NEW_PROJECT
+↓
+NEXT SESSION PROMPT
+↓
+NEXT SESSION PROMPT
+↓
+NEXT SESSION PROMPT
+↓
+PROJECT COMPLETE
 ```
-
-И так до завершения проекта.
 
 ---
 
 ## Quality gates
 
-Код не считается готовым только потому, что агент его написал.
+Код не считается готовым только потому, что AI его написал.
 
 В зависимости от проекта используются:
 
@@ -363,49 +362,16 @@ lint
 + acceptance criteria
 ```
 
-Для auth, payments, private files, permissions, webhooks и destructive migrations negative tests обязательны там, где они релевантны.
-
----
-
-## Структура repository
-
-```text
-.
-├── .specify/memory/
-│   └── constitution.md
-│
-├── docs/
-│   ├── project/
-│   │   ├── PROJECT_BRIEF.md
-│   │   ├── ARCHITECTURE.md
-│   │   ├── ROADMAP.md
-│   │   ├── TOOLING_STATUS.md
-│   │   └── NEXT_SESSION.md
-│   │
-│   ├── phases/
-│   ├── decisions/
-│   ├── system/
-│   ├── USAGE_GUIDE.md
-│   └── WORKFLOW.md
-│
-├── integrations/
-├── templates/
-├── prompts/
-├── AGENTS.md
-├── README.md
-└── README_EN.md
-```
-
 ---
 
 ## Документация
 
-- **Хочу просто начать:** [README.md](README.md)
-- **Хочу понять, как пользоваться:** [docs/USAGE_GUIDE.md](docs/USAGE_GUIDE.md)
-- **Хочу понять внутренний workflow:** [docs/WORKFLOW.md](docs/WORKFLOW.md)
-- **Хочу понять переход между сессиями:** [docs/system/SESSION_HANDOFF.md](docs/system/SESSION_HANDOFF.md)
-- **Хочу узнать, что делать дальше прямо сейчас:** [docs/project/NEXT_SESSION.md](docs/project/NEXT_SESSION.md)
-- **Хочу понять integrations:** [integrations/README.md](integrations/README.md)
+- **Просто начать:** [README.md](README.md)
+- **Пошаговое руководство:** [docs/USAGE_GUIDE.md](docs/USAGE_GUIDE.md)
+- **Как работает система внутри:** [docs/WORKFLOW.md](docs/WORKFLOW.md)
+- **Что делать дальше:** [docs/project/NEXT_SESSION.md](docs/project/NEXT_SESSION.md)
+- **Переход между сессиями:** [docs/system/SESSION_HANDOFF.md](docs/system/SESSION_HANDOFF.md)
+- **Интеграции:** [integrations/README.md](integrations/README.md)
 
 ---
 
