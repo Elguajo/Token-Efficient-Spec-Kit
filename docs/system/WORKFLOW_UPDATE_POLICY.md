@@ -33,8 +33,6 @@ docs/system/*
 integrations/*
 templates/*
 prompts/*
-VERSION
-CHANGELOG.md
 ```
 
 These may be replaced by newer upstream framework versions after comparing local changes.
@@ -44,12 +42,19 @@ These may be replaced by newer upstream framework versions after comparing local
 ```text
 .specify/memory/constitution.md
 AGENTS.md
+VERSION
+CHANGELOG.md
 ```
 
-These may contain project/user customization.
+`VERSION` and `CHANGELOG.md` are framework metadata in the template repository, but a downstream product may later repurpose or extend root-level version/changelog files.
 
-Never blindly overwrite them.
-Use a three-way or semantic merge:
+Therefore:
+
+- if they still clearly belong to Token-Efficient Spec Kit, update them normally;
+- if local project-specific changes exist, merge/review instead of blindly replacing;
+- never erase product release history merely to update the workflow.
+
+For all merge-sensitive files, use a three-way or semantic merge when practical:
 
 ```text
 old framework version
@@ -59,7 +64,7 @@ vs
 new framework version
 ```
 
-Preserve intentional local rules unless incompatible with the new framework.
+Preserve intentional local rules/history unless incompatible with the new framework.
 
 ### C. Project-owned — never overwrite automatically
 
@@ -88,6 +93,8 @@ https://github.com/Elguajo/Token-Efficient-Spec-Kit
 ```
 
 Prefer a tagged/released version when available.
+If no release/tag exists, the updater may compare against the documented upstream version on the default branch, but it must report that it is updating from an unreleased source.
+
 Do not update from an untrusted fork unless the user explicitly selects it.
 
 ---
@@ -95,8 +102,8 @@ Do not update from an untrusted fork unless the user explicitly selects it.
 ## Safe update flow
 
 ```text
-1. Read local VERSION
-2. Determine target upstream version
+1. Read local VERSION / identify installed workflow version
+2. Determine target upstream version/source
 3. Read CHANGELOG / migration notes
 4. Compare framework-managed files
 5. Detect local modifications
@@ -105,7 +112,7 @@ Do not update from an untrusted fork unless the user explicitly selects it.
 8. Apply only framework changes
 9. Run Workflow Self-Audit
 10. Verify key internal links/paths
-11. Update local VERSION
+11. Record the installed workflow version safely
 12. Report exactly what changed
 ```
 
@@ -137,6 +144,7 @@ reset docs/project/*
 reset docs/phases/*
 reset docs/decisions/*
 replace local Constitution without merge
+erase a project-specific CHANGELOG
 ```
 
 These approaches can destroy real project knowledge.
@@ -150,6 +158,7 @@ A successful update should report:
 ```text
 Previous workflow version
 Target workflow version
+Update source: release/tag/default branch
 Framework files updated
 Merge-sensitive files changed
 Project-owned files touched: NONE
