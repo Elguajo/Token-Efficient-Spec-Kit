@@ -1,47 +1,69 @@
 # Интеграции
 
-Этот каталог описывает дополнительные инструменты, которые усиливают Token-Efficient Spec Kit, не превращая workflow в набор конкурирующих фреймворков.
+Token-Efficient Spec Kit теперь является **самостоятельным core workflow**.
 
-## Recommended profile
+Дополнительные инструменты усиливают отдельные части процесса, но не управляют проектом целиком.
 
-По умолчанию рекомендуется:
+## Recommended profile — default
 
 ```text
 Token-Efficient Spec Kit
-+ GitHub Spec Kit
 + Superpowers
-+ Superpowers Implementation Bridge
 + gstack
 + Context7
 ```
 
-Роли разделены жёстко:
+Роли:
 
 ```text
 Token-Efficient Spec Kit
-→ правила проекта, контекст, архитектурная дисциплина
-
-GitHub Spec Kit
-→ WHAT: spec, clarify, plan, tasks, analyze, converge
+→ intent, Project Brief, Architecture, Roadmap, phases, tasks,
+  acceptance criteria, context routing, convergence, session handoff
 
 Superpowers
-→ HOW: TDD, systematic debugging, execution discipline, verification
-
-Superpowers Implementation Bridge
-→ не даёт Spec Kit и Superpowers создавать два параллельных planning workflow
+→ HOW: TDD, implementation discipline, systematic debugging, verification
 
 gstack
-→ challenge/review layer: engineering review, design review, code review, browser QA, release checks
+→ challenge / review / browser QA / release checks
 
 Context7
-→ актуальная документация библиотек/API по требованию
+→ fresh library/API docs on demand
 ```
 
-## Главный принцип
+## Optional Advanced Spec Mode
 
-Ни один дополнительный инструмент не становится вторым source of truth.
+GitHub Spec Kit больше не является обязательным dependency.
 
-Canonical project intent остаётся в:
+Подключай его только для фаз, где formal specification действительно улучшает качество:
+
+```text
+payments
+complex permissions
+multi-tenancy
+critical migrations
+public API contracts
+large ambiguous features
+high-risk integrations
+```
+
+Тогда модель такая:
+
+```text
+Token-Efficient Spec Kit
+→ project-level source of truth
+
+GitHub Spec Kit
+→ optional deep feature/phase specification
+
+Superpowers Bridge
+→ optional coordination only when both Spec Kit and Superpowers are enabled
+```
+
+Подробнее: [`SPEC_KIT.md`](SPEC_KIT.md).
+
+## Canonical project state
+
+Остаётся в:
 
 ```text
 .specify/memory/constitution.md
@@ -49,16 +71,28 @@ docs/project/PROJECT_BRIEF.md
 docs/project/ARCHITECTURE.md
 docs/project/ROADMAP.md
 docs/phases/
+docs/project/NEXT_SESSION.md
+code/tests
 ```
+
+Ни Superpowers, ни gstack, ни Context7, ни GitHub Spec Kit не должны создавать второй project-level source of truth.
 
 ## Установка
 
-Для установки Recommended profile используй:
+Default tooling устанавливается через:
 
 ```text
 prompts/SETUP_RECOMMENDED_TOOLING.md
 ```
 
-AI-agent должен сначала определить текущий coding harness, затем сверить актуальные официальные инструкции каждого инструмента и только после этого выполнять установку.
+Он настраивает:
 
-Это сделано намеренно: способы установки Claude Code, Codex, Cursor и других harnesses меняются быстрее, чем сам шаблон.
+```text
+Superpowers
+gstack
+Context7
+```
+
+GitHub Spec Kit устанавливается отдельно только при включении Advanced Spec Mode.
+
+AI-agent должен использовать текущие официальные upstream instructions для активного coding harness.
