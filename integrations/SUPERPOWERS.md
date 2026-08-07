@@ -1,9 +1,8 @@
 # Superpowers Integration
 
-Role: implementation discipline.
+Role: **implementation discipline (HOW)**.
 
 Repository:
-
 https://github.com/obra/superpowers
 
 ## Use it for
@@ -11,69 +10,48 @@ https://github.com/obra/superpowers
 ```text
 TDD
 systematic debugging
-executing accepted plans
+implementation discipline
 verification
 implementation/code-review habits
-branch finishing
+branch finishing where useful
 ```
 
-## Do not use it for by default
+## Canonical ownership
 
-When Spec Kit has already produced accepted project/feature artifacts, do not create a second canonical:
+Token-Efficient Spec Kit already owns:
 
 ```text
-brainstorm
-product spec
-implementation plan
-roadmap
+Project Brief
+Architecture
+Roadmap
+phase scope
+phase tasks
+acceptance criteria
+session handoff
 ```
 
-This avoids duplicated context and conflicting plans.
+Superpowers should help execute that accepted work, not silently create a second project-level planning system.
+
+If a Superpowers skill includes brainstorming/planning, use it only when it helps resolve a genuine implementation ambiguity or when the user explicitly wants to rethink the current approach.
 
 ## Installation
 
 Installation is harness-specific and changes over time.
+The setup agent must read current official Superpowers instructions for the active coding harness before installing.
 
-The setup agent must read the current official Superpowers README/instructions before installing.
+## Optional Spec Kit bridge
 
-Examples of currently documented paths include:
+The Spec Kit ↔ Superpowers bridge is **not part of the default profile**.
 
-```text
-Claude Code
-→ official/plugin marketplace installation
-
-Cursor
-→ plugin marketplace
-
-Codex
-→ Codex-specific installation instructions in the Superpowers repository
-
-Gemini CLI
-→ Gemini extension installation
-```
-
-Do not hardcode a stale installation method when the current upstream documentation exposes a native plugin path.
-
-## Spec Kit bridge
-
-Recommended profile also installs:
+It is relevant only when Optional Advanced Spec Mode enables GitHub Spec Kit and both systems need coordination:
 
 ```text
-speckit-superpowers-bridge
-```
-
-through Spec Kit's extension catalog when available.
-
-Purpose:
-
-```text
-Spec Kit = WHAT
+Token-Efficient Spec Kit = project orchestration
+GitHub Spec Kit = optional formal deep spec inside current phase
 Superpowers = HOW
-Bridge = handoff + guard rails
+Bridge = optional coordination between Spec Kit and Superpowers
 ```
-
-The bridge should prevent planning/execution ownership from overlapping unnecessarily.
 
 ## Verification
 
-After installation, verify that a new agent session can discover Superpowers skills and that the workflow does not override the project's Constitution or canonical Spec Kit artifacts.
+After setup, verify that Superpowers is discoverable by the active harness and does not override the project's Constitution, Architecture, Roadmap or phase files.
