@@ -1,0 +1,33 @@
+# Project Brief
+
+## Desired outcome
+...
+
+## Primary users
+...
+
+## Core user jobs
+1. ...
+
+## Must-have requirements
+- ...
+
+## Explicit constraints
+- ...
+
+## Assumptions
+- ...
+
+## Out of scope for first release
+- ...
+
+## Success criteria
+- ...
+
+## Classification
+Type: ...
+Complexity tier: S / M / L
+Risk: Low / Medium / High
+
+## Open blockers
+None, unless a real blocker exists.
