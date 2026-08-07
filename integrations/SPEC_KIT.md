@@ -1,93 +1,85 @@
-# GitHub Spec Kit Integration
+# GitHub Spec Kit Integration — Optional Advanced Spec Mode
 
-Role: canonical specification/planning layer.
+GitHub Spec Kit is **not required by the default Token-Efficient workflow**.
 
-## Responsibilities
-
-Spec Kit owns:
+Token-Efficient Spec Kit already owns project-level:
 
 ```text
-constitution integration
-feature specification
-clarification
-implementation plan
-quality checklist when needed
-task decomposition
-cross-artifact analysis
+intent
+Project Brief
+Architecture
+Roadmap
+phases
+tasks
+acceptance criteria
 convergence
+session handoff
 ```
 
-## Install
+GitHub Spec Kit is an optional capability for phases that benefit from deeper formal specification.
 
-Use current official installation instructions.
+## Good triggers
 
-Current supported pattern:
+Use Advanced Spec Mode when a phase is materially ambiguous, cross-cutting or high-risk, for example:
 
-```bash
-uv tool install specify-cli
-specify version
-```
+- payments;
+- complex authorization;
+- multi-tenant isolation;
+- critical migrations;
+- public API contracts;
+- large cross-system integrations;
+- difficult requirements where consistency analysis is valuable.
 
-Initialize the current project with the appropriate agent integration:
+Do not enable it just because a project is large.
 
-```bash
-specify init . --integration <agent>
-```
-
-Modern Spec Kit supports many agent integrations, including Codex and Claude Code. Always verify the currently supported integration key before automation.
-
-## Existing template files
-
-Token-Efficient Spec Kit already ships a custom:
+## Ownership when enabled
 
 ```text
-.specify/memory/constitution.md
+Token-Efficient Spec Kit
+= project-level source of truth, architecture, roadmap, phase boundary, handoff
+
+GitHub Spec Kit
+= formal specification/planning support INSIDE the current phase
+
+Superpowers
+= implementation discipline
+
+gstack
+= challenge/review/QA
 ```
 
-During initialization, preserve this Constitution. If the installer needs `--force`, back up the existing Constitution and restore it afterward unless the user explicitly requests regeneration.
+Do not generate a second project roadmap or replace existing project-level docs.
 
-## Recommended workflow
+## Typical Advanced flow
 
-Small/normal feature:
+Use only the gates justified by the phase:
 
 ```text
-specify
+current Token-Efficient phase
+→ specify
+→ clarify if consequential ambiguity exists
 → plan
+→ checklist if risk justifies it
 → tasks
-→ implement/handoff
+→ analyze if consistency/risk warrants it
+→ implementation
 → converge
+→ Token-Efficient NEXT SESSION handoff
 ```
 
-Risky/ambiguous feature:
+For ordinary features, stay with the native Token-Efficient phase workflow.
 
-```text
-specify
-→ clarify
-→ plan
-→ checklist
-→ tasks
-→ analyze
-→ implementation handoff
-→ converge
-```
+## Installation
 
-Do not run every quality gate for every trivial task.
+Installation changes over time. Before installing, use the current official GitHub Spec Kit documentation.
 
-## Superpowers bridge
+If both GitHub Spec Kit and Superpowers are enabled, a current supported bridge may be added to prevent duplicate planning/execution ownership. The bridge is optional and belongs only to Advanced Spec Mode.
 
-Recommended profile should install the community extension:
+## Important rule
 
-```bash
-specify extension add speckit-superpowers-bridge
-```
+Do not install or load GitHub Spec Kit in every project/session merely because integration support exists.
 
-The bridge keeps Spec Kit as the design source of truth and Superpowers as implementation discipline.
+Token efficiency wins when formal tooling is activated only where its additional rigor is worth the context cost.
 
-Before installation, verify that the extension still exists in the current Spec Kit community catalog and read its current requirements.
-
-Official references:
-
-- https://github.github.com/spec-kit/
-- https://github.github.com/spec-kit/installation.html
-- https://github.github.com/spec-kit/reference/integrations.html
-- https://github.github.com/spec-kit/reference/extensions.html
+Official project:
+https://github.com/github/spec-kit
