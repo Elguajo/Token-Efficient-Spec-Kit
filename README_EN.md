@@ -8,7 +8,9 @@
 
 `Idea → Architecture → Phases → 1–3 Tasks → Code → Verification → Next Prompt`
 
-[Русская версия](README.md) · [Usage Guide](docs/USAGE_GUIDE.md) · [Workflow](docs/WORKFLOW.md) · [Integrations](integrations/README.md)
+**Current version: `0.5.0`**
+
+[Русская версия](README.md) · [Usage Guide](docs/USAGE_GUIDE.md) · [Workflow](docs/WORKFLOW.md) · [Integrations](integrations/README.md) · [Changelog](CHANGELOG.md)
 
 </div>
 
@@ -162,35 +164,15 @@ Token-Efficient Spec Kit
 
 GitHub Spec Kit is **not required for normal operation**.
 
-Token-Efficient Spec Kit already owns project-level:
-
-```text
-Brief
-Architecture
-Roadmap
-Phases
-Tasks
-Acceptance Criteria
-Convergence
-Session Handoff
-```
+Token-Efficient Spec Kit already owns project-level Brief, Architecture, Roadmap, Phases, Tasks, Acceptance Criteria, Convergence and Session Handoff.
 
 GitHub Spec Kit can be enabled as **Optional Advanced Spec Mode** for difficult phases where deeper formal specification adds clear value, such as payments, complex authorization, multi-tenancy boundaries, public APIs, critical migrations, or large ambiguous integrations.
 
-When enabled:
+Use:
 
 ```text
-Token-Efficient Spec Kit
-= project-level source of truth
-
-GitHub Spec Kit
-= optional deep specification inside the current phase
-
-Superpowers
-= implementation discipline
+prompts/ENABLE_ADVANCED_SPEC_MODE.md
 ```
-
-See [integrations/SPEC_KIT.md](integrations/SPEC_KIT.md).
 
 ---
 
@@ -203,8 +185,95 @@ See [integrations/SPEC_KIT.md](integrations/SPEC_KIT.md).
 | Generic continuation fallback | [`CONTINUE_PROJECT.md`](prompts/CONTINUE_PROJECT.md) |
 | Review/close a phase | [`REVIEW_CURRENT_PHASE.md`](prompts/REVIEW_CURRENT_PHASE.md) |
 | Lost the handoff | [`GENERATE_NEXT_SESSION_PROMPT.md`](prompts/GENERATE_NEXT_SESSION_PROMPT.md) |
+| Understand project health | [`PROJECT_DOCTOR.md`](prompts/PROJECT_DOCTOR.md) |
 | Requirements changed | [`CHANGE_REQUEST.md`](prompts/CHANGE_REQUEST.md) |
 | Fix a bug | [`BUG_FIX.md`](prompts/BUG_FIX.md) |
+| Audit the workflow itself | [`AUDIT_WORKFLOW.md`](prompts/AUDIT_WORKFLOW.md) |
+| Safely update the workflow | [`UPDATE_WORKFLOW.md`](prompts/UPDATE_WORKFLOW.md) |
+
+---
+
+# Project Doctor
+
+If you do not understand the current repository state, run:
+
+```text
+prompts/PROJECT_DOCTOR.md
+```
+
+It explains in plain language:
+
+```text
+HEALTHY / NEEDS ATTENTION / BLOCKED / UNKNOWN
+current phase
+what is already done
+what remains
+known build/test status
+workflow/tooling concerns
+best next action
+NEXT SESSION PROMPT
+```
+
+Project Doctor is diagnostic by default and should not implement unrelated product work.
+
+---
+
+# Workflow Self-Audit
+
+After material changes to Token-Efficient Spec Kit itself, run:
+
+```text
+prompts/AUDIT_WORKFLOW.md
+```
+
+It checks ownership consistency, default-vs-optional tooling, Session Handoff, token efficiency, paths/links, safe update boundaries, and VERSION/CHANGELOG alignment.
+
+It reports findings first instead of automatically redesigning the framework.
+
+---
+
+# Safe workflow updates
+
+To update Token-Efficient Spec Kit inside an existing product repository, use:
+
+```text
+prompts/UPDATE_WORKFLOW.md
+```
+
+The updater distinguishes:
+
+```text
+Framework-managed
+→ system docs / prompts / integrations / templates
+
+Merge-sensitive
+→ Constitution / AGENTS.md
+
+Project-owned
+→ project docs / phases / ADRs / code / tests / migrations
+```
+
+**Project-owned files must never be blindly replaced with template defaults.**
+
+After an update, Workflow Self-Audit is required.
+
+---
+
+# Versioning
+
+Current framework version:
+
+```text
+VERSION
+```
+
+History and migration context:
+
+```text
+CHANGELOG.md
+```
+
+The project follows Semantic Versioning principles.
 
 ---
 
@@ -213,8 +282,14 @@ See [integrations/SPEC_KIT.md](integrations/SPEC_KIT.md).
 - [Usage Guide](docs/USAGE_GUIDE.md)
 - [End-to-End Workflow](docs/WORKFLOW.md)
 - [Session Handoff](docs/system/SESSION_HANDOFF.md)
+- [Project Doctor](docs/system/PROJECT_DOCTOR.md)
+- [Workflow Self-Audit](docs/system/WORKFLOW_SELF_AUDIT.md)
+- [Safe Workflow Update Policy](docs/system/WORKFLOW_UPDATE_POLICY.md)
 - [Current Next Step](docs/project/NEXT_SESSION.md)
 - [Integrations](integrations/README.md)
+- [Changelog](CHANGELOG.md)
+- [Contributing](CONTRIBUTING.md)
+- [Security](SECURITY.md)
 
 ---
 
