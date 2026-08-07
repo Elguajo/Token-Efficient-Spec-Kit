@@ -9,6 +9,7 @@ For normal implementation read only:
 docs/project/PROJECT_BRIEF.md
 docs/project/ARCHITECTURE.md
 docs/system/ENGINEERING_RULES.md
+docs/system/SESSION_HANDOFF.md
 current phase
 relevant ADR only if needed
 relevant code/tests
@@ -103,3 +104,20 @@ e2e/manual QA
 ```
 
 Do not weaken tests, access control or security just to achieve green status.
+
+## Session handoff — mandatory
+
+The user may not know what the next engineering step should be. The agent owns that decision.
+
+At the end of every meaningful coding/review session:
+
+1. classify status as `IN PROGRESS`, `PHASE COMPLETE`, or `PROJECT COMPLETE`;
+2. decide the next action from the current phase acceptance criteria and roadmap;
+3. update `docs/project/NEXT_SESSION.md`;
+4. end the response with a ready-to-copy `NEXT SESSION PROMPT` for a fresh AI session.
+
+If the phase is incomplete, the prompt continues the same phase.
+If complete, the prompt starts the next roadmap phase.
+If the project is complete, route to release/audit or future `CHANGE_REQUEST` work.
+
+The handoff must remain token-efficient: reference canonical files instead of repeating the whole project.
