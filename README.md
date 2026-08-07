@@ -4,13 +4,13 @@
 
 ### Универсальный workflow для разработки с AI-агентами
 
-**Ты описываешь результат. AI сам выбирает стек, проектирует архитектуру, ведёт проект по фазам, проверяет качество и в конце каждой сессии говорит, что делать дальше.**
+**Ты описываешь, что хочешь получить. AI сам выбирает стек, проектирует архитектуру, ведёт проект по фазам и в конце каждой сессии говорит, что делать дальше.**
 
 `Идея → Архитектура → Фазы → 1–3 задачи → Код → Проверка → Следующий prompt`
 
-**Current version: `0.5.0`**
+**v0.5.0**
 
-[English](README_EN.md) · [Руководство](docs/USAGE_GUIDE.md) · [Workflow](docs/WORKFLOW.md) · [Интеграции](integrations/README.md) · [Changelog](CHANGELOG.md)
+[English](README_EN.md) · [Руководство](docs/USAGE_GUIDE.md) · [Workflow](docs/WORKFLOW.md) · [Maintenance](docs/MAINTENANCE.md) · [Changelog](CHANGELOG.md)
 
 </div>
 
@@ -20,29 +20,35 @@
 
 **Token-Efficient Spec Kit — самостоятельный AI Engineering Workflow.**
 
-Он не требует, чтобы пользователь разбирался в разработке или заранее выбирал framework, database, hosting, auth и другие технические детали.
+Он создан для ситуации, когда ты понимаешь **что хочешь сделать**, но не обязан знать:
 
-Ты можешь написать:
+```text
+какой framework выбрать
+какая database лучше
+как построить architecture
+на какие phases разбить проект
+что попросить у AI следующим сообщением
+```
+
+Например, ты пишешь:
 
 ```text
 Хочу приложение, где дизайнеры смогут продавать digital assets.
 ```
 
-Дальше AI самостоятельно:
+AI должен самостоятельно:
 
-1. понимает продукт и пользователей;
-2. задаёт только действительно необходимые вопросы;
-3. выбирает один рекомендуемый стек;
-4. проектирует архитектуру и data model;
-5. создаёт roadmap и phases;
-6. берёт только 1–3 связанные задачи за сессию;
-7. пишет код и tests;
-8. запускает review / QA по необходимости;
-9. проверяет acceptance criteria;
-10. определяет следующий шаг;
-11. выдаёт готовый prompt для новой AI-сессии.
+- понять продукт и пользователей;
+- спросить только то, без чего действительно нельзя продолжать;
+- выбрать один рекомендуемый stack;
+- создать Architecture и Roadmap;
+- разделить работу на проверяемые phases;
+- делать обычно по 1–3 связанные задачи за сессию;
+- запускать нужные tests / review / QA;
+- определить следующий инженерный шаг;
+- выдать готовый prompt для новой AI-сессии.
 
-> **Пользователь отвечает за желаемый результат. AI отвечает за инженерные решения и навигацию по проекту.**
+> **Ты управляешь продуктом. AI управляет инженерным исполнением и навигацией по проекту.**
 
 ---
 
@@ -55,9 +61,9 @@ git clone https://github.com/Elguajo/Token-Efficient-Spec-Kit.git my-project
 cd my-project
 ```
 
-### 2. Открой его в repository-aware AI coding agent
+### 2. Открой его в AI coding agent
 
-Например Codex, Claude Code, Cursor или другом совместимом coding harness.
+Например Codex, Claude Code, Cursor или другом repository-aware agent.
 
 ### 3. Запусти
 
@@ -86,29 +92,29 @@ prompts/START_NEW_PROJECT.md
 ## Как проходит работа
 
 ```mermaid
-flowchart TD
-    A[Ты описываешь результат] --> B[Project Brief]
+flowchart LR
+    A[Идея] --> B[Project Brief]
     B --> C[Architecture]
     C --> D[Roadmap]
     D --> E[Current Phase]
     E --> F[1–3 задачи]
-    F --> G[Implementation]
-    G --> H[Tests / Review / QA]
-    H --> I{Phase готов?}
-    I -- Нет --> J[Prompt продолжить текущую фазу]
-    I -- Да --> K[Prompt начать следующую фазу]
-    J --> L[Новая AI-сессия]
-    K --> L
-    L --> E
+    F --> G[Code + Tests]
+    G --> H{Phase готов?}
+    H -- Нет --> I[Next Session Prompt]
+    H -- Да --> J[Prompt для следующей Phase]
+    I --> E
+    J --> E
 ```
 
-Project knowledge хранится в repository, а не только в истории чата.
+Project knowledge хранится в repository, поэтому новую сессию не нужно начинать с пересказа всей истории.
 
 ---
 
-# Главная особенность — AI сам говорит, что делать дальше
+# AI сам говорит, что делать дальше
 
-В конце каждой meaningful coding/review session AI обязан определить:
+Это одна из главных особенностей workflow.
+
+В конце meaningful coding/review session AI определяет:
 
 ```text
 IN PROGRESS
@@ -116,26 +122,13 @@ PHASE COMPLETE
 PROJECT COMPLETE
 ```
 
-После этого он создаёт **NEXT SESSION PROMPT**.
-
-Ты просто:
+и обязательно создаёт:
 
 ```text
-получил prompt
-→ открыл новую сессию
-→ вставил prompt
-→ продолжил работу
+NEXT SESSION PROMPT
 ```
 
-Не нужно самому понимать:
-
-```text
-какой phase следующий?
-пора ли тестировать?
-что осталось?
-нужен ли review?
-что написать AI завтра?
-```
+Ты просто копируешь его в новую сессию.
 
 Текущий handoff также хранится в:
 
@@ -149,195 +142,60 @@ docs/project/NEXT_SESSION.md
 prompts/GENERATE_NEXT_SESSION_PROMPT.md
 ```
 
-Подробнее: [Session Handoff Protocol](docs/system/SESSION_HANDOFF.md)
+[Подробнее о Session Handoff →](docs/system/SESSION_HANDOFF.md)
 
 ---
 
 ## Почему это экономит токены
 
-Обычная сессия читает только:
+Обычная рабочая сессия читает только минимально нужный контекст:
 
 ```text
 Constitution
 + Project Brief
 + Architecture
-+ Engineering Rules
 + Current Phase
 + relevant ADR
 + relevant code/tests
 ```
 
-Она **не перечитывает по умолчанию**:
-
-```text
-все завершённые phases
-все ADR
-всю историю чатов
-гигантские master specs
-повторяющиеся research dumps
-```
+Она не должна без необходимости перечитывать весь roadmap, все старые phases, всю историю чатов или огромные master specs.
 
 > **Один факт — одно canonical место. Одна сессия — обычно 1–3 связанные задачи.**
 
 ---
 
-# Senior autonomy
+## Recommended profile
 
-AI не должен перекладывать обычные engineering decisions на пользователя.
+Сам Token-Efficient Spec Kit является **core**.
 
-Он не должен спрашивать:
-
-```text
-React или Vue?
-Postgres или MongoDB?
-Vercel или AWS?
-REST или GraphQL?
-```
-
-если это можно профессионально определить из требований.
-
-Вопрос пользователю нужен только когда неизвестный параметр реально меняет продукт, стоимость, security, compliance, business rules или требует необратимого действия.
-
----
-
-## Creative autonomy
-
-AI может самостоятельно улучшать незаданные детали:
-
-- UX flows;
-- information architecture;
-- feature organization;
-- API ergonomics;
-- data models;
-- onboarding;
-- loading / empty / error states;
-- developer experience;
-- небольшие high-value product ideas.
-
-Но он не имеет права незаметно менять явные требования пользователя.
-
----
-
-# Recommended AI Engineering Profile
-
-Наш workflow является core сам по себе.
-
-Default:
-
-```text
-Token-Efficient Spec Kit
-├── Superpowers
-├── gstack
-└── Context7
-```
+Дополнительный рекомендуемый набор:
 
 | Инструмент | Роль |
 |---|---|
-| **Token-Efficient Spec Kit** | **CORE** — intent, architecture, roadmap, phases, tasks, context, convergence, handoff |
-| **Superpowers** | **HOW** — TDD, implementation discipline, systematic debugging |
-| **gstack** | Challenge / review / browser QA / release checks |
+| **Superpowers** | TDD, implementation discipline, systematic debugging |
+| **gstack** | Engineering/design review, browser QA, release checks |
 | **Context7** | Свежая документация libraries/API по необходимости |
 
-`START_NEW_PROJECT.md` автоматически проверяет tooling state и запускает default setup, если нужно.
+GitHub Spec Kit **не обязателен**. Он доступен как [Optional Advanced Spec Mode](integrations/SPEC_KIT.md) для сложных фаз, где formal deep specification действительно полезна.
 
-Подробнее: [integrations/README.md](integrations/README.md)
-
----
-
-# GitHub Spec Kit — optional Advanced Spec Mode
-
-GitHub Spec Kit **не нужен для обычной работы**.
-
-Наш workflow уже самостоятельно выполняет project-level:
-
-```text
-Brief
-Architecture
-Roadmap
-Phases
-Tasks
-Acceptance Criteria
-Convergence
-Session Handoff
-```
-
-Но GitHub Spec Kit остаётся полезным для отдельных сложных фаз, например:
-
-```text
-Payments
-Complex Authorization
-Multi-tenancy
-Public API contracts
-Critical migrations
-Large ambiguous integrations
-```
-
-Тогда:
-
-```text
-Token-Efficient Spec Kit
-= project-level source of truth
-
-GitHub Spec Kit
-= optional deep specification inside current phase
-
-Superpowers
-= implementation discipline
-```
-
-Для включения:
-
-```text
-prompts/ENABLE_ADVANCED_SPEC_MODE.md
-```
+[Подробнее об интеграциях →](integrations/README.md)
 
 ---
 
-## Процесс адаптируется под проект
-
-### S — Small
-
-```text
-Brief → Tasks → Implement → Verify
-```
-
-### M — Medium
-
-```text
-Brief → Architecture → Roadmap → Phases → Implement → Converge
-```
-
-### L / High-risk
-
-```text
-Brief
-→ Architecture
-→ Roadmap
-→ Small phases
-→ Stronger quality gates
-→ optional Advanced Spec Mode where useful
-→ Converge
-```
-
-High Risk означает больше доказательств качества, а не автоматически больше frameworks.
-
----
-
-# Как работать каждый день
+# Основные команды
 
 | Ситуация | Что использовать |
 |---|---|
-| Начинаю новый проект | [`START_NEW_PROJECT.md`](prompts/START_NEW_PROJECT.md) |
-| Продолжаю работу | [`CONTINUE_PROJECT.md`](prompts/CONTINUE_PROJECT.md) |
-| Проверяю/закрываю phase | [`REVIEW_CURRENT_PHASE.md`](prompts/REVIEW_CURRENT_PHASE.md) |
-| Не знаю, что делать дальше | [`GENERATE_NEXT_SESSION_PROMPT.md`](prompts/GENERATE_NEXT_SESSION_PROMPT.md) |
-| Меняю требования | [`CHANGE_REQUEST.md`](prompts/CHANGE_REQUEST.md) |
-| Исправляю bug | [`BUG_FIX.md`](prompts/BUG_FIX.md) |
-| Хочу понять состояние проекта | [`PROJECT_DOCTOR.md`](prompts/PROJECT_DOCTOR.md) |
-| Проверяю сам workflow на противоречия | [`AUDIT_WORKFLOW.md`](prompts/AUDIT_WORKFLOW.md) |
-| Обновляю workflow безопасно | [`UPDATE_WORKFLOW.md`](prompts/UPDATE_WORKFLOW.md) |
+| Начать новый проект | [`START_NEW_PROJECT.md`](prompts/START_NEW_PROJECT.md) |
+| Продолжить работу | предыдущий **NEXT SESSION PROMPT** |
+| Проверить/закрыть phase | [`REVIEW_CURRENT_PHASE.md`](prompts/REVIEW_CURRENT_PHASE.md) |
+| Не понимаю, что происходит | [`PROJECT_DOCTOR.md`](prompts/PROJECT_DOCTOR.md) |
+| Потерял следующий шаг | [`GENERATE_NEXT_SESSION_PROMPT.md`](prompts/GENERATE_NEXT_SESSION_PROMPT.md) |
+| Изменить требования | [`CHANGE_REQUEST.md`](prompts/CHANGE_REQUEST.md) |
+| Исправить bug | [`BUG_FIX.md`](prompts/BUG_FIX.md) |
 
-В нормальном процессе тебе чаще всего понадобится только:
+В обычной работе цикл выглядит ещё проще:
 
 ```text
 START_NEW_PROJECT
@@ -353,151 +211,17 @@ PROJECT COMPLETE
 
 ---
 
-# Project Doctor — «что происходит с проектом?»
+## Куда идти дальше
 
-Если ты не понимаешь текущее состояние repository, запусти:
-
-```text
-prompts/PROJECT_DOCTOR.md
-```
-
-Он не начинает новую разработку, а объясняет человеческим языком:
-
-```text
-Health: HEALTHY / NEEDS ATTENTION / BLOCKED / UNKNOWN
-Current phase
-Что уже сделано
-Что осталось
-Какие проверки проходят или падают
-Есть ли проблема с workflow/tooling
-Что делать дальше
-NEXT SESSION PROMPT
-```
-
-То есть это кнопка **«объясни мне состояние проекта и скажи следующий шаг»**.
-
-Подробнее: [Project Doctor Protocol](docs/system/PROJECT_DOCTOR.md)
-
----
-
-# Workflow Self-Audit
-
-Сам framework тоже может со временем начать противоречить себе.
-
-После значимых изменений запусти:
-
-```text
-prompts/AUDIT_WORKFLOW.md
-```
-
-Audit проверяет:
-
-- согласованность Constitution / AGENTS / README / prompts;
-- ownership инструментов;
-- default vs optional tooling;
-- Session Handoff;
-- token efficiency;
-- stale paths/links;
-- safe update boundaries;
-- VERSION / CHANGELOG consistency.
-
-Audit **не переписывает framework автоматически** — он сначала показывает проблемы и минимальные рекомендуемые исправления.
-
-Подробнее: [Workflow Self-Audit](docs/system/WORKFLOW_SELF_AUDIT.md)
-
----
-
-# Безопасное обновление workflow
-
-Проект может обновлять Token-Efficient Spec Kit до новой версии, не уничтожая реальные project docs.
-
-Используй:
-
-```text
-prompts/UPDATE_WORKFLOW.md
-```
-
-Updater разделяет файлы на три класса:
-
-```text
-Framework-managed
-→ system docs / prompts / integrations / templates
-
-Merge-sensitive
-→ Constitution / AGENTS.md
-
-Project-owned
-→ PROJECT_BRIEF / ARCHITECTURE / ROADMAP
-→ phases / ADRs
-→ source code / tests / migrations
-```
-
-**Project-owned файлы нельзя автоматически перезаписывать template defaults.**
-
-После update автоматически требуется Workflow Self-Audit.
-
-Подробнее: [Safe Workflow Update Policy](docs/system/WORKFLOW_UPDATE_POLICY.md)
-
----
-
-# Версионирование
-
-Текущая версия хранится в:
-
-```text
-VERSION
-```
-
-История изменений:
-
-```text
-CHANGELOG.md
-```
-
-Проект использует Semantic Versioning:
-
-```text
-MAJOR.MINOR.PATCH
-```
-
-- `PATCH` — исправления без изменения workflow contract;
-- `MINOR` — новые совместимые capabilities;
-- `MAJOR` — breaking изменения workflow/file contracts.
-
----
-
-## Quality gates
-
-Код не считается готовым только потому, что AI его написал.
-
-В зависимости от проекта используются:
-
-```text
-lint
-+ typecheck
-+ tests
-+ build
-+ security negative tests
-+ browser/e2e QA
-+ acceptance criteria
-```
-
----
-
-## Документация
-
-- **Просто начать:** [README.md](README.md)
-- **Пошаговое руководство:** [docs/USAGE_GUIDE.md](docs/USAGE_GUIDE.md)
-- **Как работает система внутри:** [docs/WORKFLOW.md](docs/WORKFLOW.md)
-- **Что делать дальше:** [docs/project/NEXT_SESSION.md](docs/project/NEXT_SESSION.md)
-- **Переход между сессиями:** [docs/system/SESSION_HANDOFF.md](docs/system/SESSION_HANDOFF.md)
-- **Project Doctor:** [docs/system/PROJECT_DOCTOR.md](docs/system/PROJECT_DOCTOR.md)
-- **Workflow Self-Audit:** [docs/system/WORKFLOW_SELF_AUDIT.md](docs/system/WORKFLOW_SELF_AUDIT.md)
-- **Safe Updates:** [docs/system/WORKFLOW_UPDATE_POLICY.md](docs/system/WORKFLOW_UPDATE_POLICY.md)
-- **Интеграции:** [integrations/README.md](integrations/README.md)
-- **История версий:** [CHANGELOG.md](CHANGELOG.md)
-- **Contributing:** [CONTRIBUTING.md](CONTRIBUTING.md)
-- **Security:** [SECURITY.md](SECURITY.md)
+| Хочу понять... | Открыть |
+|---|---|
+| Как пользоваться системой пошагово | [Usage Guide](docs/USAGE_GUIDE.md) |
+| Как workflow устроен внутри | [End-to-End Workflow](docs/WORKFLOW.md) |
+| Что делать прямо сейчас в текущем проекте | [NEXT_SESSION.md](docs/project/NEXT_SESSION.md) |
+| Как работают дополнительные инструменты | [Integrations](integrations/README.md) |
+| Как использовать Doctor, Self-Audit, Updates и Versioning | [Maintenance](docs/MAINTENANCE.md) |
+| Что изменилось между версиями | [Changelog](CHANGELOG.md) |
+| Как предложить изменение | [Contributing](CONTRIBUTING.md) |
 
 ---
 
