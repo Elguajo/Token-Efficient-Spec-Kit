@@ -1,17 +1,21 @@
 # Руководство по использованию Token-Efficient Spec Kit
 
-> Практическое руководство: что делать пользователю, что делает AI-агент и как вести проект от одной идеи до production.
+> Практическое руководство для человека, который может вообще не разбираться в разработке.
+
+Если после чтения этого файла остаётся вопрос **«что мне теперь делать?»**, открой [`project/NEXT_SESSION.md`](project/NEXT_SESSION.md). Там AI должен хранить готовый следующий шаг и copy-paste prompt.
 
 ---
 
-## Короткая версия
+# Самая короткая версия
 
-Для нового проекта тебе достаточно трёх действий:
+Для нового проекта достаточно:
 
 ```text
-1. Клонировать Token-Efficient Spec Kit
-2. Открыть repository в Codex / Claude Code / Cursor / другом coding agent
-3. Запустить prompts/START_NEW_PROJECT.md и заменить <WHAT_I_WANT>
+1. Клонировать repository
+2. Открыть его в AI coding agent
+3. Запустить prompts/START_NEW_PROJECT.md
+4. Заменить <WHAT_I_WANT> на своё описание продукта
+5. Дальше копировать NEXT SESSION PROMPT, который AI выдаёт в конце каждой сессии
 ```
 
 Например:
@@ -21,90 +25,62 @@
 искать и автоматически тегировать локальные 3D-ассеты.
 ```
 
-После этого агент должен самостоятельно:
+После этого AI должен самостоятельно:
 
 ```text
 проверить tooling
 → понять продукт
-→ выбрать лучший практичный stack
+→ выбрать практичный stack
 → спроектировать architecture
 → создать roadmap
-→ разбить проект на phases
-→ начать первые 1–3 задачи
+→ разбить работу на phases
+→ выполнить первые 1–3 задачи
 → проверить результат
+→ определить следующий шаг
+→ дать prompt для новой сессии
 ```
 
-Тебе не нужно заранее выбирать framework, database, auth, hosting и другие обычные инженерные детали.
+Тебе не нужно заранее выбирать framework, database, auth, hosting или знать, какая фаза должна идти следующей.
 
 ---
 
-# 1. Что находится в этом шаблоне
+# 1. Что делает пользователь, а что делает AI
 
-Token-Efficient Spec Kit состоит из нескольких уровней.
+| Пользователь | AI-agent |
+|---|---|
+| Объясняет, что хочет получить | Понимает продукт и пользователей |
+| Даёт реальные business constraints | Выбирает stack |
+| Даёт feedback | Проектирует architecture |
+| Принимает важные product/business decisions | Создаёт roadmap и phases |
+| Даёт login/credentials при необходимости | Делит работу на tasks |
+| Подтверждает destructive/high-impact actions | Пишет код и tests |
+| Может переопределить решение AI | Делает review / QA |
+| | **Определяет следующий шаг и пишет следующий prompt** |
 
-```text
-Constitution
-    ↓
-System Rules
-    ↓
-Project Brief + Architecture + Roadmap
-    ↓
-Current Phase
-    ↓
-Implementation
-    ↓
-Verification / Review
-```
+Главный принцип:
 
-Основные файлы:
-
-```text
-.specify/memory/constitution.md
-    Постоянные принципы работы AI-агента.
-
-docs/system/
-    Как агент принимает решения, выбирает stack,
-    контролирует complexity и расход контекста.
-
-docs/project/
-    Текущее состояние конкретного проекта.
-
-docs/phases/
-    Маленькие этапы разработки.
-
-docs/decisions/
-    Только важные architecture decisions (ADR).
-
-integrations/
-    Правила работы Spec Kit, Superpowers,
-    gstack и Context7 без конфликтов.
-
-prompts/
-    Готовые entry points для разных ситуаций.
-```
+> **Ты управляешь продуктом. AI управляет инженерным исполнением и навигацией по проекту.**
 
 ---
 
 # 2. Новый проект
 
-## Шаг 1 — создать repository из шаблона
-
-Самый простой вариант:
+## Шаг 1 — клонировать шаблон
 
 ```bash
 git clone https://github.com/Elguajo/Token-Efficient-Spec-Kit.git my-project
 cd my-project
 ```
 
-После этого желательно создать собственный новый Git repository / remote для реального проекта, чтобы история самого шаблона не смешивалась с историей продукта.
+Для реального продукта лучше затем привязать папку к своему новому Git repository, чтобы история шаблона не смешивалась с историей продукта.
 
-Если проект уже существует, можно перенести workflow-файлы в существующий repository вместо клонирования как нового приложения.
+Если проект уже существует, workflow-файлы можно перенести в существующий repository.
 
 ---
 
 ## Шаг 2 — открыть repository в AI coding agent
 
-Workflow рассчитан на repository-aware agent, например:
+Workflow рассчитан на repository-aware coding agent, например:
 
 ```text
 Codex
@@ -115,9 +91,7 @@ OpenCode
 другой совместимый coding harness
 ```
 
-Не требуется постоянно использовать один и тот же model/provider.
-
-Canonical project knowledge хранится в repository, а не только в истории конкретного чата.
+Главная память проекта хранится в repository, а не только в истории конкретного чата.
 
 ---
 
@@ -135,40 +109,38 @@ prompts/START_NEW_PROJECT.md
 <WHAT_I_WANT>
 ```
 
-на описание желаемого результата.
+на желаемый результат.
 
-Можно писать очень коротко:
+Можно написать одну строку:
 
 ```text
 Хочу сервис для генерации коммерческих предложений для архитекторов.
 ```
 
-Или подробно:
+Или подробнее:
 
 ```text
 Хочу web app для небольших архитектурных студий.
 Пользователь загружает Excel со сметой, выбирает фирменный шаблон,
-а система генерирует аккуратное PDF-коммерческое предложение.
+а система генерирует PDF-коммерческое предложение.
 Нужны аккаунты, история документов и платная подписка.
 ```
 
-Чем больше у тебя реальных бизнес-ограничений, тем полезнее их сразу указать.
-
-Не нужно придумывать технические ограничения, если они тебе не важны.
+Указывай реальные ограничения, если они есть. Не придумывай технические решения только потому, что считаешь, что их «надо указать».
 
 ---
 
-# 3. Что происходит после первого prompt
+# 3. Что AI делает после первого prompt
 
-## Step 0 — Tooling bootstrap
+## 3.1 Tooling bootstrap
 
-Агент читает:
+AI проверяет:
 
 ```text
 docs/project/TOOLING_STATUS.md
 ```
 
-Если Recommended tooling ещё не настроен для текущего coding harness, агент должен самостоятельно запустить setup-процесс.
+Если Recommended profile ещё не готов для текущего coding harness, `START_NEW_PROJECT.md` запускает setup автоматически.
 
 Recommended profile:
 
@@ -180,46 +152,38 @@ GitHub Spec Kit
 + Context7
 ```
 
-Агент использует актуальные upstream installation instructions, потому что способы установки AI tooling быстро меняются.
-
-После успешной настройки он обновляет:
-
-```text
-docs/project/TOOLING_STATUS.md
-```
-
 Tooling не должен переустанавливаться в каждой сессии.
 
-### Когда потребуется твоё участие
-
-Агент может остановиться, если требуется:
+AI может остановиться только если действительно требуется твоё участие, например:
 
 - OAuth/login;
-- API key, который он не может получить сам;
-- установка system runtime с твоим разрешением;
+- API key;
+- установка system runtime с разрешением;
 - destructive overwrite;
-- выбор между двумя реально разными бизнес-сценариями.
-
-Обычные engineering decisions не являются поводом для вопроса.
+- важный business/product выбор, который нельзя безопасно предположить.
 
 ---
 
-## Step 1 — понимание продукта
+## 3.2 Project Brief
 
-Агент создаёт:
+AI создаёт:
 
 ```text
 docs/project/PROJECT_BRIEF.md
 ```
 
-В нём фиксируются только важные вещи:
+Там хранится компактный ответ на вопрос:
+
+> **Что именно мы строим?**
+
+Обычно:
 
 ```text
 Desired outcome
 Primary users
 Core jobs
 Must-have requirements
-Explicit constraints
+Constraints
 Assumptions
 Out of scope
 Success criteria
@@ -228,188 +192,186 @@ Complexity: S / M / L
 Risk: Low / Medium / High
 ```
 
-Это компактная canonical версия того, **что именно мы строим**.
-
-Не нужно создавать несколько PRD с одинаковой информацией.
-
 ---
 
-## Step 2 — выбор технологий
+## 3.3 Architecture
 
-Агент самостоятельно исследует только те технологии, где актуальность действительно имеет значение.
-
-Например:
-
-```text
-framework APIs
-payment providers
-auth libraries
-deployment limits
-AI SDK
-current pricing/licensing
-security-sensitive integrations
-```
-
-Для свежей library/API documentation может использоваться Context7.
-
-Результат исследования не превращается в огромный research document.
-
-Агент сохраняет только решения, влияющие на проект.
-
----
-
-## Step 3 — architecture
-
-Агент создаёт:
+AI выбирает **один рекомендуемый stack**, если нет реальной причины оставить несколько вариантов, и записывает его в:
 
 ```text
 docs/project/ARCHITECTURE.md
 ```
 
-Он должен выбрать **один рекомендуемый stack**, если нет реальной причины оставить несколько вариантов.
+Он учитывает:
 
-Например:
+- requirement fit;
+- simplicity;
+- maintainability;
+- security;
+- operational burden;
+- cost;
+- near-term growth.
 
-```text
-Frontend: Next.js
-Backend: Next.js server layer
-Database: PostgreSQL
-Auth: Better Auth
-Storage: Cloudflare R2
-Hosting: Vercel
-Testing: Vitest + Playwright
-```
-
-Но никакой stack не зафиксирован глобально — другой проект может получить совершенно другую архитектуру.
-
-В Architecture также фиксируются:
-
-- system diagram;
-- sources of truth;
-- security boundaries;
-- operational assumptions;
-- причины, при которых решение нужно пересмотреть.
+Никакой stack не зафиксирован глобально. Для каждого проекта решение может быть другим.
 
 ---
 
-## Step 4 — roadmap
+## 3.4 Roadmap и phases
 
-Агент создаёт:
+AI создаёт:
 
 ```text
 docs/project/ROADMAP.md
+docs/phases/00-....md
+docs/phases/01-....md
+...
 ```
 
-и отдельные файлы:
+Проект делится на проверяемые фазы.
+
+Хороший пример:
 
 ```text
-docs/phases/00-...
-docs/phases/01-...
-docs/phases/02-...
-```
-
-Каждый phase должен давать проверяемый результат.
-
-Хорошо:
-
-```text
+Phase 00 — Foundation
 Phase 01 — Authentication
-Phase 02 — Asset library
+Phase 02 — Asset Library
 Phase 03 — Search
 Phase 04 — Payments
+Phase 05 — Production Hardening
 ```
 
-Плохо:
-
-```text
-Phase 01 — Frontend
-Phase 02 — Backend
-Phase 03 — Database
-```
-
-если такие этапы невозможно нормально проверить как пользовательский результат.
+Phase должен давать понятный проверяемый результат, а не быть просто техническим слоем вроде «Frontend» или «Database», если это не оправдано задачей.
 
 ---
 
-# 4. Как проходит обычная разработка
+# 4. Как проходит обычная работа
 
-После инициализации проекта начинается повторяющийся цикл.
+Основной цикл:
 
 ```text
 Current Phase
     ↓
 Spec / Plan / Tasks
     ↓
-1–3 cohesive tasks
+1–3 связанные задачи
     ↓
 Implementation
     ↓
-Tests
-    ↓
-Review / QA
+Tests / Review / QA
     ↓
 Converge
     ↓
-Phase Complete
+Определение состояния phase
     ↓
-Next Phase
+NEXT SESSION PROMPT
+    ↓
+Новая AI-сессия
 ```
 
-Главное правило:
+Одна сессия обычно делает **1–3 связанные задачи**, а не весь проект сразу.
 
-> **Одна рабочая сессия обычно делает 1–3 связанные задачи, а не пытается реализовать весь проект.**
-
-Так агент держит маленький context и реже ломает уже принятые решения.
+Это уменьшает контекст, делает ошибки локальнее и упрощает проверку.
 
 ---
 
-# 5. Как продолжить работу завтра или в новой сессии
+# 5. Главное: тебе не нужно знать, что делать дальше
 
-Не нужно снова объяснять агенту весь проект.
-
-Запусти:
+В конце каждой meaningful implementation/review session AI обязан определить одно из трёх состояний:
 
 ```text
-prompts/CONTINUE_PROJECT.md
+IN PROGRESS
+PHASE COMPLETE
+PROJECT COMPLETE
 ```
 
-Он должен прочитать только:
+После этого он обязан:
+
+1. решить следующий инженерный шаг;
+2. обновить `docs/project/NEXT_SESSION.md`;
+3. дать в ответе блок `NEXT SESSION PROMPT`;
+4. сделать prompt готовым для copy-paste в новую сессию.
+
+## Если phase ещё не закончен
+
+AI продолжает тот же phase и выбирает следующие 1–3 задачи.
+
+## Если phase завершён
+
+AI сам читает `ROADMAP.md`, находит следующий phase и готовит prompt для его старта.
+
+Ты **не должен** вручную решать:
 
 ```text
-Constitution
-Project Brief
-Architecture
-Engineering Rules
-Current Phase
-Relevant ADR
-Relevant source code/tests
+какая фаза следующая?
+что нужно прочитать?
+какие задачи брать?
+нужно ли сначала тестировать?
+нужно ли запускать review?
 ```
 
-После этого он определяет следующие 1–3 незавершённые задачи и продолжает работу.
+## Если весь roadmap завершён
 
-### Что НЕ должно происходить
-
-Агент не должен каждый раз перечитывать:
+AI должен определить правильный финальный шаг:
 
 ```text
-все старые phases
-все ADR
-всю историю чатов
-все research documents
-весь repository без необходимости
+release audit
+deployment
+security review
+browser/E2E QA
+documentation/release notes
+или отсутствие дальнейшей работы
 ```
+
+Если продукт уже выпущен, новые функции идут через `CHANGE_REQUEST.md`.
+
+Полный протокол: [`system/SESSION_HANDOFF.md`](system/SESSION_HANDOFF.md).
 
 ---
 
-# 6. Как завершить текущий phase
+# 6. Как начать следующую сессию
 
-Запусти:
+Нормальный путь — **не придумывать новый prompt самому**.
+
+В конце предыдущей сессии AI должен дать:
+
+```text
+NEXT SESSION PROMPT
+
+<готовый prompt>
+```
+
+Ты:
+
+```text
+1. создаёшь новую AI-сессию;
+2. вставляешь этот prompt;
+3. запускаешь;
+4. в конце снова получаешь следующий prompt.
+```
+
+Так продолжается до завершения проекта.
+
+`CONTINUE_PROJECT.md` остаётся универсальным fallback/entry point, но при нормальной работе handoff prompt точнее, потому что уже знает текущий state.
+
+Если предыдущая сессия закончилась без handoff, используй:
+
+```text
+prompts/GENERATE_NEXT_SESSION_PROMPT.md
+```
+
+AI восстановит состояние из repository и создаст правильный следующий prompt.
+
+---
+
+# 7. Как закрыть текущий phase
+
+Для явной проверки используй:
 
 ```text
 prompts/REVIEW_CURRENT_PHASE.md
 ```
 
-Агент сравнит:
+AI сравнит:
 
 ```text
 Phase Spec
@@ -421,33 +383,29 @@ Tests
 Acceptance Criteria
 ```
 
-Если есть gaps — он исправляет только их.
-
-Результат должен быть одним из:
-
-```text
-PHASE COMPLETE
-```
-
-или:
+Результат:
 
 ```text
 PHASE NOT COMPLETE
 ```
 
-После `PHASE COMPLETE` можно переходить к следующему phase.
+или:
+
+```text
+PHASE COMPLETE
+```
+
+или, если roadmap завершён:
+
+```text
+PROJECT COMPLETE
+```
+
+Но ответ на этом не заканчивается — AI обязан также дать **NEXT SESSION PROMPT**.
 
 ---
 
-# 7. Если ты захотел изменить продукт
-
-Например в середине проекта решил:
-
-```text
-Добавить multi-user teams.
-```
-
-Не нужно вручную редактировать все specs.
+# 8. Если изменились требования
 
 Используй:
 
@@ -455,33 +413,32 @@ PHASE NOT COMPLETE
 prompts/CHANGE_REQUEST.md
 ```
 
-и опиши изменение.
-
 Например:
 
 ```text
-Нужно добавить workspace и приглашение нескольких пользователей.
-У каждого workspace должен быть владелец и участники.
+Теперь нужно добавить workspace и приглашение нескольких пользователей.
 ```
 
-Агент должен сначала определить impact:
+AI должен определить impact только на затронутые части:
 
 ```text
 PROJECT_BRIEF?
 ARCHITECTURE?
-DATABASE?
-AUTH?
 ROADMAP?
 CURRENT PHASE?
+DATABASE?
+AUTH?
 MIGRATIONS?
 SECURITY?
 ```
 
-и изменить только затронутые canonical docs.
+и не переписывать весь проект без необходимости.
+
+После работы он также должен подготовить handoff для следующей сессии.
 
 ---
 
-# 8. Если появился баг
+# 9. Если появился bug
 
 Используй:
 
@@ -489,7 +446,7 @@ SECURITY?
 prompts/BUG_FIX.md
 ```
 
-Передай симптом:
+Передай симптом, например:
 
 ```text
 После refresh пользователь иногда становится logged out.
@@ -503,117 +460,77 @@ Reproduce
 → Smallest correct fix
 → Regression test
 → Verification
+→ Next session handoff if work remains
 ```
 
-Для обычного бага агент не должен загружать всю архитектуру проекта, если проблема локальная.
+Обычный локальный bug не должен заставлять AI перечитывать весь проект.
 
 ---
 
-# 9. Как используются дополнительные инструменты
+# 10. Кто за что отвечает в Recommended profile
 
-Recommended profile специально разделяет ответственность.
+| Инструмент | Роль |
+|---|---|
+| **Token-Efficient Spec Kit** | Intent, architecture discipline, phases, context budget, handoff |
+| **GitHub Spec Kit** | **WHAT** — specification, plan, tasks, convergence |
+| **Superpowers** | **HOW** — implementation, TDD, systematic debugging |
+| **Superpowers Bridge** | Разделяет ownership между Spec Kit и Superpowers |
+| **gstack** | Engineering/design review, browser QA, release checks |
+| **Context7** | Свежая документация libraries/API по необходимости |
 
-## Token-Efficient Spec Kit
-
-Отвечает за:
-
-```text
-intent
-architecture discipline
-context budget
-project state
-phase boundaries
-```
-
-## GitHub Spec Kit
-
-Отвечает за **WHAT**:
-
-```text
-specify
-clarify when necessary
-plan
-tasks
-analyze when necessary
-converge
-```
-
-## Superpowers
-
-Отвечает за **HOW**:
-
-```text
-TDD
-systematic implementation
-debugging
-verification discipline
-```
-
-## Superpowers Implementation Bridge
-
-Не даёт Spec Kit и Superpowers создавать два параллельных planning workflow.
-
-Основная модель:
-
-```text
-Spec Kit = WHAT
-Superpowers = HOW
-```
-
-## gstack
-
-Это challenge / QA layer.
-
-Он используется там, где даст реальную пользу:
-
-```text
-engineering review
-design review
-code review
-browser QA
-investigation
-release / ship checks
-```
-
-Он не должен автоматически запускаться после каждой маленькой правки.
-
-## Context7
-
-Используется для актуальной документации library/API.
-
-Он не нужен для каждой функции или каждой строки кода.
+Главное правило: инструменты не должны создавать несколько параллельных canonical plans.
 
 ---
 
-# 10. Когда какой quality gate нужен
+# 11. Почему workflow экономит токены
+
+Обычная coding-сессия читает только:
+
+```text
+Constitution
++ Project Brief
++ Architecture
++ Engineering Rules
++ Current Phase
++ Relevant ADR if needed
++ Relevant source/tests
+```
+
+Она не перечитывает автоматически:
+
+```text
+все старые phases
+все ADR
+всю историю чатов
+гигантские master specs
+сырые research dumps
+```
+
+`NEXT_SESSION.md` тоже остаётся маленьким: это navigation layer, а не копия всей спецификации.
+
+---
+
+# 12. Когда нужны дополнительные quality gates
 
 ## Обычная feature
 
 ```text
-spec
-→ plan
-→ tasks
-→ implement
-→ tests
-→ converge
+spec → plan → tasks → implement → tests → converge
 ```
 
 ## Неоднозначная feature
 
-Добавляется:
+Добавляется clarification.
 
-```text
-clarify
-```
+## Auth / payments / permissions / private files
 
-## Security / payments / permissions
-
-Добавляются:
+Добавляются релевантные:
 
 ```text
 negative tests
-review
-analyze
+security review
+analysis
+idempotency/permission tests
 ```
 
 ## Сложный UI
@@ -626,243 +543,152 @@ browser QA
 Playwright / E2E
 ```
 
-## Перед production release
+## Перед production
 
 Полезны:
 
 ```text
-full relevant test suite
+full relevant tests
 security review
-gstack ship/release checks
 migration review
-observability verification
+browser QA
+observability/config review
+release checks
+smoke test
 ```
 
-Не нужно использовать все quality gates для каждого изменения.
+Не все gates нужны для каждой маленькой задачи.
 
 ---
 
-# 11. Как общаться с агентом после старта
+# 13. Если проект уже существует
 
-Ты можешь продолжать говорить обычным языком.
+AI сначала должен изучить существующую систему:
 
-### Новый проект
+1. stack;
+2. architecture;
+3. conventions;
+4. database/data model;
+5. tests;
+6. deployment constraints.
 
-```text
-Хочу приложение для ...
-```
-
-### Новая функция
-
-```text
-Добавь возможность делиться проектом по публичной ссылке.
-```
-
-### Изменение требований
-
-```text
-Теперь нужен не только Google login, но и email/password.
-```
-
-### Баг
-
-```text
-После удаления файла счётчик storage не обновляется.
-```
-
-### UX feedback
-
-```text
-Мне не нравится текущая product page. Сделай её визуально проще,
-но не меняй checkout flow.
-```
-
-### Архитектурный вопрос
-
-```text
-Проверь, не пора ли вынести background jobs из основного приложения.
-```
-
-Агент сам должен определить, какой workflow применить и какие docs нужно обновить.
+После этого `PROJECT_BRIEF.md` и `ARCHITECTURE.md` описывают **реальную существующую систему**, а не повод переписать её на любимый stack агента.
 
 ---
 
-# 12. Что должен делать пользователь, а что агент
+# 14. Что такое ADR
 
-| Пользователь | AI-agent |
-|---|---|
-| Определяет желаемый продукт | Выбирает stack |
-| Даёт реальные business constraints | Проектирует architecture |
-| Принимает важные product decisions | Создаёт specs и roadmap |
-| Даёт feedback по результату | Делит работу на tasks |
-| Даёт credentials/login при необходимости | Пишет код |
-| Подтверждает destructive/high-impact actions | Пишет tests |
-| Может переопределить любое решение | Делает review / QA |
-
-Пользователь остаётся владельцем продукта.
-
-Engineering autonomy агента означает не отсутствие контроля, а отсутствие необходимости вручную управлять каждым техническим выбором.
-
----
-
-# 13. Как работать с уже существующим проектом
-
-Не запускай workflow так, будто repository пустой.
-
-Перед planning агент должен:
-
-1. изучить текущую структуру;
-2. определить существующий stack;
-3. найти реальные conventions;
-4. понять current architecture;
-5. сохранить совместимость;
-6. создать Project Brief / Architecture как описание существующей системы;
-7. только после этого планировать изменения.
-
-Нельзя переписывать работающий проект на любимый stack агента без необходимости.
-
----
-
-# 14. Когда нужно создавать ADR
-
-ADR нужен только для существенного и трудно обратимого решения.
+ADR создаётся только для существенного и трудно обратимого решения.
 
 Например:
 
 ```text
-PostgreSQL как primary database
-Multi-tenant data isolation strategy
-Object storage provider
-Event-driven processing boundary
-Authentication architecture
+primary database
+multi-tenant isolation
+object storage strategy
+auth architecture
+event-processing boundary
 ```
 
-ADR обычно НЕ нужен для:
+ADR обычно не нужен для:
 
 ```text
-названия React component
-utility function
-иконки
+названия component
 CSS property
-маленькой package
+маленькой utility function
+локальной package без архитектурного эффекта
 ```
-
-Меньше лишней документации = меньше лишнего контекста.
 
 ---
 
-# 15. Что делать перед release
+# 15. Полный пример
 
-Перед production агент должен проверить релевантные пункты:
-
-```text
-Acceptance criteria
-Build
-Typecheck
-Lint
-Unit tests
-Integration tests
-E2E/browser tests
-Security negative tests
-Database migrations
-Secrets/configuration
-Backups where relevant
-Monitoring / error tracking
-Critical user flow
-Rollback/recovery where relevant
-```
-
-Не каждый проект требует каждый пункт, но high-risk части не должны выпускаться только потому, что happy path работает.
-
----
-
-# 16. Полный пример одного проекта
-
-Ты начинаешь с:
+Ты начинаешь:
 
 ```text
 Хочу веб-приложение, которое позволяет загружать PDF,
 задавать вопросы по документу и сохранять историю чатов.
 ```
 
-Агент создаёт:
-
-```text
-PROJECT_BRIEF.md
-ARCHITECTURE.md
-ROADMAP.md
-```
-
-Например roadmap:
+AI создаёт примерно такой roadmap:
 
 ```text
 Phase 00 — Foundation
 Phase 01 — Authentication
-Phase 02 — PDF upload and storage
-Phase 03 — Document processing
-Phase 04 — Q&A chat
+Phase 02 — PDF Upload
+Phase 03 — Document Processing
+Phase 04 — Q&A Chat
 Phase 05 — History
-Phase 06 — Production hardening
+Phase 06 — Production Hardening
 ```
 
-В текущей сессии агент делает только:
+Первая сессия:
 
 ```text
 Phase 00
-Task 1
-Task 2
-Task 3
+→ первые 1–3 tasks
+→ verification
+→ NEXT SESSION PROMPT
 ```
 
-На следующий день ты запускаешь:
+Если Phase 00 ещё не готов, следующий prompt продолжает Phase 00.
 
-```text
-CONTINUE_PROJECT.md
-```
-
-После завершения Phase 00:
-
-```text
-REVIEW_CURRENT_PHASE.md
-```
-
-Получаешь:
+Когда Phase 00 закрыт:
 
 ```text
 PHASE COMPLETE
 ```
 
-и переходишь к Authentication.
-
-Если потом говоришь:
+AI сам определяет:
 
 ```text
-Нужна командная работа над документами.
+Next: Phase 01 — Authentication
 ```
 
-используется Change Request, roadmap и architecture корректируются только там, где это необходимо.
+и выдаёт готовый prompt.
+
+Ты открываешь новую сессию, вставляешь его — и работа продолжается.
+
+Тебе не нужно вручную читать roadmap и решать, что спросить у AI.
+
+---
+
+# 16. Какой файл открыть, если потерялся
+
+| Вопрос | Файл |
+|---|---|
+| Что мы строим? | `docs/project/PROJECT_BRIEF.md` |
+| Как это устроено? | `docs/project/ARCHITECTURE.md` |
+| Какие этапы впереди? | `docs/project/ROADMAP.md` |
+| Что делаем сейчас? | текущий файл в `docs/phases/` |
+| **Что мне делать дальше?** | **`docs/project/NEXT_SESSION.md`** |
+| Как работает весь процесс? | `docs/WORKFLOW.md` |
+| Как устроен handoff? | `docs/system/SESSION_HANDOFF.md` |
 
 ---
 
 # 17. Главный принцип
 
-Не пытайся управлять AI-agent как junior-разработчиком через тысячи микроинструкций.
+Не нужно управлять AI-agent как junior-разработчиком через сотни микроинструкций.
 
 Опиши:
 
 ```text
-что нужно получить
-почему это нужно
+что хочешь получить
+зачем это нужно
 какие реальные ограничения существуют
 ```
 
-А Token-Efficient Spec Kit должен заставить агента самостоятельно определить:
+Система должна помочь AI самостоятельно определить:
 
 ```text
 как лучше это построить
 как разбить работу
+что реализовать сейчас
 что проверить
-какой контекст нужен сейчас
+какой контекст нужен
+какой следующий шаг
+какой prompt дать пользователю для новой сессии
 ```
 
-> **Ты управляешь продуктом. Агент управляет инженерным исполнением. Repository хранит общую память.**
+> **Ты управляешь продуктом. AI управляет инженерным исполнением. Repository хранит память. NEXT_SESSION.md ведёт тебя дальше.**
