@@ -2,53 +2,55 @@
 
 # Token-Efficient Spec Kit
 
-### An autonomous, senior-level AI engineering workflow that keeps context small and decisions sharp.
+### Универсальный workflow для AI-разработки: меньше контекста, меньше токенов, сильнее инженерные решения.
 
-**Describe the outcome. Let the agent choose the stack, architecture, roadmap, and implementation path.**
+**Опиши результат. Пусть AI-агент сам выберет стек, архитектуру, roadmap и путь реализации.**
 
-`Outcome → Decisions → Specs → Small Tasks → Code → Verification`
+`Цель → Решения → Спеки → Маленькие задачи → Код → Проверка`
+
+[English version](README_EN.md)
 
 </div>
 
 ---
 
-## Why this exists
+## Зачем это нужно
 
-AI coding agents are powerful, but large projects often become expensive and inconsistent because every session reloads too much context, repeats decisions, and asks the user to choose technical details they should not need to choose.
+AI coding agents уже умеют делать очень много, но на больших проектах быстро появляются две проблемы: агент постоянно перечитывает огромный контекст и начинает либо повторять уже принятые решения, либо перекладывать технический выбор обратно на пользователя.
 
-**Token-Efficient Spec Kit** is a lightweight engineering operating system built around a simple idea:
+**Token-Efficient Spec Kit** — это лёгкая инженерная система поверх spec-driven подхода, построенная вокруг простой идеи:
 
-> **The user defines the outcome. The agent owns engineering decisions. Specs preserve intent. Small context preserves tokens. Verification preserves quality.**
+> **Пользователь задаёт желаемый результат. Агент принимает инженерные решения. Спеки сохраняют намерение. Маленький контекст экономит токены. Проверка сохраняет качество.**
 
-You can start with something as small as:
+Начать можно буквально с одной фразы:
 
 ```text
-I want a web app where photographers can sell Lightroom presets.
+Хочу веб-приложение, где фотографы смогут продавать Lightroom-пресеты.
 ```
 
-The agent is expected to determine the rest professionally:
+Дальше агент должен профессионально определить сам:
 
-- what kind of product this is;
-- what needs clarification and what can be assumed;
-- the recommended stack;
-- architecture and data model;
-- security boundaries;
-- project complexity and risk;
-- implementation phases;
-- testing strategy;
-- deployment approach;
-- the next 1–3 tasks to implement.
+- тип продукта;
+- что действительно нужно уточнить, а что можно разумно предположить;
+- рекомендуемый стек;
+- архитектуру и модель данных;
+- границы безопасности;
+- сложность и уровень риска проекта;
+- этапы разработки;
+- стратегию тестирования;
+- deployment;
+- следующие 1–3 задачи для реализации.
 
-It should **not** make you answer questions like “React or Vue?”, “Postgres or MongoDB?”, or “Vercel or AWS?” unless your business constraints genuinely make the choice depend on you.
+Он **не должен** заставлять тебя выбирать между «React или Vue?», «Postgres или MongoDB?», «Vercel или AWS?», если это обычное инженерное решение, которое можно принять без дополнительного бизнес-контекста.
 
 ---
 
-## Core workflow
+## Основной workflow
 
 ```text
                     ┌──────────────────────┐
-                    │     USER OUTCOME     │
-                    │  "I want to build…" │
+                    │   ЖЕЛАЕМЫЙ РЕЗУЛЬТАТ │
+                    │    «Хочу сделать…»   │
                     └──────────┬───────────┘
                                │
                                ▼
@@ -93,47 +95,47 @@ It should **not** make you answer questions like “React or Vue?”, “Postgre
                     │ spec ↔ code ↔ tests │
                     └──────────┬───────────┘
                                │
-                               └──────► next phase
+                               └──────► следующий этап
 ```
 
 ---
 
-## The token-efficient part
+## Почему workflow экономит токены
 
-A typical agent session should **not** reread the entire project.
+Обычная рабочая сессия агента **не должна перечитывать весь проект**.
 
-It loads only the smallest useful context:
+Минимальный полезный контекст:
 
 ```text
 constitution
 + project brief
-+ compact architecture
++ компактная architecture
 + engineering rules
-+ current phase
-+ relevant ADR (only if needed)
-+ relevant source files/tests
++ текущий phase
++ релевантный ADR — только если нужен
++ релевантный код и тесты
 ```
 
-It normally does **not** load:
+По умолчанию агент **не загружает**:
 
 ```text
-all completed phases
-+ every decision record
-+ full chat history
-+ giant master specs
-+ repeated research notes
-+ duplicated PRDs
+все завершённые phases
++ все ADR
++ всю историю чата
++ гигантские master specs
++ сырые research notes
++ несколько дублирующих PRD
 ```
 
-This keeps the agent focused and reduces both token usage and architectural drift.
+Так агент меньше расходует контекст и реже теряет архитектурную дисциплину по мере роста проекта.
 
 ---
 
-## Adaptive process — not every project needs the same ceremony
+## Адаптивный процесс — не каждому проекту нужен одинаковый уровень документации
 
 ### S — Small
 
-For landing pages, small CLIs, isolated features, simple automations:
+Для landing page, небольшого CLI, простой automation или изолированной функции:
 
 ```text
 Brief → Plan → Tasks → Implement → Verify
@@ -141,7 +143,7 @@ Brief → Plan → Tasks → Implement → Verify
 
 ### M — Medium
 
-For SaaS MVPs, ecommerce, plugins with backends, internal tools:
+Для SaaS MVP, ecommerce, plugin + backend или internal tool:
 
 ```text
 Brief → Architecture → Roadmap → Phase Specs → Implement → Converge
@@ -149,60 +151,60 @@ Brief → Architecture → Roadmap → Phase Specs → Implement → Converge
 
 ### L — Large / High-risk
 
-For marketplaces, multi-role systems, payments, sensitive data, critical migrations:
+Для marketplace, multi-role системы, payments, sensitive data или критических migrations:
 
 ```text
 Brief
 → Architecture
 → Risk model
 → Roadmap
-→ Small independent specs
+→ Маленькие независимые specs
 → Selective quality gates
 → Implementation batches
 → Converge
 ```
 
-The system deliberately avoids heavyweight documentation when it does not add value.
+Система специально не создаёт тяжёлую документацию там, где она не даёт реальной пользы.
 
 ---
 
-## Senior-agent behavior
+## Как должен вести себя senior AI-agent
 
-The included Constitution instructs the agent to:
+Constitution требует от агента:
 
-- make normal engineering decisions autonomously;
-- choose **one recommended default**, not dump ten options on the user;
-- research current official documentation when technology freshness matters;
-- prefer simple, mature technology over novelty when both solve the problem;
-- ask questions only when the answer materially changes the product, cost, security, compliance, or an irreversible action;
-- treat security as architecture, not a later checklist;
-- add complexity only when a concrete requirement justifies it;
-- verify before claiming completion.
+- самостоятельно принимать обычные инженерные решения;
+- выбирать **один рекомендуемый вариант**, а не перекладывать на пользователя список из десяти технологий;
+- проверять актуальную официальную документацию для быстро меняющихся инструментов и API;
+- при равных условиях предпочитать зрелое и простое решение модному и сложному;
+- задавать вопросы только тогда, когда ответ реально меняет продукт, стоимость, безопасность, compliance или необратимое действие;
+- проектировать security как часть архитектуры;
+- повышать сложность только при наличии конкретной причины;
+- проверять результат перед заявлением о завершении.
 
 ---
 
 ## Creative autonomy
 
-This workflow is not intended to make the agent rigid.
+Workflow не должен превращать агента в механического исполнителя.
 
-When details are unspecified, the agent is explicitly allowed to propose and choose:
+Когда детали не заданы явно, агенту разрешено самостоятельно предлагать и выбирать:
 
-- product and feature organization;
+- структуру продукта и функций;
 - UX flows;
 - information architecture;
-- visual patterns;
+- визуальные паттерны;
 - API ergonomics;
 - data models;
 - onboarding;
-- loading, empty and error states;
+- loading, empty и error states;
 - developer tooling;
-- small high-value product improvements.
+- небольшие улучшения продукта с высокой пользой и низкой ценой реализации.
 
-Creative choices must support the requested outcome and must never silently override explicit constraints.
+Креативные решения должны помогать исходной цели и не имеют права незаметно менять явные ограничения пользователя.
 
 ---
 
-## Repository structure
+## Структура репозитория
 
 ```text
 .
@@ -241,86 +243,88 @@ Creative choices must support the requested outcome and must never silently over
 │   └── BUG_FIX.md
 │
 ├── AGENTS.md
-└── README.md
+├── README.md
+└── README_EN.md
 ```
 
 ---
 
-## Quick start
+## Быстрый старт
 
-### 1. Copy or clone this template
+### 1. Склонируй шаблон
 
 ```bash
 git clone https://github.com/Elguajo/Token-Efficient-Spec-Kit.git my-project
 cd my-project
 ```
 
-You can also merge these files into an existing repository.
+Также можно перенести эти файлы в уже существующий проект.
 
-### 2. Optional: initialize GitHub Spec Kit
+### 2. При желании подключи GitHub Spec Kit
 
-If you use GitHub Spec Kit, initialize it for your coding agent according to the current Spec Kit documentation.
+Если ты используешь GitHub Spec Kit, инициализируй его для своего coding-agent по актуальной документации Spec Kit.
 
-The workflow here is intentionally agent-agnostic and can be used with Codex, Claude Code, Cursor, or other repository-aware coding agents.
+Сам workflow остаётся agent-agnostic и может использоваться с Codex, Claude Code, Cursor и другими repository-aware coding agents.
 
-### 3. Open the starter prompt
+### 3. Открой стартовый prompt
 
-Use:
+Используй:
 
 ```text
 prompts/START_NEW_PROJECT.md
 ```
 
-Replace:
+Замени:
 
 ```text
 <WHAT_I_WANT>
 ```
 
-with your desired outcome.
+на описание того, что хочешь получить.
 
-Example:
+Например:
 
 ```text
-I want a desktop application for Windows and macOS that automatically
-organizes my CGI/3D assets, generates previews, and lets me search by tags.
+Хочу desktop-приложение для Windows и macOS,
+которое автоматически организует мои CGI/3D ассеты,
+создаёт превью и позволяет искать их по тегам.
 ```
 
-### 4. Let the agent bootstrap the project
+### 4. Дай агенту самостоятельно инициализировать проект
 
-It should create/update:
+Он должен создать или обновить:
 
 ```text
 docs/project/PROJECT_BRIEF.md
 docs/project/ARCHITECTURE.md
 docs/project/ROADMAP.md
 docs/phases/...
-docs/decisions/...  # only when a real ADR is justified
+docs/decisions/...  # только если ADR действительно нужен
 ```
 
-Then it starts the first small implementation batch unless a genuine blocker exists.
+После этого агент начинает первую небольшую implementation batch, если нет реального блокера.
 
-### 5. Continue with a small context window
+### 5. Продолжай разработку маленькими контекстами
 
-For later sessions use:
+Для следующих сессий:
 
 ```text
 prompts/CONTINUE_PROJECT.md
 ```
 
-For phase verification:
+Для проверки текущего этапа:
 
 ```text
 prompts/REVIEW_CURRENT_PHASE.md
 ```
 
-For requirement changes:
+Для изменения требований:
 
 ```text
 prompts/CHANGE_REQUEST.md
 ```
 
-For focused bug fixing:
+Для точечного исправления бага:
 
 ```text
 prompts/BUG_FIX.md
@@ -328,15 +332,15 @@ prompts/BUG_FIX.md
 
 ---
 
-## Example: what the agent should decide
+## Пример: что агент должен выбрать самостоятельно
 
-You say:
+Ты говоришь:
 
 ```text
-Build a marketplace where designers can sell digital templates.
+Создай marketplace, где дизайнеры смогут продавать digital templates.
 ```
 
-You should **not** have to specify:
+Тебе не нужно заранее указывать:
 
 ```text
 framework
@@ -349,44 +353,44 @@ test runner
 observability stack
 ```
 
-The agent evaluates requirements, risk and current tooling, then records a single recommended architecture.
+Агент оценивает требования, риски и актуальные инструменты, после чего фиксирует один рекомендуемый вариант архитектуры.
 
-For consequential choices it may record an ADR like:
+Для действительно важных решений он может создать ADR, например:
 
 ```text
 docs/decisions/ADR-001-primary-database.md
 ```
 
-For trivial implementation decisions it should not create documentation overhead.
+Для мелких локальных решений дополнительная документация не создаётся.
 
 ---
 
-## Decision philosophy
+## Принцип выбора технологий
 
-A material technical choice is evaluated roughly around:
+Для существенных решений агент ориентируется примерно на такие критерии:
 
-| Criterion | Default weight |
+| Критерий | Базовый вес |
 |---|---:|
-| Requirement fit | 25% |
-| Simplicity | 20% |
-| Maintainability | 15% |
-| Ecosystem / maturity | 10% |
-| Security | 10% |
-| Operational burden | 10% |
-| Cost | 5% |
-| Developer productivity | 5% |
+| Соответствие требованиям | 25% |
+| Простота | 20% |
+| Поддерживаемость | 15% |
+| Экосистема / зрелость | 10% |
+| Безопасность | 10% |
+| Операционная сложность | 10% |
+| Стоимость | 5% |
+| Скорость разработки | 5% |
 
-Weights are adapted to the project. For example, security and data integrity dominate in financial or sensitive systems.
+Вес меняется в зависимости от проекта. Например, в финансовых или чувствительных системах security и data integrity становятся значительно важнее скорости разработки.
 
-The rule is not “always choose the most popular stack.” The rule is **choose the simplest mature stack that fits the actual product**.
+Принцип не в том, чтобы «всегда брать самый популярный стек», а в том, чтобы **выбрать наиболее простое зрелое решение, соответствующее реальной задаче**.
 
 ---
 
 ## Quality gates
 
-A feature is not complete just because code exists.
+Функция не считается готовой только потому, что код написан.
 
-Relevant evidence may include:
+В зависимости от проекта доказательством завершения могут быть:
 
 ```text
 lint
@@ -398,54 +402,58 @@ lint
 + acceptance criteria
 ```
 
-For high-risk areas such as auth, payments, private files, permissions, migrations, and external webhooks, negative tests are expected.
+Для auth, payments, private files, permissions, migrations и external webhooks обязательны негативные сценарии там, где они релевантны.
 
 ---
 
-## Principles in one minute
+## 10 принципов за минуту
 
-1. **Outcome first.** The user describes what they want, not how to implement it.
-2. **Senior autonomy.** The agent owns normal technical decisions.
-3. **Ask only blockers.** Do not turn every engineering choice into a user questionnaire.
-4. **Simplicity first.** No premature distributed architecture.
-5. **Current information.** Verify fast-changing APIs and providers from official docs.
-6. **Small context.** Read only what the current task needs.
-7. **Small batches.** Usually 1–3 cohesive tasks per implementation run.
-8. **Canonical docs.** One fact, one preferred home.
-9. **Security by design.** Server authority, least privilege, negative tests.
-10. **Verification before completion.** Spec ↔ code ↔ tests must converge.
-
----
-
-## What this is not
-
-This is **not**:
-
-- a fixed technology stack;
-- a giant PRD generator;
-- a multi-agent role-play framework;
-- a reason to create documentation for every trivial decision;
-- a replacement for engineering judgment;
-- a guarantee that AI-generated code is correct without verification.
-
-It is a compact operating layer that makes repository-aware coding agents behave more consistently across projects.
+1. **Outcome first.** Пользователь описывает результат, а не стек.
+2. **Senior autonomy.** Агент принимает обычные технические решения сам.
+3. **Ask only blockers.** Не превращать разработку в анкету для пользователя.
+4. **Simplicity first.** Никакой преждевременной distributed architecture.
+5. **Current information.** Быстро меняющиеся API и инструменты проверяются по актуальной документации.
+6. **Small context.** Агент читает только нужное для текущей задачи.
+7. **Small batches.** Обычно 1–3 связанные задачи за один implementation run.
+8. **Canonical docs.** Один факт — одно основное место хранения.
+9. **Security by design.** Server authority, least privilege и negative tests.
+10. **Verification before completion.** Spec ↔ code ↔ tests должны сходиться.
 
 ---
 
-## Designed for
+## Чем этот проект не является
 
-- solo developers using AI coding agents;
-- designers/founders who know the product they want but do not want to choose every technology;
-- senior developers who want AI to respect architecture without rereading giant specs;
-- prototypes that may grow into production systems;
-- projects where context cost and drift become a problem over long sessions.
+Это **не**:
+
+- фиксированный technology stack;
+- генератор огромных PRD;
+- multi-agent role-play framework;
+- повод документировать каждое тривиальное решение;
+- замена инженерному мышлению;
+- гарантия корректности AI-кода без проверки.
+
+Это компактный operating layer, который помогает repository-aware AI coding agents работать последовательнее на длинных проектах.
+
+---
+
+## Для кого
+
+- solo developers, работающие с AI coding agents;
+- дизайнеры и founders, которые хорошо понимают желаемый продукт, но не хотят вручную выбирать каждую технологию;
+- senior developers, которым нужно сохранить архитектурную дисциплину без постоянного чтения гигантских specs;
+- prototypes, которые потенциально могут вырасти в production systems;
+- проекты, где со временем начинают мешать стоимость контекста и architectural drift.
 
 ---
 
 <div align="center">
 
-### Describe the outcome. Keep the context small. Let the agent engineer.
+### Опиши результат. Держи контекст маленьким. Пусть агент занимается инженерией.
 
-Start with [`prompts/START_NEW_PROJECT.md`](prompts/START_NEW_PROJECT.md).
+Начни с [`prompts/START_NEW_PROJECT.md`](prompts/START_NEW_PROJECT.md).
+
+<br />
+
+Built with ♥ by [Elguajo](https://github.com/Elguajo)
 
 </div>
