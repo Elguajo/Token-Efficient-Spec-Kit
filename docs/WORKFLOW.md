@@ -1,6 +1,6 @@
 # Token-Efficient Spec Kit — End-to-End Workflow
 
-> Техническая карта процесса: какие состояния проходит проект, какой контекст загружает агент и какой инструмент включается на каждом этапе.
+> Техническая карта: какие состояния проходит проект, какой контекст читает AI и какой инструмент отвечает за каждый слой.
 
 ---
 
@@ -23,34 +23,54 @@ SPEC / PLAN / TASKS
     ↓
 IMPLEMENTATION BATCH
     ↓
-VERIFICATION
+VERIFICATION / REVIEW / QA
     ↓
 CONVERGE
     ↓
-PHASE COMPLETE?
-    ├── no  → fix gaps → verify again
-    └── yes → next phase
-                    ↓
-                 RELEASE
+PHASE STATE?
+    ├── IN PROGRESS ──► create handoff for same phase
+    ├── COMPLETE ─────► create handoff for next roadmap phase
+    └── PROJECT COMPLETE ─► release/audit/deploy handoff
+                              ↓
+                     NEXT SESSION PROMPT
+                              ↓
+                        FRESH SESSION
 ```
 
-Процесс циклический, но контекст остаётся локальным.
+Процесс циклический. Chat — временный execution context. Repository — долговременная память проекта.
 
 ---
 
-# 2. Состояния проекта
+# 2. Главный navigation rule
+
+Пользователь не обязан знать, какой engineering step должен быть следующим.
+
+В конце каждой meaningful implementation/review session AI обязан:
+
+1. определить состояние текущей фазы;
+2. решить правильный следующий шаг;
+3. обновить `docs/project/NEXT_SESSION.md`;
+4. выдать готовый `NEXT SESSION PROMPT`;
+5. остановиться, не начиная новую фазу автоматически в старой сессии.
+
+Это позволяет переносить работу в новый контекст без пересказа истории и без необходимости пользователю понимать roadmap.
+
+Полные правила: [`system/SESSION_HANDOFF.md`](system/SESSION_HANDOFF.md).
+
+---
+
+# 3. Состояния проекта
 
 ## STATE 0 — TEMPLATE
 
-Repository содержит workflow, но конкретный product ещё не инициализирован.
-
-Canonical status:
+Конкретный product ещё не инициализирован.
 
 ```text
-docs/project/PROJECT_BRIEF.md      → not initialized
-docs/project/ARCHITECTURE.md       → not initialized
-docs/project/ROADMAP.md            → not initialized
-docs/project/TOOLING_STATUS.md     → not initialized / ready
+PROJECT_BRIEF      → not initialized
+ARCHITECTURE       → not initialized
+ROADMAP            → not initialized
+TOOLING_STATUS     → not initialized / ready
+NEXT_SESSION       → not initialized
 ```
 
 Entry point:
@@ -69,16 +89,7 @@ Trigger:
 TOOLING_STATUS != ready for active harness
 ```
 
-Agent loads:
-
-```text
-prompts/SETUP_RECOMMENDED_TOOLING.md
-integrations/PROFILES.md
-integrations/TOOLING_POLICY.md
-only required integration docs
-```
-
-Recommended target:
+Recommended profile:
 
 ```text
 GitHub Spec Kit
@@ -88,38 +99,21 @@ gstack
 Context7
 ```
 
+AI читает только нужные integration docs и использует актуальные upstream installation instructions.
+
 Output:
 
 ```text
 docs/project/TOOLING_STATUS.md
 ```
 
-Exit condition:
-
-```text
-Recommended tooling verified
-or
-explicit documented limitation
-```
-
-Tooling bootstrap is not repeated on every session.
+Tooling bootstrap не повторяется в каждой сессии.
 
 ---
 
 ## STATE 2 — PRODUCT DEFINITION
 
-Agent converts the user's outcome into compact product truth.
-
-Reads:
-
-```text
-constitution
-OPERATING_MODEL
-DECISION_FRAMEWORK
-ENGINEERING_RULES
-CREATIVE_AUTONOMY
-user request
-```
+AI превращает пользовательское описание результата в compact canonical truth.
 
 Writes:
 
@@ -127,7 +121,11 @@ Writes:
 docs/project/PROJECT_BRIEF.md
 ```
 
-Output must distinguish:
+Файл отвечает на вопрос:
+
+> What are we building?
+
+Он разделяет:
 
 ```text
 facts
@@ -136,17 +134,13 @@ reasonable assumptions
 true blockers
 ```
 
-Do not ask technical preference questions that the agent can decide itself.
+AI не спрашивает framework/database/hosting preferences, если может принять решение профессионально.
 
 ---
 
 ## STATE 3 — ARCHITECTURE
 
-Agent chooses the simplest mature architecture that safely satisfies the product.
-
-Research is selective.
-
-Context7 or web/current official docs are used only when freshness materially matters.
+AI выбирает самый простой зрелый вариант архитектуры, который безопасно удовлетворяет требованиям.
 
 Writes:
 
@@ -154,26 +148,21 @@ Writes:
 docs/project/ARCHITECTURE.md
 ```
 
-Potential ADR:
+При необходимости:
 
 ```text
 docs/decisions/ADR-XXX-....md
 ```
 
-ADR only for consequential cross-cutting or hard-to-reverse decisions.
+ADR создаётся только для consequential / cross-cutting / hard-to-reverse решений.
 
-Exit condition:
-
-```text
-One recommended default architecture exists
-and critical security/source-of-truth boundaries are clear.
-```
+Research selective: Context7 или актуальные official docs используются только там, где freshness действительно влияет на решение.
 
 ---
 
 ## STATE 4 — ROADMAP
 
-Agent creates independently verifiable product phases.
+AI создаёт независимо проверяемые product phases.
 
 Writes:
 
@@ -184,18 +173,12 @@ docs/phases/01-....md
 ...
 ```
 
-Roadmap depth adapts to complexity.
+Depth адаптируется под проект:
 
 ```text
 S → minimal
 M → normal phased roadmap
-L → smaller phases + stronger risk gates
-```
-
-Exit condition:
-
-```text
-The first phase is actionable and verifiable.
+L → smaller phases + stronger selective gates
 ```
 
 ---
@@ -208,37 +191,34 @@ Canonical input:
 current phase file
 ```
 
-GitHub Spec Kit owns WHAT:
+Tool ownership:
+
+```text
+GitHub Spec Kit = WHAT
+Superpowers     = HOW
+```
+
+Spec Kit может выполнять:
 
 ```text
 specify
-clarify — only if ambiguity matters
+clarify — только если ambiguity consequential
 plan
 tasks
-analyze — only if risk/consistency warrants it
+analyze — только если risk/consistency оправдывает
 ```
 
-Superpowers must not create a competing product plan.
-
-Recommended task size:
+Recommended batch:
 
 ```text
-1–3 cohesive implementation tasks per run
-```
-
-Exit condition:
-
-```text
-The next implementation batch is small, clear and testable.
+1–3 cohesive tasks
 ```
 
 ---
 
 ## STATE 6 — IMPLEMENTATION
 
-Superpowers / coding harness owns HOW.
-
-Agent reads only:
+AI читает минимальный контекст:
 
 ```text
 constitution
@@ -246,32 +226,26 @@ PROJECT_BRIEF
 ARCHITECTURE
 ENGINEERING_RULES
 current phase
-specific relevant ADR
+relevant ADR if needed
 relevant source/tests
 ```
 
-Agent should not load all completed phase files.
+Не читает автоматически все завершённые phases.
 
-During implementation:
+Во время реализации:
 
-- use current stable APIs;
-- validate external inputs;
-- preserve security boundaries;
-- add tests with behavior;
-- avoid opportunistic future-scope work;
-- avoid unrelated refactors.
-
-Exit condition:
-
-```text
-Current batch implemented.
-```
+- current stable APIs;
+- input validation;
+- security boundaries;
+- behavior-focused tests;
+- no accidental future scope;
+- no unrelated refactors.
 
 ---
 
 ## STATE 7 — VERIFICATION
 
-Relevant checks may include:
+В зависимости от проекта:
 
 ```text
 lint
@@ -284,17 +258,13 @@ security negative tests
 manual QA
 ```
 
-The exact set depends on project type and risk.
-
-A written feature without verification is not considered done.
+Written code without relevant verification is not done.
 
 ---
 
 ## STATE 8 — CHALLENGE / QA
 
-gstack is used selectively here.
-
-Possible jobs:
+gstack используется выборочно как challenge layer:
 
 ```text
 engineering review
@@ -303,18 +273,16 @@ code review
 investigation
 browser QA
 release review
-cross-model challenge
+cross-model challenge where available
 ```
 
-Trigger gstack when the expected quality improvement justifies extra context/cost.
-
-Do not run every gstack skill after every tiny change.
+Не нужно запускать все gstack skills после каждой маленькой правки.
 
 ---
 
 ## STATE 9 — CONVERGENCE
 
-Compare:
+Сравнение:
 
 ```text
 SPEC
@@ -326,43 +294,110 @@ TESTS
 ACCEPTANCE CRITERIA
 ```
 
-Missing work becomes a small follow-up task.
-
-Do not rewrite the whole roadmap because one criterion failed.
-
-Result:
+Результат должен быть одним из:
 
 ```text
+IN PROGRESS
 PHASE COMPLETE
+PROJECT COMPLETE
 ```
 
-or:
+Missing work превращается в маленькие follow-up tasks, а не в переписывание всего roadmap.
+
+---
+
+## STATE 10 — SESSION HANDOFF
+
+Это обязательное состояние после meaningful implementation/review work.
+
+### A. Phase IN PROGRESS
+
+AI:
 
 ```text
-PHASE NOT COMPLETE
+same phase
+→ next 1–3 unfinished tasks
+→ verification requirements
+→ NEXT SESSION PROMPT
+```
+
+### B. PHASE COMPLETE
+
+AI:
+
+```text
+inspect ROADMAP
+→ find next phase
+→ do NOT implement it in old session
+→ create fresh-session prompt for next phase
+```
+
+### C. PROJECT COMPLETE
+
+AI выбирает подходящий следующий шаг:
+
+```text
+final audit
+release
+deployment
+security/browser QA
+documentation
+or no further work
+```
+
+Если продукт уже released, новая functionality начинается через `CHANGE_REQUEST.md`.
+
+AI пишет:
+
+```text
+docs/project/NEXT_SESSION.md
+```
+
+и возвращает:
+
+```text
+NEXT SESSION PROMPT
+
+<ready-to-copy prompt>
 ```
 
 ---
 
-## STATE 10 — NEXT PHASE
+## STATE 11 — FRESH SESSION
 
-After `PHASE COMPLETE`:
+Пользователь создаёт новую AI-сессию и вставляет handoff prompt.
 
-1. mark persistent state only where needed;
-2. switch current phase;
-3. do not preload completed phase details;
-4. repeat planning → implementation → verification → converge.
+Новый agent не должен перечитывать историю старого чата.
+
+Prompt ссылается на canonical files и содержит только то, что нельзя надёжно восстановить из repository.
+
+Normal loop:
+
+```text
+Session N
+→ implementation/review
+→ handoff
+→ Session N+1
+```
+
+Если handoff потерян:
+
+```text
+prompts/GENERATE_NEXT_SESSION_PROMPT.md
+```
+
+восстанавливает следующий шаг по repository state.
 
 ---
 
-## STATE 11 — RELEASE
+## STATE 12 — RELEASE
 
-Before release, choose gates by project risk.
+После реализации roadmap выбираются gates по risk.
 
 Typical production-oriented flow:
 
 ```text
-all current acceptance criteria
+acceptance criteria
 → full relevant tests
 → migration review
 → security checks
@@ -373,26 +408,24 @@ all current acceptance criteria
 → production smoke test
 ```
 
-High-risk projects may require explicit human approval before destructive migration or release.
+High-risk destructive/release actions могут требовать human approval.
 
 ---
 
-# 3. Tool ownership
-
-The most important integration rule is that tools do not own the same job.
+# 4. Tool ownership
 
 ```text
 Token-Efficient Spec Kit
-    = project memory, architecture discipline, context budget
+    = intent + architecture discipline + context budget + phase/session navigation
 
 GitHub Spec Kit
     = WHAT to build
 
 Superpowers
-    = HOW to implement/debug/test
+    = HOW to implement / test / debug
 
 Superpowers Implementation Bridge
-    = handoff between WHAT and HOW
+    = boundary between WHAT and HOW
 
 gstack
     = challenge / review / browser QA / ship layer
@@ -401,15 +434,13 @@ Context7
     = fresh technical documentation on demand
 ```
 
-If two tools attempt to create duplicate planning artifacts, the Token-Efficient ownership model wins.
+Если два инструмента пытаются создать competing canonical plans, ownership rules Token-Efficient Spec Kit имеют приоритет.
 
 ---
 
-# 4. Context routing
+# 5. Context routing
 
-## New project initialization
-
-Read:
+## New project
 
 ```text
 constitution
@@ -418,13 +449,7 @@ tooling status
 user goal
 ```
 
-Do not read irrelevant integration docs if tooling is already ready.
-
----
-
-## Normal implementation session
-
-Read:
+## Normal implementation
 
 ```text
 constitution
@@ -436,25 +461,29 @@ relevant ADR only
 relevant source/tests
 ```
 
----
+## New session after handoff
+
+```text
+NEXT SESSION PROMPT
++ canonical files referenced by that prompt
++ relevant source/tests
+```
+
+Не нужно загружать old chat history.
 
 ## Bug fix
 
 Start with:
 
 ```text
-bug symptoms
+symptoms
 relevant code
 relevant tests
 ```
 
-Load architecture only if the bug crosses architectural boundaries.
-
----
+Architecture загружается только если bug пересекает subsystem boundaries.
 
 ## Change request
-
-Read:
 
 ```text
 PROJECT_BRIEF
@@ -463,28 +492,26 @@ ROADMAP
 affected phases/ADRs/code only
 ```
 
-Do not reread unrelated project history.
-
----
-
 ## Production incident
-
-Prioritize:
 
 ```text
 symptoms
 logs/errors
-production diff/recent changes
+recent production changes
 relevant subsystem
 ```
 
-Do not begin with full project replanning.
+Не начинать incident с полного replanning проекта.
 
 ---
 
-# 5. Complexity routing
+# 6. Complexity routing
 
 ## Tier S
+
+```text
+Brief → short plan → tasks → implement → verify → handoff if more work remains
+```
 
 Examples:
 
@@ -496,21 +523,18 @@ single feature
 simple automation
 ```
 
-Workflow:
+## Tier M
 
 ```text
 Brief
-→ short plan
-→ tasks
-→ implement
-→ verify
+→ Architecture
+→ Roadmap
+→ Current Phase
+→ Spec/Plan/Tasks
+→ Implementation batches
+→ Converge
+→ Session Handoff
 ```
-
-Avoid architecture ceremony unless needed.
-
----
-
-## Tier M
 
 Examples:
 
@@ -522,34 +546,9 @@ plugin + backend
 mobile MVP
 ```
 
-Workflow:
+## Tier L / High-risk
 
-```text
-Brief
-→ Architecture
-→ Roadmap
-→ Current Phase
-→ Spec/Plan/Tasks
-→ Implementation batches
-→ Converge
-```
-
----
-
-## Tier L
-
-Examples:
-
-```text
-marketplace
-multi-role SaaS
-complex multi-tenancy
-critical migrations
-financial workflows
-sensitive data
-```
-
-Workflow adds selective gates:
+Добавляются selective gates:
 
 ```text
 risk model
@@ -560,17 +559,15 @@ analysis
 stronger release review
 ```
 
-Tier L does not mean microservices by default.
+Tier L не означает microservices by default.
 
 ---
 
-# 6. Risk routing
+# 7. Risk routing
 
-Risk is separate from project size.
+Risk отделён от project size.
 
-A small feature can still be High Risk.
-
-High-risk triggers include:
+High-risk triggers:
 
 ```text
 payments
@@ -585,7 +582,7 @@ security controls
 production infrastructure
 ```
 
-For high-risk changes use more evidence:
+Для таких changes требуется больше evidence:
 
 ```text
 negative tests
@@ -595,120 +592,94 @@ review
 rollback/recovery planning
 ```
 
-Do not respond to risk by automatically introducing architectural complexity.
+Больше risk ≠ автоматически больше architectural complexity.
 
 ---
 
-# 7. Standard user interactions
+# 8. Standard user interactions
 
 ## Start
 
-User:
-
 ```text
-Хочу сделать ...
+prompts/START_NEW_PROJECT.md
 ```
 
-Entry:
+## Normal next session
+
+Использовать **NEXT SESSION PROMPT**, который дал предыдущий AI.
+
+Это preferred path.
+
+## Continue fallback
 
 ```text
-START_NEW_PROJECT
+prompts/CONTINUE_PROJECT.md
 ```
 
----
-
-## Continue
-
-User:
-
-```text
-Продолжай разработку.
-```
-
-Entry:
-
-```text
-CONTINUE_PROJECT
-```
-
----
+Используется, если нужен generic continuation entry point.
 
 ## Review current phase
 
-User:
-
 ```text
-Проверь текущий этап и закрой его, если всё выполнено.
+prompts/REVIEW_CURRENT_PHASE.md
 ```
 
-Entry:
+## Lost / no handoff
 
 ```text
-REVIEW_CURRENT_PHASE
+prompts/GENERATE_NEXT_SESSION_PROMPT.md
 ```
-
----
 
 ## Change requirements
 
-User:
-
 ```text
-Теперь нужно добавить ...
+prompts/CHANGE_REQUEST.md
 ```
-
-Entry:
-
-```text
-CHANGE_REQUEST
-```
-
----
 
 ## Bug
 
-User:
-
 ```text
-Вот ошибка / неправильное поведение ...
-```
-
-Entry:
-
-```text
-BUG_FIX
+prompts/BUG_FIX.md
 ```
 
 ---
 
-# 8. Persistent state vs chat state
+# 9. Persistent state vs chat state
 
-Chat is temporary execution context.
+Chat — temporary execution context.
 
-Repository is durable project memory.
+Repository — durable memory.
 
-Important durable truth must live in:
+Persistent truth:
 
 ```text
 PROJECT_BRIEF
 ARCHITECTURE
 ROADMAP
 current phase
-ADR when justified
-source code/tests
+ADRs when justified
+source/tests
 ```
 
-Do not depend on an old chat session to remember critical architecture.
+Navigation state:
 
-But do not copy every chat message into repository docs either.
+```text
+NEXT_SESSION.md
+```
 
-Only persistent truth should survive.
+`NEXT_SESSION.md` не должен дублировать спецификацию. Он отвечает только:
+
+```text
+Where are we?
+What is next?
+What prompt should the user paste?
+```
 
 ---
 
-# 9. Token budget principles
+# 10. Token budget principles
 
-## Keep
+Keep:
 
 ```text
 compact canonical files
@@ -716,26 +687,26 @@ small phase specs
 small implementation batches
 selective research
 selective reviews
+small handoffs
 ```
 
-## Avoid
+Avoid:
 
 ```text
 duplicate PRDs
 repeated architecture summaries
 raw research dumps
 reading the whole repo every run
-four parallel planning frameworks
-large status reports saved after every task
+full old chat history
+multiple competing planning frameworks
+huge handoff prompts
 ```
 
-Token efficiency is not about giving the model too little context.
-
-It is about giving it **the smallest context that still contains all decision-critical information**.
+Token efficiency = **smallest context that still contains all decision-critical information**.
 
 ---
 
-# 10. Example complete lifecycle
+# 11. Complete lifecycle example
 
 ```text
 USER:
@@ -762,16 +733,24 @@ Tests/build
 Converge
 ↓
 PHASE COMPLETE
+↓
+NEXT SESSION PROMPT: start Phase 01
+
+--- new AI session ---
 
 Phase 01 — Catalog
 ↓
+1–3 tasks
+↓
 ...
+↓
+NEXT SESSION PROMPT
 
-Phase 05 — Payments (High Risk)
+--- new AI session ---
+
+Phase 05 — Payments [High Risk]
 ↓
-Spec
-↓
-Plan
+Spec / plan
 ↓
 Negative-test requirements
 ↓
@@ -782,10 +761,14 @@ Review
 Webhook/payment tests
 ↓
 Converge
+↓
+NEXT SESSION PROMPT
 
 ...
 
-Release Candidate
+PROJECT COMPLETE
+↓
+Release/audit handoff
 ↓
 gstack QA/review
 ↓
@@ -800,9 +783,9 @@ Production
 
 ---
 
-# 11. Final operating rule
+# 12. Four canonical questions + one navigation question
 
-At any moment the agent should be able to answer four questions without loading the entire project:
+В любой момент AI должен отвечать без загрузки всего проекта:
 
 ```text
 1. What product are we building?
@@ -811,11 +794,14 @@ At any moment the agent should be able to answer four questions without loading 
 2. How is it built?
    → ARCHITECTURE
 
-3. What are we doing now?
-   → CURRENT PHASE
+3. What is the roadmap?
+   → ROADMAP
 
-4. What proves it is done?
-   → ACCEPTANCE CRITERIA + TESTS
+4. What are we doing now and what proves it is done?
+   → CURRENT PHASE + ACCEPTANCE CRITERIA + TESTS
+
+5. What should the user do next?
+   → NEXT_SESSION
 ```
 
-If these four answers are clear, the workflow is healthy.
+Если эти пять ответов ясны, workflow находится в здоровом состоянии.
