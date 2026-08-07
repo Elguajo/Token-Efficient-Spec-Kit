@@ -19,17 +19,17 @@ ROADMAP
     ↓
 CURRENT PHASE
     ↓
-SPEC / PLAN / TASKS
+1–3 TASKS
     ↓
-IMPLEMENTATION BATCH
+IMPLEMENTATION
     ↓
 VERIFICATION / REVIEW / QA
     ↓
-CONVERGE
+CONVERGENCE
     ↓
 PHASE STATE?
-    ├── IN PROGRESS ──► create handoff for same phase
-    ├── COMPLETE ─────► create handoff for next roadmap phase
+    ├── IN PROGRESS ──► handoff for same phase
+    ├── COMPLETE ─────► handoff for next roadmap phase
     └── PROJECT COMPLETE ─► release/audit/deploy handoff
                               ↓
                      NEXT SESSION PROMPT
@@ -37,40 +37,67 @@ PHASE STATE?
                         FRESH SESSION
 ```
 
-Процесс циклический. Chat — временный execution context. Repository — долговременная память проекта.
+Chat — временный execution context. Repository — долговременная память проекта.
 
 ---
 
-# 2. Главный navigation rule
+# 2. Кто является core
 
-Пользователь не обязан знать, какой engineering step должен быть следующим.
+**Token-Efficient Spec Kit — самостоятельный project orchestration layer.**
 
-В конце каждой meaningful implementation/review session AI обязан:
+Он владеет:
 
-1. определить состояние текущей фазы;
-2. решить правильный следующий шаг;
-3. обновить `docs/project/NEXT_SESSION.md`;
-4. выдать готовый `NEXT SESSION PROMPT`;
-5. остановиться, не начиная новую фазу автоматически в старой сессии.
+```text
+User Intent
+Project Brief
+Architecture
+Roadmap
+Phases
+Phase Tasks
+Acceptance Criteria
+Context Routing
+Quality Routing
+Convergence
+Session Handoff
+```
 
-Это позволяет переносить работу в новый контекст без пересказа истории и без необходимости пользователю понимать roadmap.
-
-Полные правила: [`system/SESSION_HANDOFF.md`](system/SESSION_HANDOFF.md).
+Внешние инструменты не становятся вторым project-level source of truth.
 
 ---
 
-# 3. Состояния проекта
+# 3. Tool ownership
+
+```text
+Token-Efficient Spec Kit
+= WHAT + orchestration + project memory + handoff
+
+Superpowers
+= HOW: TDD, implementation discipline, systematic debugging, verification
+
+gstack
+= challenge / review / browser QA / release checks
+
+Context7
+= fresh technical documentation on demand
+
+GitHub Spec Kit
+= OPTIONAL Advanced Spec Mode for formal deep specification inside a difficult phase
+```
+
+Если два инструмента пытаются создать competing project-level plans, Token-Efficient canonical docs побеждают.
+
+---
+
+# 4. Состояния проекта
 
 ## STATE 0 — TEMPLATE
 
-Конкретный product ещё не инициализирован.
-
 ```text
-PROJECT_BRIEF      → not initialized
-ARCHITECTURE       → not initialized
-ROADMAP            → not initialized
-TOOLING_STATUS     → not initialized / ready
-NEXT_SESSION       → not initialized
+PROJECT_BRIEF  → not initialized
+ARCHITECTURE   → not initialized
+ROADMAP        → not initialized
+TOOLING_STATUS → not initialized / ready
+NEXT_SESSION   → not initialized
 ```
 
 Entry point:
@@ -83,23 +110,15 @@ prompts/START_NEW_PROJECT.md
 
 ## STATE 1 — TOOLING BOOTSTRAP
 
-Trigger:
+Default Recommended profile:
 
 ```text
-TOOLING_STATUS != ready for active harness
-```
-
-Recommended profile:
-
-```text
-GitHub Spec Kit
 Superpowers
-Superpowers Implementation Bridge
 gstack
 Context7
 ```
 
-AI читает только нужные integration docs и использует актуальные upstream installation instructions.
+GitHub Spec Kit не устанавливается по умолчанию.
 
 Output:
 
@@ -113,7 +132,7 @@ Tooling bootstrap не повторяется в каждой сессии.
 
 ## STATE 2 — PRODUCT DEFINITION
 
-AI превращает пользовательское описание результата в compact canonical truth.
+AI превращает пользовательское описание в compact canonical truth.
 
 Writes:
 
@@ -121,26 +140,13 @@ Writes:
 docs/project/PROJECT_BRIEF.md
 ```
 
-Файл отвечает на вопрос:
-
-> What are we building?
-
-Он разделяет:
-
-```text
-facts
-explicit constraints
-reasonable assumptions
-true blockers
-```
-
-AI не спрашивает framework/database/hosting preferences, если может принять решение профессионально.
+Содержит только decision-critical product truth, assumptions и blockers.
 
 ---
 
 ## STATE 3 — ARCHITECTURE
 
-AI выбирает самый простой зрелый вариант архитектуры, который безопасно удовлетворяет требованиям.
+AI выбирает один практичный recommended architecture.
 
 Writes:
 
@@ -148,23 +154,13 @@ Writes:
 docs/project/ARCHITECTURE.md
 ```
 
-При необходимости:
-
-```text
-docs/decisions/ADR-XXX-....md
-```
-
-ADR создаётся только для consequential / cross-cutting / hard-to-reverse решений.
-
-Research selective: Context7 или актуальные official docs используются только там, где freshness действительно влияет на решение.
+ADR создаётся только для consequential hard-to-reverse решений.
 
 ---
 
 ## STATE 4 — ROADMAP
 
-AI создаёт независимо проверяемые product phases.
-
-Writes:
+AI создаёт independently verifiable phases:
 
 ```text
 docs/project/ROADMAP.md
@@ -173,17 +169,11 @@ docs/phases/01-....md
 ...
 ```
 
-Depth адаптируется под проект:
-
-```text
-S → minimal
-M → normal phased roadmap
-L → smaller phases + stronger selective gates
-```
+Roadmap depth адаптируется к сложности проекта.
 
 ---
 
-## STATE 5 — CURRENT PHASE PLANNING
+## STATE 5 — CURRENT PHASE
 
 Canonical input:
 
@@ -191,61 +181,74 @@ Canonical input:
 current phase file
 ```
 
-Tool ownership:
+Token-Efficient Spec Kit определяет:
 
 ```text
-GitHub Spec Kit = WHAT
-Superpowers     = HOW
+Goal
+Context
+In scope
+Out of scope
+Tasks
+Acceptance Criteria
+Negative/security tests where relevant
+Verification
 ```
 
-Spec Kit может выполнять:
-
-```text
-specify
-clarify — только если ambiguity consequential
-plan
-tasks
-analyze — только если risk/consistency оправдывает
-```
-
-Recommended batch:
+Recommended implementation batch:
 
 ```text
 1–3 cohesive tasks
 ```
 
+### Optional Advanced Spec Mode
+
+Если текущая фаза materially ambiguous, cross-cutting или high-risk, AI может подключить GitHub Spec Kit для formal deep specification.
+
+Примеры:
+
+```text
+payments
+complex authorization
+multi-tenancy boundaries
+critical migrations
+public API contracts
+large cross-system integrations
+```
+
+GitHub Spec Kit работает **внутри текущей фазы** и не заменяет Project Brief, Architecture, Roadmap или Session Handoff.
+
 ---
 
 ## STATE 6 — IMPLEMENTATION
 
-AI читает минимальный контекст:
+Superpowers/native coding harness отвечает за HOW.
+
+Agent reads only:
 
 ```text
-constitution
+Constitution
 PROJECT_BRIEF
 ARCHITECTURE
 ENGINEERING_RULES
 current phase
-relevant ADR if needed
+relevant ADR
 relevant source/tests
 ```
 
-Не читает автоматически все завершённые phases.
+Avoid:
 
-Во время реализации:
-
-- current stable APIs;
-- input validation;
-- security boundaries;
-- behavior-focused tests;
-- no accidental future scope;
-- no unrelated refactors.
+```text
+all completed phases
+all ADRs
+full chat history
+entire repository without need
+```
 
 ---
 
 ## STATE 7 — VERIFICATION
 
-В зависимости от проекта:
+Relevant checks may include:
 
 ```text
 lint
@@ -258,13 +261,13 @@ security negative tests
 manual QA
 ```
 
-Written code without relevant verification is not done.
+The exact set depends on project type and risk.
 
 ---
 
 ## STATE 8 — CHALLENGE / QA
 
-gstack используется выборочно как challenge layer:
+gstack используется выборочно:
 
 ```text
 engineering review
@@ -273,19 +276,18 @@ code review
 investigation
 browser QA
 release review
-cross-model challenge where available
 ```
 
-Не нужно запускать все gstack skills после каждой маленькой правки.
+Trigger only when expected quality improvement justifies extra context/cost.
 
 ---
 
 ## STATE 9 — CONVERGENCE
 
-Сравнение:
+Compare:
 
 ```text
-SPEC
+PHASE SPEC
 ↕
 CODE
 ↕
@@ -294,7 +296,9 @@ TESTS
 ACCEPTANCE CRITERIA
 ```
 
-Результат должен быть одним из:
+Missing work становится маленьким follow-up task.
+
+Result:
 
 ```text
 IN PROGRESS
@@ -302,99 +306,25 @@ PHASE COMPLETE
 PROJECT COMPLETE
 ```
 
-Missing work превращается в маленькие follow-up tasks, а не в переписывание всего roadmap.
-
 ---
 
 ## STATE 10 — SESSION HANDOFF
 
-Это обязательное состояние после meaningful implementation/review work.
+At the end of every meaningful implementation/review session AI must:
 
-### A. Phase IN PROGRESS
+1. determine phase/project state;
+2. decide the correct next action;
+3. update `docs/project/NEXT_SESSION.md`;
+4. create a ready-to-copy `NEXT SESSION PROMPT`;
+5. stop before starting the next phase in the old session.
 
-AI:
-
-```text
-same phase
-→ next 1–3 unfinished tasks
-→ verification requirements
-→ NEXT SESSION PROMPT
-```
-
-### B. PHASE COMPLETE
-
-AI:
-
-```text
-inspect ROADMAP
-→ find next phase
-→ do NOT implement it in old session
-→ create fresh-session prompt for next phase
-```
-
-### C. PROJECT COMPLETE
-
-AI выбирает подходящий следующий шаг:
-
-```text
-final audit
-release
-deployment
-security/browser QA
-documentation
-or no further work
-```
-
-Если продукт уже released, новая functionality начинается через `CHANGE_REQUEST.md`.
-
-AI пишет:
-
-```text
-docs/project/NEXT_SESSION.md
-```
-
-и возвращает:
-
-```text
-NEXT SESSION PROMPT
-
-<ready-to-copy prompt>
-```
+This is mandatory because the user may not know the correct engineering next step.
 
 ---
 
-## STATE 11 — FRESH SESSION
+## STATE 11 — RELEASE
 
-Пользователь создаёт новую AI-сессию и вставляет handoff prompt.
-
-Новый agent не должен перечитывать историю старого чата.
-
-Prompt ссылается на canonical files и содержит только то, что нельзя надёжно восстановить из repository.
-
-Normal loop:
-
-```text
-Session N
-→ implementation/review
-→ handoff
-→ Session N+1
-```
-
-Если handoff потерян:
-
-```text
-prompts/GENERATE_NEXT_SESSION_PROMPT.md
-```
-
-восстанавливает следующий шаг по repository state.
-
----
-
-## STATE 12 — RELEASE
-
-После реализации roadmap выбираются gates по risk.
-
-Typical production-oriented flow:
+Production-oriented flow may include:
 
 ```text
 acceptance criteria
@@ -403,125 +333,28 @@ acceptance criteria
 → security checks
 → browser/E2E QA
 → observability/config review
-→ release/ship review
+→ gstack release checks where useful
 → deploy
-→ production smoke test
+→ smoke test
 ```
 
-High-risk destructive/release actions могут требовать human approval.
+High-risk destructive actions may require explicit human approval.
 
 ---
 
-# 4. Tool ownership
-
-```text
-Token-Efficient Spec Kit
-    = intent + architecture discipline + context budget + phase/session navigation
-
-GitHub Spec Kit
-    = WHAT to build
-
-Superpowers
-    = HOW to implement / test / debug
-
-Superpowers Implementation Bridge
-    = boundary between WHAT and HOW
-
-gstack
-    = challenge / review / browser QA / ship layer
-
-Context7
-    = fresh technical documentation on demand
-```
-
-Если два инструмента пытаются создать competing canonical plans, ownership rules Token-Efficient Spec Kit имеют приоритет.
-
----
-
-# 5. Context routing
-
-## New project
-
-```text
-constitution
-system operating docs
-tooling status
-user goal
-```
-
-## Normal implementation
-
-```text
-constitution
-PROJECT_BRIEF
-ARCHITECTURE
-ENGINEERING_RULES
-current phase
-relevant ADR only
-relevant source/tests
-```
-
-## New session after handoff
-
-```text
-NEXT SESSION PROMPT
-+ canonical files referenced by that prompt
-+ relevant source/tests
-```
-
-Не нужно загружать old chat history.
-
-## Bug fix
-
-Start with:
-
-```text
-symptoms
-relevant code
-relevant tests
-```
-
-Architecture загружается только если bug пересекает subsystem boundaries.
-
-## Change request
-
-```text
-PROJECT_BRIEF
-ARCHITECTURE
-ROADMAP
-affected phases/ADRs/code only
-```
-
-## Production incident
-
-```text
-symptoms
-logs/errors
-recent production changes
-relevant subsystem
-```
-
-Не начинать incident с полного replanning проекта.
-
----
-
-# 6. Complexity routing
+# 5. Complexity routing
 
 ## Tier S
 
 ```text
-Brief → short plan → tasks → implement → verify → handoff if more work remains
+Brief
+→ Tasks
+→ Implement
+→ Verify
+→ Handoff
 ```
 
-Examples:
-
-```text
-landing page
-small script
-CLI
-single feature
-simple automation
-```
+Examples: landing page, CLI, small script, simple automation.
 
 ## Tier M
 
@@ -529,60 +362,46 @@ simple automation
 Brief
 → Architecture
 → Roadmap
-→ Current Phase
-→ Spec/Plan/Tasks
+→ Phases
 → Implementation batches
 → Converge
-→ Session Handoff
+→ Handoff
 ```
 
-Examples:
+Examples: SaaS MVP, ecommerce, internal dashboard, plugin + backend.
+
+## Tier L / High Risk
+
+Adds stronger quality gates, not automatically more infrastructure:
 
 ```text
-SaaS MVP
-ecommerce
-internal dashboard
-plugin + backend
-mobile MVP
-```
-
-## Tier L / High-risk
-
-Добавляются selective gates:
-
-```text
-risk model
-clarification where consequential
-architecture review
+smaller phases
 negative tests
-analysis
+architecture review
+more explicit acceptance criteria
+selective Advanced Spec Mode
 stronger release review
 ```
 
-Tier L не означает microservices by default.
-
 ---
 
-# 7. Risk routing
+# 6. Risk routing
 
-Risk отделён от project size.
-
-High-risk triggers:
+High-risk triggers include:
 
 ```text
 payments
 authentication
 authorization
-private user files
+private files
 PII/sensitive data
 financial records
 destructive migrations
-public API compatibility
-security controls
+public APIs
 production infrastructure
 ```
 
-Для таких changes требуется больше evidence:
+Use more evidence:
 
 ```text
 negative tests
@@ -592,216 +411,120 @@ review
 rollback/recovery planning
 ```
 
-Больше risk ≠ автоматически больше architectural complexity.
+Do not answer risk by automatically introducing microservices or more frameworks.
 
 ---
 
-# 8. Standard user interactions
+# 7. Context routing
 
-## Start
+## Normal implementation session
 
-```text
-prompts/START_NEW_PROJECT.md
-```
-
-## Normal next session
-
-Использовать **NEXT SESSION PROMPT**, который дал предыдущий AI.
-
-Это preferred path.
-
-## Continue fallback
+Read:
 
 ```text
-prompts/CONTINUE_PROJECT.md
+Constitution
+PROJECT_BRIEF
+ARCHITECTURE
+ENGINEERING_RULES
+Current Phase
+Relevant ADR
+Relevant source/tests
 ```
 
-Используется, если нужен generic continuation entry point.
+## Bug fix
 
-## Review current phase
+Start with:
 
 ```text
-prompts/REVIEW_CURRENT_PHASE.md
+symptom
+relevant code
+relevant tests
 ```
 
-## Lost / no handoff
+Load broader architecture only if needed.
 
-```text
-prompts/GENERATE_NEXT_SESSION_PROMPT.md
-```
+## Change request
 
-## Change requirements
-
-```text
-prompts/CHANGE_REQUEST.md
-```
-
-## Bug
-
-```text
-prompts/BUG_FIX.md
-```
-
----
-
-# 9. Persistent state vs chat state
-
-Chat — temporary execution context.
-
-Repository — durable memory.
-
-Persistent truth:
+Read:
 
 ```text
 PROJECT_BRIEF
 ARCHITECTURE
 ROADMAP
-current phase
-ADRs when justified
-source/tests
+affected phases/ADRs/code only
 ```
 
-Navigation state:
+## Advanced Spec Mode
 
-```text
-NEXT_SESSION.md
-```
-
-`NEXT_SESSION.md` не должен дублировать спецификацию. Он отвечает только:
-
-```text
-Where are we?
-What is next?
-What prompt should the user paste?
-```
+Load GitHub Spec Kit instructions only when the current phase explicitly enables it.
 
 ---
 
-# 10. Token budget principles
+# 8. Persistent state vs chat state
+
+Durable truth lives in:
+
+```text
+PROJECT_BRIEF
+ARCHITECTURE
+ROADMAP
+Current Phase
+ADRs where justified
+code/tests
+NEXT_SESSION as navigation only
+```
+
+Do not depend on old chats to remember critical project truth.
+Do not copy every chat message into repository docs either.
+
+---
+
+# 9. Token budget principles
 
 Keep:
 
 ```text
 compact canonical files
 small phase specs
-small implementation batches
+1–3 task batches
 selective research
 selective reviews
-small handoffs
+optional tooling only when useful
 ```
 
 Avoid:
 
 ```text
 duplicate PRDs
-repeated architecture summaries
+parallel roadmaps
 raw research dumps
 reading the whole repo every run
-full old chat history
-multiple competing planning frameworks
-huge handoff prompts
+loading installed tools just because they exist
 ```
 
-Token efficiency = **smallest context that still contains all decision-critical information**.
+Token efficiency means giving the agent the **smallest context that still contains all decision-critical information**.
 
 ---
 
-# 11. Complete lifecycle example
+# 10. Healthy workflow test
+
+At any moment AI should be able to answer:
 
 ```text
-USER:
-"Хочу marketplace digital assets."
-
-↓ START_NEW_PROJECT
-
-Tooling check
-↓
-Project Brief
-↓
-Architecture
-↓
-Roadmap
-
-Phase 00 — Foundation
-↓
-Spec Kit plan/tasks
-↓
-Superpowers implementation
-↓
-Tests/build
-↓
-Converge
-↓
-PHASE COMPLETE
-↓
-NEXT SESSION PROMPT: start Phase 01
-
---- new AI session ---
-
-Phase 01 — Catalog
-↓
-1–3 tasks
-↓
-...
-↓
-NEXT SESSION PROMPT
-
---- new AI session ---
-
-Phase 05 — Payments [High Risk]
-↓
-Spec / plan
-↓
-Negative-test requirements
-↓
-Implementation
-↓
-Review
-↓
-Webhook/payment tests
-↓
-Converge
-↓
-NEXT SESSION PROMPT
-
-...
-
-PROJECT COMPLETE
-↓
-Release/audit handoff
-↓
-gstack QA/review
-↓
-Full relevant tests
-↓
-Deploy
-↓
-Smoke test
-↓
-Production
-```
-
----
-
-# 12. Four canonical questions + one navigation question
-
-В любой момент AI должен отвечать без загрузки всего проекта:
-
-```text
-1. What product are we building?
+1. What are we building?
    → PROJECT_BRIEF
 
 2. How is it built?
    → ARCHITECTURE
 
-3. What is the roadmap?
-   → ROADMAP
+3. What are we doing now?
+   → CURRENT PHASE
 
-4. What are we doing now and what proves it is done?
-   → CURRENT PHASE + ACCEPTANCE CRITERIA + TESTS
+4. What proves it is done?
+   → ACCEPTANCE CRITERIA + TESTS
 
 5. What should the user do next?
    → NEXT_SESSION
 ```
 
-Если эти пять ответов ясны, workflow находится в здоровом состоянии.
+If these five answers are clear, the workflow is healthy.
