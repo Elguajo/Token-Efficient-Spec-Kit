@@ -2,13 +2,13 @@
 
 # Token-Efficient Spec Kit
 
-### An autonomous, senior-level AI engineering workflow that keeps context small and decisions sharp.
+### A universal workflow for building software with AI coding agents
 
-**Describe the outcome. Let the agent choose the stack, architecture, roadmap, and implementation path.**
+**You describe the outcome. The AI agent chooses the stack, designs the architecture, works phase by phase, and tells you exactly what to do next at the end of every session.**
 
-`Outcome → Decisions → Specs → Small Tasks → Code → Verification`
+`Idea → Specs → Architecture → Phases → Code → Verification → Next Prompt`
 
-[Русская версия](README.md)
+[Русская версия](README.md) · [Usage Guide](docs/USAGE_GUIDE.md) · [Workflow](docs/WORKFLOW.md) · [Integrations](integrations/README.md)
 
 </div>
 
@@ -16,265 +16,56 @@
 
 ## Why this exists
 
-AI coding agents are powerful, but large projects often become expensive and inconsistent because every session reloads too much context, repeats decisions, and asks the user to choose technical details they should not need to choose.
+AI coding agents create two common problems on longer projects:
 
-**Token-Efficient Spec Kit** is a lightweight engineering operating system built around a simple idea:
+1. they repeatedly load too much context and waste tokens;
+2. non-developers often do not know **what to ask the AI to do next**.
 
-> **The user defines the outcome. The agent owns engineering decisions. Specs preserve intent. Small context preserves tokens. Verification preserves quality.**
+Token-Efficient Spec Kit addresses both.
 
-You can start with something as small as:
+> **The user owns the desired outcome. The AI owns engineering decisions and the next step.**
+
+Instead of choosing frameworks, databases, hosting, architecture, phase order, and the next engineering task yourself, you can simply say:
 
 ```text
-I want a web app where photographers can sell Lightroom presets.
+I want a marketplace where designers can sell digital assets.
 ```
 
-The agent is expected to determine the rest professionally:
+The agent should then:
 
-- what kind of product this is;
-- what needs clarification and what can be assumed;
-- the recommended stack;
-- architecture and data model;
-- security boundaries;
-- project complexity and risk;
-- implementation phases;
-- testing strategy;
-- deployment approach;
-- the next 1–3 tasks to implement.
-
-It should **not** make you answer questions like “React or Vue?”, “Postgres or MongoDB?”, or “Vercel or AWS?” unless your business constraints genuinely make the choice depend on you.
+- understand the product and users;
+- ask only true blocking questions;
+- choose one recommended stack;
+- design architecture and data boundaries;
+- classify complexity and risk;
+- create a roadmap and verifiable phases;
+- implement small batches of 1–3 cohesive tasks;
+- run relevant tests/reviews/QA;
+- determine the next engineering step;
+- produce a ready-to-copy prompt for the next fresh AI session.
 
 ---
 
-## Core workflow
+# Quick Start
 
-```text
-                    ┌──────────────────────┐
-                    │     USER OUTCOME     │
-                    │  "I want to build…" │
-                    └──────────┬───────────┘
-                               │
-                               ▼
-                    ┌──────────────────────┐
-                    │      UNDERSTAND      │
-                    │ users · jobs · scope │
-                    └──────────┬───────────┘
-                               │
-                               ▼
-                    ┌──────────────────────┐
-                    │   CLASSIFY & ASSESS  │
-                    │ type · risk · size   │
-                    └──────────┬───────────┘
-                               │
-                               ▼
-                    ┌──────────────────────┐
-                    │   SENIOR DECISIONS   │
-                    │ stack · architecture │
-                    └──────────┬───────────┘
-                               │
-                               ▼
-                    ┌──────────────────────┐
-                    │       ROADMAP        │
-                    │ verifiable phases   │
-                    └──────────┬───────────┘
-                               │
-                               ▼
-                    ┌──────────────────────┐
-                    │    CURRENT PHASE     │
-                    │  1–3 cohesive tasks │
-                    └──────────┬───────────┘
-                               │
-                               ▼
-                    ┌──────────────────────┐
-                    │      IMPLEMENT       │
-                    │ code · migrate · test│
-                    └──────────┬───────────┘
-                               │
-                               ▼
-                    ┌──────────────────────┐
-                    │       CONVERGE       │
-                    │ spec ↔ code ↔ tests │
-                    └──────────┬───────────┘
-                               │
-                               └──────► next phase
-```
-
----
-
-## The token-efficient part
-
-A typical agent session should **not** reread the entire project.
-
-It loads only the smallest useful context:
-
-```text
-constitution
-+ project brief
-+ compact architecture
-+ engineering rules
-+ current phase
-+ relevant ADR (only if needed)
-+ relevant source files/tests
-```
-
-It normally does **not** load:
-
-```text
-all completed phases
-+ every decision record
-+ full chat history
-+ giant master specs
-+ repeated research notes
-+ duplicated PRDs
-```
-
-This keeps the agent focused and reduces both token usage and architectural drift.
-
----
-
-## Adaptive process — not every project needs the same ceremony
-
-### S — Small
-
-For landing pages, small CLIs, isolated features, simple automations:
-
-```text
-Brief → Plan → Tasks → Implement → Verify
-```
-
-### M — Medium
-
-For SaaS MVPs, ecommerce, plugins with backends, internal tools:
-
-```text
-Brief → Architecture → Roadmap → Phase Specs → Implement → Converge
-```
-
-### L — Large / High-risk
-
-For marketplaces, multi-role systems, payments, sensitive data, critical migrations:
-
-```text
-Brief
-→ Architecture
-→ Risk model
-→ Roadmap
-→ Small independent specs
-→ Selective quality gates
-→ Implementation batches
-→ Converge
-```
-
-The system deliberately avoids heavyweight documentation when it does not add value.
-
----
-
-## Senior-agent behavior
-
-The included Constitution instructs the agent to:
-
-- make normal engineering decisions autonomously;
-- choose **one recommended default**, not dump ten options on the user;
-- research current official documentation when technology freshness matters;
-- prefer simple, mature technology over novelty when both solve the problem;
-- ask questions only when the answer materially changes the product, cost, security, compliance, or an irreversible action;
-- treat security as architecture, not a later checklist;
-- add complexity only when a concrete requirement justifies it;
-- verify before claiming completion.
-
----
-
-## Creative autonomy
-
-This workflow is not intended to make the agent rigid.
-
-When details are unspecified, the agent is explicitly allowed to propose and choose:
-
-- product and feature organization;
-- UX flows;
-- information architecture;
-- visual patterns;
-- API ergonomics;
-- data models;
-- onboarding;
-- loading, empty and error states;
-- developer tooling;
-- small high-value product improvements.
-
-Creative choices must support the requested outcome and must never silently override explicit constraints.
-
----
-
-## Repository structure
-
-```text
-.
-├── .specify/
-│   └── memory/
-│       └── constitution.md
-│
-├── docs/
-│   ├── system/
-│   │   ├── OPERATING_MODEL.md
-│   │   ├── DECISION_FRAMEWORK.md
-│   │   ├── ENGINEERING_RULES.md
-│   │   ├── TOKEN_EFFICIENCY.md
-│   │   └── CREATIVE_AUTONOMY.md
-│   │
-│   ├── project/
-│   │   ├── PROJECT_BRIEF.md
-│   │   ├── ARCHITECTURE.md
-│   │   └── ROADMAP.md
-│   │
-│   ├── phases/
-│   └── decisions/
-│
-├── templates/
-│   ├── PROJECT_BRIEF.template.md
-│   ├── ARCHITECTURE.template.md
-│   ├── ROADMAP.template.md
-│   ├── PHASE.template.md
-│   └── ADR.template.md
-│
-├── prompts/
-│   ├── START_NEW_PROJECT.md
-│   ├── CONTINUE_PROJECT.md
-│   ├── REVIEW_CURRENT_PHASE.md
-│   ├── CHANGE_REQUEST.md
-│   └── BUG_FIX.md
-│
-├── AGENTS.md
-├── README.md
-└── README_EN.md
-```
-
----
-
-## Quick start
-
-### 1. Copy or clone this template
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/Elguajo/Token-Efficient-Spec-Kit.git my-project
 cd my-project
 ```
 
-You can also merge these files into an existing repository.
+### 2. Open it in a repository-aware AI coding agent
 
-### 2. Optional: initialize GitHub Spec Kit
+For example Codex, Claude Code, Cursor, or another compatible coding harness.
 
-If you use GitHub Spec Kit, initialize it for your coding agent according to the current Spec Kit documentation.
-
-The workflow here is intentionally agent-agnostic and can be used with Codex, Claude Code, Cursor, or other repository-aware coding agents.
-
-### 3. Open the starter prompt
-
-Use:
+### 3. Run
 
 ```text
 prompts/START_NEW_PROJECT.md
 ```
 
-Replace:
+Replace only:
 
 ```text
 <WHAT_I_WANT>
@@ -285,111 +76,242 @@ with your desired outcome.
 Example:
 
 ```text
-I want a desktop application for Windows and macOS that automatically
-organizes my CGI/3D assets, generates previews, and lets me search by tags.
+I want a desktop app for Windows and macOS that organizes my 3D assets,
+generates previews, and lets me search them by tags.
 ```
 
-### 4. Let the agent bootstrap the project
-
-It should create/update:
-
-```text
-docs/project/PROJECT_BRIEF.md
-docs/project/ARCHITECTURE.md
-docs/project/ROADMAP.md
-docs/phases/...
-docs/decisions/...  # only when a real ADR is justified
-```
-
-Then it starts the first small implementation batch unless a genuine blocker exists.
-
-### 5. Continue with a small context window
-
-For later sessions use:
-
-```text
-prompts/CONTINUE_PROJECT.md
-```
-
-For phase verification:
-
-```text
-prompts/REVIEW_CURRENT_PHASE.md
-```
-
-For requirement changes:
-
-```text
-prompts/CHANGE_REQUEST.md
-```
-
-For focused bug fixing:
-
-```text
-prompts/BUG_FIX.md
-```
+**The agent should organize the engineering work from there.**
 
 ---
 
-## Example: what the agent should decide
+## What happens automatically
 
-You say:
-
-```text
-Build a marketplace where designers can sell digital templates.
+```mermaid
+flowchart TD
+    A[Describe desired outcome] --> B[Tooling bootstrap]
+    B --> C[Project Brief]
+    C --> D[Architecture]
+    D --> E[Roadmap]
+    E --> F[Current Phase]
+    F --> G[Spec / Plan / Tasks]
+    G --> H[1–3 Tasks]
+    H --> I[Implementation]
+    I --> J[Tests / Review / QA]
+    J --> K{Phase complete?}
+    K -- No --> L[Prompt to continue current phase]
+    K -- Yes --> M[Prompt to start next phase]
+    L --> N[Fresh AI session]
+    M --> N
+    N --> F
 ```
 
-You should **not** have to specify:
-
-```text
-framework
-database
-auth provider
-object storage
-hosting
-API style
-test runner
-observability stack
-```
-
-The agent evaluates requirements, risk and current tooling, then records a single recommended architecture.
-
-For consequential choices it may record an ADR like:
-
-```text
-docs/decisions/ADR-001-primary-database.md
-```
-
-For trivial implementation decisions it should not create documentation overhead.
+Project knowledge lives in the repository, so a new session does not require retelling the whole project.
 
 ---
 
-## Decision philosophy
+# The key idea: the AI tells you what to do next
 
-A material technical choice is evaluated roughly around:
+At the end of every meaningful implementation/review session, the agent must classify the state as:
 
-| Criterion | Default weight |
-|---|---:|
-| Requirement fit | 25% |
-| Simplicity | 20% |
-| Maintainability | 15% |
-| Ecosystem / maturity | 10% |
-| Security | 10% |
-| Operational burden | 10% |
-| Cost | 5% |
-| Developer productivity | 5% |
+```text
+IN PROGRESS
+PHASE COMPLETE
+PROJECT COMPLETE
+```
 
-Weights are adapted to the project. For example, security and data integrity dominate in financial or sensitive systems.
+Then it must:
 
-The rule is not “always choose the most popular stack.” The rule is **choose the simplest mature stack that fits the actual product**.
+1. decide the correct next engineering action;
+2. update `docs/project/NEXT_SESSION.md`;
+3. return a **NEXT SESSION PROMPT** that is ready to paste into a fresh AI session.
+
+### If the phase is still in progress
+
+The next prompt continues the same phase and identifies the next 1–3 tasks.
+
+### If the phase is complete
+
+The AI reads `ROADMAP.md`, identifies the next phase itself, and prepares the next-session prompt.
+
+### If the project is complete
+
+The AI routes the work into final audit, release, deployment, security/browser QA, or explains how to begin a future change request.
+
+If a handoff is ever lost, use:
+
+```text
+prompts/GENERATE_NEXT_SESSION_PROMPT.md
+```
+
+Full protocol: [Session Handoff](docs/system/SESSION_HANDOFF.md)
+
+---
+
+## Why it saves tokens
+
+A normal coding session should read only:
+
+```text
+Constitution
++ Project Brief
++ Architecture
++ Engineering Rules
++ Current Phase
++ Relevant ADR if needed
++ Relevant code/tests
+```
+
+It should not automatically reread:
+
+```text
+all completed phases
+all ADRs
+full chat history
+giant master specs
+raw research dumps
+```
+
+Core rule:
+
+> **One fact, one canonical location. One session, usually 1–3 cohesive tasks.**
+
+---
+
+# Senior autonomy
+
+The AI should make routine engineering decisions itself.
+
+It should not ask you:
+
+```text
+React or Vue?
+Postgres or MongoDB?
+Vercel or AWS?
+REST or GraphQL?
+```
+
+when those choices can be professionally derived from project requirements.
+
+A user question is justified only when a missing answer materially changes:
+
+- the product;
+- cost;
+- security;
+- compliance;
+- business rules;
+- irreversible/destructive actions.
+
+Otherwise the agent chooses one recommended default and proceeds.
+
+---
+
+## Creative autonomy
+
+Where requirements are unspecified, the agent may improve:
+
+- UX flows;
+- information architecture;
+- feature organization;
+- API ergonomics;
+- data models;
+- onboarding;
+- loading/empty/error states;
+- developer experience;
+- small high-value product ideas.
+
+It must never silently override explicit user constraints.
+
+---
+
+# Recommended AI Engineering Profile
+
+Default production-oriented profile:
+
+```text
+Token-Efficient Spec Kit
+├── GitHub Spec Kit
+├── Superpowers
+├── Superpowers Implementation Bridge
+├── gstack
+└── Context7
+```
+
+| Tool | Responsibility |
+|---|---|
+| **Token-Efficient Spec Kit** | Intent, architecture discipline, phases, context budget, session handoff |
+| **GitHub Spec Kit** | **WHAT** — specification, plan, tasks, convergence |
+| **Superpowers** | **HOW** — implementation, TDD, systematic debugging |
+| **Superpowers Bridge** | Prevents duplicate planning ownership |
+| **gstack** | Engineering/design review, browser QA, release checks |
+| **Context7** | Fresh library/API documentation on demand |
+
+`START_NEW_PROJECT.md` checks tooling state and can bootstrap the Recommended profile when needed.
+
+More: [integrations/README.md](integrations/README.md)
+
+---
+
+## Adaptive process
+
+### S — Small
+
+```text
+Brief → Plan → Tasks → Implement → Verify
+```
+
+### M — Medium
+
+```text
+Brief → Architecture → Roadmap → Phase Specs → Implement → Converge → Handoff
+```
+
+### L / High-risk
+
+```text
+Brief
+→ Architecture
+→ Risk model
+→ Roadmap
+→ Small specs
+→ Selective quality gates
+→ Implementation batches
+→ Converge
+→ Handoff
+```
+
+High risk means more evidence and verification, not automatically more complex architecture.
+
+---
+
+# Daily use
+
+| Situation | Use |
+|---|---|
+| Start a new project | [`START_NEW_PROJECT.md`](prompts/START_NEW_PROJECT.md) |
+| Normal next session | **Paste the previous NEXT SESSION PROMPT** |
+| Generic continuation fallback | [`CONTINUE_PROJECT.md`](prompts/CONTINUE_PROJECT.md) |
+| Review/close current phase | [`REVIEW_CURRENT_PHASE.md`](prompts/REVIEW_CURRENT_PHASE.md) |
+| Lost the handoff / unsure what is next | [`GENERATE_NEXT_SESSION_PROMPT.md`](prompts/GENERATE_NEXT_SESSION_PROMPT.md) |
+| Requirements changed | [`CHANGE_REQUEST.md`](prompts/CHANGE_REQUEST.md) |
+| Fix a bug | [`BUG_FIX.md`](prompts/BUG_FIX.md) |
+
+Normal loop:
+
+```text
+Session 1
+→ AI work
+→ NEXT SESSION PROMPT
+→ fresh session
+→ paste prompt
+→ Session 2
+→ ...
+```
 
 ---
 
 ## Quality gates
 
-A feature is not complete just because code exists.
-
-Relevant evidence may include:
+Depending on project type and risk:
 
 ```text
 lint
@@ -397,59 +319,58 @@ lint
 + tests
 + build
 + security negative tests
-+ manual QA
++ browser/e2e QA
 + acceptance criteria
 ```
 
-For high-risk areas such as auth, payments, private files, permissions, migrations, and external webhooks, negative tests are expected.
+Auth, payments, permissions, private files, webhooks, and destructive migrations require stronger negative/security verification when relevant.
 
 ---
 
-## Principles in one minute
+## Repository map
 
-1. **Outcome first.** The user describes what they want, not how to implement it.
-2. **Senior autonomy.** The agent owns normal technical decisions.
-3. **Ask only blockers.** Do not turn every engineering choice into a user questionnaire.
-4. **Simplicity first.** No premature distributed architecture.
-5. **Current information.** Verify fast-changing APIs and providers from official docs.
-6. **Small context.** Read only what the current task needs.
-7. **Small batches.** Usually 1–3 cohesive tasks per implementation run.
-8. **Canonical docs.** One fact, one preferred home.
-9. **Security by design.** Server authority, least privilege, negative tests.
-10. **Verification before completion.** Spec ↔ code ↔ tests must converge.
-
----
-
-## What this is not
-
-This is **not**:
-
-- a fixed technology stack;
-- a giant PRD generator;
-- a multi-agent role-play framework;
-- a reason to create documentation for every trivial decision;
-- a replacement for engineering judgment;
-- a guarantee that AI-generated code is correct without verification.
-
-It is a compact operating layer that makes repository-aware coding agents behave more consistently across projects.
+```text
+.
+├── .specify/memory/
+│   └── constitution.md
+├── docs/
+│   ├── project/
+│   │   ├── PROJECT_BRIEF.md
+│   │   ├── ARCHITECTURE.md
+│   │   ├── ROADMAP.md
+│   │   ├── TOOLING_STATUS.md
+│   │   └── NEXT_SESSION.md
+│   ├── phases/
+│   ├── decisions/
+│   ├── system/
+│   ├── USAGE_GUIDE.md
+│   └── WORKFLOW.md
+├── integrations/
+├── templates/
+├── prompts/
+├── AGENTS.md
+├── README.md
+└── README_EN.md
+```
 
 ---
 
-## Designed for
+## Documentation
 
-- solo developers using AI coding agents;
-- designers/founders who know the product they want but do not want to choose every technology;
-- senior developers who want AI to respect architecture without rereading giant specs;
-- prototypes that may grow into production systems;
-- projects where context cost and drift become a problem over long sessions.
+- **Start here:** [README.md](README.md)
+- **How to use it:** [docs/USAGE_GUIDE.md](docs/USAGE_GUIDE.md)
+- **How the workflow works internally:** [docs/WORKFLOW.md](docs/WORKFLOW.md)
+- **How sessions/phases hand off:** [docs/system/SESSION_HANDOFF.md](docs/system/SESSION_HANDOFF.md)
+- **What should happen next right now:** [docs/project/NEXT_SESSION.md](docs/project/NEXT_SESSION.md)
+- **Tool integrations:** [integrations/README.md](integrations/README.md)
 
 ---
 
 <div align="center">
 
-### Describe the outcome. Keep the context small. Let the agent engineer.
+### Describe the outcome. Let the agent handle the engineering and the next step.
 
-Start with [`prompts/START_NEW_PROJECT.md`](prompts/START_NEW_PROJECT.md).
+**[Start a new project →](prompts/START_NEW_PROJECT.md)**
 
 <br />
 
