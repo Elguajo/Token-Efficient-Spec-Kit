@@ -2,7 +2,7 @@
 
 > Практическое руководство для человека, который может вообще не разбираться в разработке.
 
-Если после чтения остаётся вопрос **«что мне теперь делать?»**, открой [`project/NEXT_SESSION.md`](project/NEXT_SESSION.md).
+Если после чтения остаётся вопрос **«что мне теперь делать?»**, открой [`project/NEXT_SESSION.md`](project/NEXT_SESSION.md) или запусти [`../prompts/PROJECT_DOCTOR.md`](../prompts/PROJECT_DOCTOR.md).
 
 ---
 
@@ -232,8 +232,11 @@ prompts/GENERATE_NEXT_SESSION_PROMPT.md
 | Продолжить работу | `prompts/CONTINUE_PROJECT.md` |
 | Проверить/закрыть phase | `prompts/REVIEW_CURRENT_PHASE.md` |
 | Не понимаю следующий шаг | `prompts/GENERATE_NEXT_SESSION_PROMPT.md` |
+| Хочу понять состояние проекта | `prompts/PROJECT_DOCTOR.md` |
 | Изменились требования | `prompts/CHANGE_REQUEST.md` |
 | Bug | `prompts/BUG_FIX.md` |
+| Проверить сам workflow | `prompts/AUDIT_WORKFLOW.md` |
+| Обновить framework | `prompts/UPDATE_WORKFLOW.md` |
 
 В идеальном процессе после первого запуска тебе чаще всего достаточно просто копировать `NEXT SESSION PROMPT`.
 
@@ -312,6 +315,137 @@ Rollback/recovery where relevant
 ```
 
 Не каждый проект требует каждый пункт, но high-risk части не должны выпускаться только потому, что happy path работает.
+
+---
+
+# 12. Project Doctor — если ты не понимаешь состояние проекта
+
+Запусти:
+
+```text
+prompts/PROJECT_DOCTOR.md
+```
+
+Doctor не начинает новую feature-разработку. Он диагностирует repository и объясняет простыми словами:
+
+```text
+HEALTHY / NEEDS ATTENTION / BLOCKED / UNKNOWN
+какая сейчас фаза
+что уже завершено
+что осталось
+какие checks проходят или падают
+есть ли проблема с tooling/workflow
+какое одно действие лучше сделать следующим
+```
+
+В конце он также даёт `NEXT SESSION PROMPT`, если безопасный следующий шаг можно определить.
+
+Это полезно, если:
+
+- давно не открывал проект;
+- другая AI-сессия закончилась непонятно;
+- не уверен, завершён ли текущий phase;
+- видишь ошибки, но не понимаешь насколько они критичны.
+
+---
+
+# 13. Workflow Self-Audit — проверить сам framework
+
+Project Doctor проверяет **проект**.
+
+Workflow Self-Audit проверяет **наши правила и prompts**.
+
+Запусти:
+
+```text
+prompts/AUDIT_WORKFLOW.md
+```
+
+Он ищет:
+
+```text
+противоречия между Constitution / AGENTS / README / prompts
+stale documentation
+duplicate planning ownership
+лишний context loading
+сломанный Session Handoff
+небезопасный update behavior
+несовпадение VERSION / CHANGELOG
+```
+
+Обычно Self-Audit нужен после значимого изменения самого Token-Efficient Spec Kit, а не после каждой feature.
+
+---
+
+# 14. Версии
+
+Текущая версия workflow:
+
+```text
+VERSION
+```
+
+История:
+
+```text
+CHANGELOG.md
+```
+
+Используется Semantic Versioning:
+
+```text
+MAJOR.MINOR.PATCH
+```
+
+Это помогает понять, насколько далеко конкретный проект от актуальной версии workflow и нужны ли migration steps.
+
+---
+
+# 15. Как безопасно обновить Token-Efficient Spec Kit
+
+Не копируй новую версию шаблона поверх проекта целиком.
+
+Используй:
+
+```text
+prompts/UPDATE_WORKFLOW.md
+```
+
+Updater должен разделять файлы на:
+
+### Framework-managed
+
+```text
+docs/system/*
+integrations/*
+templates/*
+prompts/*
+VERSION
+CHANGELOG.md
+```
+
+### Merge-sensitive
+
+```text
+.specify/memory/constitution.md
+AGENTS.md
+```
+
+### Project-owned — нельзя автоматически перезаписывать
+
+```text
+docs/project/*
+docs/phases/*
+docs/decisions/*
+source code
+tests
+migrations
+credentials
+```
+
+После обновления обязательно выполняется Workflow Self-Audit.
+
+Подробнее: [`system/WORKFLOW_UPDATE_POLICY.md`](system/WORKFLOW_UPDATE_POLICY.md).
 
 ---
 
