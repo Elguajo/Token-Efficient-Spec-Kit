@@ -30,12 +30,16 @@ Framework-managed, update with review:
 - integrations/*
 - templates/*
 - prompts/*
-- VERSION
-- CHANGELOG.md
 
 Merge-sensitive, NEVER blindly replace:
 - .specify/memory/constitution.md
 - AGENTS.md
+- VERSION
+- CHANGELOG.md
+
+For VERSION and CHANGELOG.md:
+- if they clearly still belong only to Token-Efficient Spec Kit, update them normally;
+- if the downstream product has repurposed or extended them, preserve product history and merge instead of replacing.
 
 Project-owned, NEVER automatically overwrite:
 - docs/project/*
@@ -45,12 +49,13 @@ Project-owned, NEVER automatically overwrite:
 - tests
 - migrations
 - credentials/secrets
-- project-specific product documentation
+- project-specific README/product documentation
 
 Before changing anything:
 1. produce a compact update plan;
 2. identify any breaking/migration-sensitive changes;
-3. stop for approval only if the update requires destructive/ambiguous changes to project-owned state.
+3. report whether the update source is a release/tag or an unreleased default-branch version;
+4. stop for approval only if the update requires destructive/ambiguous changes to project-owned state.
 
 For normal compatible framework updates, proceed autonomously.
 
@@ -60,7 +65,7 @@ After applying:
 3. verify NEXT_SESSION / Session Handoff behavior still exists;
 4. verify Recommended profile remains Token-Efficient Spec Kit + Superpowers + gstack + Context7 unless the target release intentionally changes it;
 5. verify GitHub Spec Kit remains optional unless the target release explicitly documents a deliberate architecture change;
-6. update VERSION only after successful application;
+6. record the installed workflow version only after successful application;
 7. do not modify application/business code merely to complete a framework update.
 
 Return:
@@ -74,6 +79,9 @@ Previous version:
 
 Target version:
 - ...
+
+Update source:
+- release / tag / default branch
 
 Updated framework files:
 - ...
