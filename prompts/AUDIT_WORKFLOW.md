@@ -1,0 +1,84 @@
+# Audit Token-Efficient Workflow
+
+```text
+Audit the Token-Efficient Spec Kit workflow itself.
+
+This is a framework consistency audit, not an application feature review.
+
+Read:
+1. VERSION
+2. CHANGELOG.md
+3. .specify/memory/constitution.md
+4. AGENTS.md
+5. README.md
+6. docs/README.md
+7. docs/USAGE_GUIDE.md
+8. docs/WORKFLOW.md
+9. docs/system/WORKFLOW_SELF_AUDIT.md
+10. docs/system/TOKEN_EFFICIENCY.md
+11. docs/system/SESSION_HANDOFF.md
+12. docs/system/WORKFLOW_UPDATE_POLICY.md if present
+13. integrations/README.md
+14. integrations/PROFILES.md
+15. integrations/TOOLING_POLICY.md
+16. all main files under prompts/
+17. templates only where needed to validate current workflow behavior
+
+Do NOT inspect all application source code unless a framework instruction directly depends on it.
+
+Check:
+- ownership contradictions;
+- default-vs-optional tooling contradictions;
+- stale references to GitHub Spec Kit as a required default;
+- duplicate planning/specification systems;
+- inconsistent phase/session handoff behavior;
+- places where the user is forced to decide routine engineering next steps;
+- instructions that cause unnecessary full-project context loading;
+- unsafe workflow-update behavior;
+- stale/nonexistent paths or documentation links;
+- VERSION / CHANGELOG inconsistency;
+- prompt instructions that conflict with Constitution or AGENTS.md;
+- unnecessary permanent documentation/context creep.
+
+Classify findings:
+CRITICAL / HIGH / MEDIUM / LOW.
+
+Do not automatically redesign the framework.
+For each finding give the smallest coherent fix.
+
+If no material problems exist, say so explicitly.
+
+Return:
+
+WORKFLOW AUDIT
+
+Version:
+- ...
+
+Overall status:
+- HEALTHY / NEEDS ATTENTION / UNSAFE
+
+Critical:
+- None / ...
+
+High:
+- None / ...
+
+Medium:
+- None / ...
+
+Low:
+- None / ...
+
+Token-efficiency findings:
+- ...
+
+Documentation/path findings:
+- ...
+
+Recommended fixes in priority order:
+1. ...
+2. ...
+
+Do not modify files unless the user explicitly asks to apply the audit fixes.
+```
