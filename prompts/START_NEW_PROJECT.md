@@ -14,7 +14,7 @@ Your job is to turn this desired outcome into the best practical implementation 
 Act as a senior engineering decision-maker:
 - understand the product outcome;
 - infer sensible defaults;
-- research current official documentation when technology freshness matters;
+- research current official documentation when freshness matters;
 - choose the most appropriate stack and architecture;
 - prefer simplicity, security and maintainability;
 - account for realistic cost and near-term growth;
@@ -31,30 +31,31 @@ READ FIRST:
 7. docs/system/SESSION_HANDOFF.md
 8. docs/project/TOOLING_STATUS.md
 
-Do not ask me React-vs-Vue, Postgres-vs-Mongo, hosting or similar questions that you can decide professionally.
-Ask a question only if a missing fact is a true blocker according to the Constitution. If none exists, proceed autonomously.
+Token-Efficient Spec Kit is the canonical core workflow.
+Do not assume GitHub Spec Kit is required.
+
+Ask a question only if a missing fact is a true blocker according to the Constitution. Otherwise proceed autonomously.
 
 STEP 0 — TOOLING BOOTSTRAP
 
 Inspect `docs/project/TOOLING_STATUS.md`.
 
-If Recommended tooling is already ready for the active coding harness, do not reinstall or reread all integration docs.
+If Recommended tooling is ready for the active harness, do not reinstall it or reread all integration docs.
 
 If tooling is not initialized, incomplete, stale, or belongs to another harness:
 1. read `prompts/SETUP_RECOMMENDED_TOOLING.md`;
-2. read only integration docs required by that setup;
-3. install/configure the Recommended profile:
-   - GitHub Spec Kit;
+2. install/configure the default Recommended profile:
    - Superpowers;
-   - current Spec Kit ↔ Superpowers bridge;
    - gstack;
    - Context7;
-4. preserve the repository Constitution and project docs;
-5. use current official upstream installation instructions;
-6. update `docs/project/TOOLING_STATUS.md`;
-7. continue automatically once tooling is ready.
+3. preserve the Constitution and project docs;
+4. use current official upstream installation instructions;
+5. update `docs/project/TOOLING_STATUS.md`;
+6. continue automatically once tooling is ready.
 
-Pause only for genuine login/OAuth, missing system-runtime approval, destructive overwrite approval, or inability to determine the coding harness.
+GitHub Spec Kit and the Spec Kit ↔ Superpowers bridge are OPTIONAL Advanced Spec Mode tools. Do not install them during default bootstrap.
+
+Pause only for genuine login/OAuth, missing global runtime approval, destructive overwrite approval, or inability to determine the coding harness.
 
 STEP 1 — UNDERSTAND
 
@@ -78,14 +79,12 @@ STEP 2 — RESEARCH ONLY WHERE NEEDED
 
 Before choosing fast-changing technologies, providers or security-sensitive APIs, verify current official documentation.
 Use Context7 when fresh library/API documentation is useful, but not for every trivial decision.
-Do not generate a research dump. Save only conclusions that influence implementation.
+Save only conclusions that influence implementation.
 
 STEP 3 — CHOOSE ARCHITECTURE
 
 Create/update `docs/project/ARCHITECTURE.md`.
-
-Choose ONE recommended default stack.
-Do not give me a menu unless alternatives have materially different business/product tradeoffs.
+Choose ONE recommended default stack unless alternatives have materially different business/product tradeoffs.
 
 Include:
 - stack;
@@ -96,14 +95,13 @@ Include:
 - operational assumptions;
 - what would trigger architecture change.
 
-Create ADRs under `docs/decisions/` only for consequential hard-to-reverse decisions.
+Create ADRs only for consequential hard-to-reverse decisions.
 
 STEP 4 — CREATE ROADMAP
 
 Create/update `docs/project/ROADMAP.md` and phase files in `docs/phases/`.
-
-Do not create unnecessary phases for small projects.
 Prefer independently verifiable vertical outcomes.
+Do not create unnecessary phases for small projects.
 
 Each phase contains only:
 - Goal;
@@ -115,18 +113,26 @@ Each phase contains only:
 - relevant negative/security tests;
 - Verification.
 
-STEP 5 — ROUTE PROCESS BY COMPLEXITY
+STEP 5 — ROUTE PROCESS BY COMPLEXITY/RISK
 
 Tier S:
-brief → short plan → tasks → implement → verify/converge
+brief → short plan → tasks → implement → verify
 
 Tier M:
-brief → architecture → roadmap → per-feature spec/plan/tasks → small implementation batches → converge
+brief → architecture → roadmap → phase tasks → implementation batches → converge
 
 Tier L/high-risk:
-smaller specs and selective clarify/checklist/analyze gates only where ambiguity or risk justifies them.
+smaller phases + stronger review/negative tests/analysis only where justified.
 
-Do not use heavy process by default.
+OPTIONAL ADVANCED SPEC MODE:
+If the CURRENT phase is materially ambiguous, cross-cutting or high-risk and formal specification would clearly improve quality, you may recommend or enable GitHub Spec Kit for that phase only.
+Examples: payments, complex authorization, public APIs, multi-tenancy boundaries, critical migrations.
+
+If Advanced Spec Mode is enabled:
+- Token-Efficient Spec Kit remains project-level source of truth;
+- GitHub Spec Kit may deepen specification/planning inside the current phase;
+- an optional current Spec Kit ↔ Superpowers bridge may be used;
+- do not create a second project roadmap or duplicate canonical project docs.
 
 STEP 6 — START IMPLEMENTATION
 
@@ -135,11 +141,12 @@ Implement only the first 1–3 cohesive tasks.
 Use current stable dependencies.
 Do not implement future phases opportunistically.
 
-Use tool ownership rules:
-- Spec Kit = WHAT/spec/plan/tasks;
-- Superpowers = HOW/TDD/debugging/implementation discipline;
-- gstack = selective review/challenge/QA;
-- Context7 = fresh docs when needed.
+Tool ownership:
+- Token-Efficient Spec Kit = WHAT + orchestration + phases + convergence + handoff;
+- Superpowers = HOW / TDD / debugging / implementation discipline;
+- gstack = selective challenge / review / QA;
+- Context7 = fresh docs when needed;
+- GitHub Spec Kit = optional Advanced Spec Mode only.
 
 STEP 7 — VERIFY
 
@@ -147,18 +154,14 @@ Run all relevant checks and do not claim success if they fail.
 
 STEP 8 — PREPARE THE NEXT SESSION
 
-The user may not know what to ask next.
 Before finishing:
-
-1. determine current phase state: IN PROGRESS / PHASE COMPLETE / PROJECT COMPLETE;
-2. inspect the roadmap and acceptance criteria;
+1. classify state as IN PROGRESS / PHASE COMPLETE / PROJECT COMPLETE;
+2. inspect current acceptance criteria and roadmap;
 3. decide the correct next action yourself;
-4. update `docs/project/NEXT_SESSION.md` according to `docs/system/SESSION_HANDOFF.md`;
-5. create a ready-to-copy prompt for the next fresh AI session.
+4. update `docs/project/NEXT_SESSION.md`;
+5. create a ready-to-copy prompt for a fresh AI session.
 
-If the first phase is incomplete, the prompt continues it.
-If it is complete, the prompt starts the next phase.
-Do not make the user decide what the next engineering step should be.
+Do not make the user decide the next engineering step.
 
 RETURN A COMPACT REPORT:
 
@@ -174,6 +177,9 @@ Classification:
 
 Recommended stack:
 - ...
+
+Tooling profile:
+- Minimal / Recommended / Recommended + Advanced Spec Mode
 
 Key decisions:
 - ...
