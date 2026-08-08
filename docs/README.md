@@ -20,6 +20,24 @@
 - как переносить работу между сессиями;
 - как менять требования и исправлять bugs.
 
+### [VISUAL_GUIDE.md](VISUAL_GUIDE.md)
+
+Визуальная карта workflow в terminal-style схемах:
+
+```text
+User Journey
+Core Architecture
+Tool Router
+Semble + Serena routing
+Session Handoff
+Context Budget
+Complexity Routing
+Maintenance Router
+Source of Truth
+```
+
+Используй её, если хочешь быстро понять систему без чтения всей технической документации.
+
 ### [project/NEXT_SESSION.md](project/NEXT_SESSION.md)
 
 Самый простой ответ на вопрос:
