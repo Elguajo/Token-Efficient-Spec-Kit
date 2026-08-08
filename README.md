@@ -3,7 +3,7 @@
 <sub>AI ENGINEERING WORKFLOW</sub> <br>
 
 # Token-Efficient Spec Kit
-## От идеи до проверенного результата 
+### От идеи до проверенного результата 
 
 [Начать новый проект](prompts/START_NEW_PROJECT.md) · [Как пользоваться](docs/USAGE_GUIDE.md) · [Visual Guide](docs/VISUAL_GUIDE.md) · [English](README_EN.md)
 
