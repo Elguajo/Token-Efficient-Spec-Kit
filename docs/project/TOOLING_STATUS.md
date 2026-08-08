@@ -2,7 +2,13 @@
 
 Status: Not initialized.
 
-Run:
+Run automatically from:
+
+```text
+prompts/START_NEW_PROJECT.md
+```
+
+or manually:
 
 ```text
 prompts/SETUP_RECOMMENDED_TOOLING.md
@@ -21,8 +27,16 @@ Token-Efficient Spec Kit: READY
 
 Recommended external tooling:
 Superpowers:
+Semble:
+Semble integration mode:
+RTK:
+RTK integration scope:
 gstack:
 Context7:
+
+Token-efficiency verification:
+Code retrieval: Semble READY / DEGRADED / N/A
+Shell/tool output: RTK READY / DEGRADED / N/A
 
 Optional Advanced Spec Mode:
 GitHub Spec Kit: NOT ENABLED / ENABLED
@@ -32,6 +46,9 @@ Verification:
 Manual action required:
 ```
 
-GitHub Spec Kit and its bridge are optional and must not be treated as missing dependencies when Advanced Spec Mode is disabled.
+Rules:
 
-Do not store API keys, tokens, OAuth secrets or other credentials here.
+- Tooling bootstrap runs once per relevant environment/harness state, not every session.
+- Semble and RTK are Recommended capabilities but must degrade gracefully if unavailable or unsafe for the active harness.
+- GitHub Spec Kit and its bridge are optional and must not be treated as missing dependencies when Advanced Spec Mode is disabled.
+- Never store API keys, tokens, OAuth secrets or other credentials here.
