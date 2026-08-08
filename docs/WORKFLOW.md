@@ -9,13 +9,17 @@
 ```text
 USER INTENT
     ↓
-TOOLING READY?
+PRODUCT DIRECTIONS (normally 3)
+    ↓
+RECOMMENDED DIRECTION (default)
     ↓
 PROJECT BRIEF
     ↓
 ARCHITECTURE
     ↓
 ROADMAP
+    ↓
+SCOPED TOOLING BOOTSTRAP
     ↓
 CURRENT PHASE
     ↓
@@ -135,49 +139,21 @@ Entry point:
 prompts/START_NEW_PROJECT.md
 ```
 
----
-
-## STATE 1 — TOOLING BOOTSTRAP
-
-Default Recommended profile:
-
-```text
-Superpowers
-Semble
-Serena
-RTK
-gstack
-Context7
-```
-
-Bootstrap запускается автоматически из `START_NEW_PROJECT.md`, если `TOOLING_STATUS.md` показывает, что environment не готов.
-
-Rules:
-
-- использовать current official installation docs;
-- предпочитать безопасный user/project scope;
-- Semble подключать через MCP, когда active harness это поддерживает;
-- Serena устанавливать через current official Quick Start, а не stale marketplace recipe;
-- Serena project config ограничивать symbol/refactor ролью и отключать generic file/search/shell/memory overlap, когда upstream это поддерживает;
-- RTK реально проверять после install, а не доверять только success installer;
-- если RTK требует global hooks/instructions для всех проектов и нет безопасного project-scoped пути — запросить одноразовое подтверждение;
-- Semble/Serena/RTK имеют graceful fallback и не блокируют продукт.
-
-GitHub Spec Kit не устанавливается по умолчанию.
-
-Output:
-
-```text
-docs/project/TOOLING_STATUS.md
-```
-
-Tooling bootstrap не повторяется в каждой сессии.
+Пользователь отправляет одно обычное описание результата вместе с просьбой запустить
+prompt. Он не редактирует prompt. До инициализации AI обычно показывает три
+содержательно разные product-направления, выбирает рекомендованное по умолчанию и
+продолжает без отдельного выбора. Вопрос нужен лишь при неразрешимом существенном
+business/safety/compliance/budget trade-off.
 
 ---
 
-## STATE 2 — PRODUCT DEFINITION
+## STATE 1 — PRODUCT DEFINITION
 
-AI превращает пользовательское описание в compact canonical truth.
+AI превращает выбранное product-направление и исходное описание пользователя в
+compact canonical truth.
+
+`PROJECT_BRIEF.md` сохраняет краткий список рассмотренных направлений и выбранный
+вариант, чтобы последующие сессии не возвращались к уже принятой product-рамке.
 
 Writes:
 
@@ -189,7 +165,7 @@ docs/project/PROJECT_BRIEF.md
 
 ---
 
-## STATE 3 — ARCHITECTURE
+## STATE 2 — ARCHITECTURE
 
 AI выбирает один практичный recommended architecture.
 
@@ -203,7 +179,7 @@ ADR создаётся только для consequential hard-to-reverse реш�
 
 ---
 
-## STATE 4 — ROADMAP
+## STATE 3 — ROADMAP
 
 AI создаёт independently verifiable phases:
 
@@ -215,6 +191,52 @@ docs/phases/01-....md
 ```
 
 Roadmap depth адаптируется к сложности проекта.
+
+---
+
+## STATE 4 — SCOPED TOOLING BOOTSTRAP
+
+`START_NEW_PROJECT.md` проверяет harness и существующий `TOOLING_STATUS.md` рано,
+но выбирает tooling только после того, как известны продукт, stack, roadmap и tier.
+
+Канонический Recommended profile:
+
+```text
+Token-Efficient Spec Kit
++ Superpowers
++ Semble
++ Serena
++ RTK
++ gstack
++ Context7
+```
+
+> Канонический источник профиля: [`../integrations/PROFILES.md`](../integrations/PROFILES.md).
+
+Bootstrap scoped по реальной полезности:
+
+- Superpowers и Context7 можно настроить сразу, когда это безопасно;
+- Semble откладывается, пока не появится codebase для intent-based discovery;
+- Serena откладывается до появления поддерживаемого language backend и symbol-level
+  задач; unsupported stacks её пропускают;
+- RTK откладывается, пока build/test output не станет достаточно шумным;
+- gstack откладывается до первого реального review/browser QA/release gate;
+- Tier S может остаться на Minimal profile; Tier M/L обычно доходит до полного
+  Recommended profile после появления кода.
+
+Rules:
+
+- использовать current official installation docs;
+- предпочитать безопасный user/project scope;
+- Serena project config ограничивать symbol/refactor ролью и отключать generic
+  file/search/shell/memory overlap, когда upstream это поддерживает;
+- каждый install проверять реально, а не доверять только success installer;
+- global hooks/instructions, затрагивающие другие проекты, требуют подтверждения;
+- Semble/Serena/RTK имеют graceful fallback и не блокируют продукт.
+
+GitHub Spec Kit не устанавливается по умолчанию. Результат и deferred/skipped
+решения записываются в `docs/project/TOOLING_STATUS.md`; bootstrap не повторяется в
+каждой сессии.
 
 ---
 
@@ -292,17 +314,9 @@ GitHub Spec Kit работает **внутри текущей фазы** и н�
 
 Superpowers/native coding harness отвечает за HOW.
 
-Agent reads only:
-
-```text
-Constitution
-PROJECT_BRIEF
-ARCHITECTURE
-ENGINEERING_RULES
-current phase
-relevant ADR
-relevant source/tests
-```
+Для normal product implementation используй только Default Read Set из
+[`system/TOKEN_EFFICIENCY.md`](system/TOKEN_EFFICIENCY.md). Не перечисляй его
+повторно в этом документе.
 
 Avoid:
 
@@ -392,9 +406,16 @@ At the end of every meaningful implementation/review session AI must:
 
 1. determine phase/project state;
 2. decide the correct next action;
-3. update `docs/project/NEXT_SESSION.md`;
-4. create a ready-to-copy `NEXT SESSION PROMPT`;
-5. stop before starting the next phase in the old session.
+3. update the marker in `docs/project/ROADMAP.md` so exactly one phase is `[>]`, or
+   all are `[x]` for `PROJECT COMPLETE`;
+4. update `docs/project/NEXT_SESSION.md`;
+5. create a ready-to-copy `NEXT SESSION PROMPT`;
+6. stop before starting the next phase in the old session.
+
+This three-part product handoff is atomic. For an uninitialized template or a
+framework-only audit/update, do not initialize or modify `docs/project/*`; still
+provide a next prompt according to
+[`system/SESSION_HANDOFF.md`](system/SESSION_HANDOFF.md#non-product-handoff-exceptions).
 
 ---
 
@@ -484,16 +505,8 @@ Use more evidence, not automatically more frameworks.
 
 ## Normal implementation session
 
-Read:
-
-```text
-Constitution
-PROJECT_BRIEF
-ARCHITECTURE
-ENGINEERING_RULES
-Current Phase
-Relevant ADR
-```
+Use the Default Read Set defined only in
+[`system/TOKEN_EFFICIENCY.md`](system/TOKEN_EFFICIENCY.md).
 
 Then choose the cheapest adequate code-context route:
 

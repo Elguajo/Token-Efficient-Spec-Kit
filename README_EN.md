@@ -2,13 +2,13 @@
 
 # Token-Efficient Spec Kit
 
-### A universal workflow for building software with AI coding agents
+### A clear workflow for building software with AI agents — from idea to verified result
 
-**Describe the outcome. The AI chooses the technical path, works phase by phase, keeps context small, and tells you what to do next.**
+**Describe the outcome. The AI frames the product, chooses the technical path, works phase by phase, and tells you what to do next.**
 
-`Idea → Architecture → Phases → 1–3 Tasks → Code → Verification → Next Prompt`
+`Idea → Options → Architecture → Phases → Code → Verification → Next Prompt`
 
-**v0.8.0**
+**v0.8.2**
 
 [Русская версия](README.md) · [Usage Guide](docs/USAGE_GUIDE.md) · [Workflow](docs/WORKFLOW.md) · [Maintenance](docs/MAINTENANCE.md) · [Changelog](CHANGELOG.md)
 
@@ -16,17 +16,30 @@
 
 ---
 
-## What it is
+## What it does
 
-**Token-Efficient Spec Kit is a standalone AI Engineering Workflow.**
+Token-Efficient Spec Kit is a workflow for repository-aware AI agents such as
+Codex, Claude Code, Cursor, and compatible tools. It records decisions in the
+repository—not in one chat—so a fresh AI session can continue without you
+re-explaining the project.
 
-You describe the product you want. The AI should then understand the product, choose one practical stack, create architecture and roadmap, split work into verifiable phases, use only the code/context needed now, implement usually 1–3 cohesive tasks per session, verify the result, and generate a ready-to-copy prompt for the next fresh session.
+You do not need to decide in advance:
 
-> **You own the product outcome. The AI owns engineering execution and project navigation.**
+```text
+Which framework or database should I use?
+How should the work be phased?
+What needs checking before release?
+What should I ask the AI next?
+```
+
+You own the desired outcome and real constraints. The AI owns routine engineering
+decisions, planning, implementation, verification, and project navigation.
 
 ---
 
-# Quick Start
+# Start a new project
+
+## 1. Prepare a copy of the template
 
 ```bash
 git clone https://github.com/Elguajo/Token-Efficient-Spec-Kit.git my-project
@@ -34,159 +47,123 @@ cd my-project
 rm -rf .git && git init
 ```
 
-The last line matters: without it `origin` still points at this repository and your
-first `git push` goes to the wrong place.
+Use the last line only for a fresh template clone: it removes the link to this
+repository so you cannot accidentally push your project here. If you are adding the
+workflow to an existing repository, see the [Usage Guide](docs/USAGE_GUIDE.md).
 
-Open the repository in Codex, Claude Code, Cursor, or another repository-aware AI coding agent, then run:
+## 2. Open the folder in an AI coding agent
+
+The agent must be able to read and edit the project files.
+
+## 3. Send one message with your idea
+
+Do not edit the prompt or replace a placeholder. In your AI agent, send something
+like this:
 
 ```text
-prompts/START_NEW_PROJECT.md
+Start a new project using prompts/START_NEW_PROJECT.md.
+My idea: a desktop app for Windows and macOS that organizes 3D assets,
+generates previews, and makes them searchable by tags.
 ```
 
-Replace only `<WHAT_I_WANT>` with the product you want to build.
+Describe the outcome you want. You do not need to choose a stack, framework,
+database, or hosting provider first.
 
-On the first run, the agent checks `docs/project/TOOLING_STATUS.md` and automatically bootstraps Recommended tooling when needed.
+## What happens next
 
----
-
-## Automatic Recommended tooling
-
-```text
-Superpowers  → implementation discipline / TDD / debugging
-Semble       → intent-based semantic code discovery
-Serena       → symbol navigation / references / semantic refactoring
-RTK          → compact terminal/test/build/git output
-gstack       → review / browser QA / release checks
-Context7     → fresh library/API documentation
-```
-> Canonical profile definition: [`integrations/PROFILES.md`](integrations/PROFILES.md). This listing is a copy for reading convenience — if the two disagree, PROFILES.md wins.
-
-
-You do not need to install each tool manually.
-
-If Semble, Serena, or RTK cannot be used safely, the workflow degrades gracefully to native tools instead of blocking product work.
-
----
-
-## How work flows
+1. The AI normally proposes three meaningfully different product directions.
+2. It explains its recommendation and continues with it without a separate choice.
+3. It asks you to choose only when the alternatives have material budget, safety,
+   compliance, or another irreversible product/business trade-off.
+4. It creates `PROJECT_BRIEF.md`, `ARCHITECTURE.md`, `ROADMAP.md`, and phases, then
+   starts the first 1–3 cohesive tasks.
+5. At the end of the session, it verifies the result and returns a ready-to-copy
+   `NEXT SESSION PROMPT`.
 
 ```text
-User Outcome
-→ Tooling Bootstrap
+Your idea
+→ Product Directions (normally 3)
+→ Recommended Direction (default)
 → Project Brief
 → Architecture
 → Roadmap
+→ Scoped Tooling Bootstrap
 → Current Phase
-→ Routed Code Context
-→ 1–3 Tasks
-→ Implementation
-→ Compact Verification Output
-→ Review / QA
-→ Convergence
+→ 1–3 cohesive tasks
+→ Implementation and verification
 → NEXT SESSION PROMPT
-→ Fresh Session
 ```
 
-Project knowledge lives in the repository, so each new session does not need the full project history.
-
----
-
-# The AI tells you what to do next
-
-At the end of every meaningful implementation/review session, the AI must classify the state as `IN PROGRESS`, `PHASE COMPLETE`, or `PROJECT COMPLETE`, update `docs/project/NEXT_SESSION.md`, and return a ready-to-copy `NEXT SESSION PROMPT`.
-
----
-
-## When Semble, Serena and RTK are already installed
-
-The agent should **route**, not stack, the tools.
-
-| Question / operation | Preferred tool |
-|---|---|
-| “Where is the logic for X?” / unfamiliar area | **Semble** |
-| Known symbol, references, implementations, diagnostics, rename/refactor | **Serena** |
-| Tiny known file/string edit | native agent tools |
-| Tests/build/git/verbose shell output | **RTK** |
-
-Typical flow:
-
-```text
-Semble
-→ finds relevant file/snippet/symbol
-→ broad discovery stops
-→ Serena only if symbol references/diagnostics/refactoring are needed
-→ implementation
-→ RTK only for terminal output
+```mermaid
+flowchart TD
+    A["Describe your idea"] --> B["Product directions"]
+    B --> C["Recommended direction"]
+    C --> D["Brief, Architecture, and Roadmap"]
+    D --> E["Current phase: 1–3 tasks"]
+    E --> F["Implementation and verification"]
+    F --> G["NEXT SESSION PROMPT"]
+    G --> E
 ```
 
-**No-double-discovery rule:** do not make Semble, Serena and grep independently rediscover the same code unless the first result failed, is ambiguous, or independent verification is justified.
-
 ---
 
-## Token-efficiency layers
+# Continue working
 
-```text
-Project/docs context         → Token-Efficient Spec Kit
-Intent-based code discovery  → Semble
-Symbol semantics/refactoring → Serena
-Shell/tool output            → RTK
-Fresh external docs          → Context7 on demand
-```
+After every meaningful coding or review session, the AI updates three connected
+items: the current-phase marker in `docs/project/ROADMAP.md`,
+`docs/project/NEXT_SESSION.md`, and the `NEXT SESSION PROMPT` in its response.
 
-Correctness always outranks token savings.
+Usually, copy that prompt into a fresh session. You do not need to decide whether a
+phase is complete, whether it is time for QA, or what should happen next.
 
----
-
-## Recommended profile
-
-| Tool | Role |
+| Situation | Send the AI |
 |---|---|
-| **Token-Efficient Spec Kit** | Core orchestration, project/docs context, phases, convergence, handoff |
-| **Superpowers** | TDD, implementation discipline, systematic debugging |
-| **Semble** | Intent-based semantic/hybrid code discovery |
-| **Serena** | Symbol navigation, references, diagnostics, semantic refactoring |
-| **RTK** | Compact terminal/test/build/git output |
-| **gstack** | Engineering/design review, browser QA, release checks |
-| **Context7** | Fresh library/API documentation on demand |
-
-GitHub Spec Kit is **optional** and can be enabled as [Advanced Spec Mode](integrations/SPEC_KIT.md) for difficult phases that benefit from deeper formal specification.
-
-[Integration details →](integrations/README.md)
-
----
-
-# Main entry points
-
-| Situation | Use |
-|---|---|
-| Start a new project | [`START_NEW_PROJECT.md`](prompts/START_NEW_PROJECT.md) |
-| Continue normally | Previous **NEXT SESSION PROMPT** |
-| Review/close a phase | [`REVIEW_CURRENT_PHASE.md`](prompts/REVIEW_CURRENT_PHASE.md) |
-| Understand project health | [`PROJECT_DOCTOR.md`](prompts/PROJECT_DOCTOR.md) |
-| Lost the next step | [`GENERATE_NEXT_SESSION_PROMPT.md`](prompts/GENERATE_NEXT_SESSION_PROMPT.md) |
-| Requirements changed | [`CHANGE_REQUEST.md`](prompts/CHANGE_REQUEST.md) |
+| Start a project | The message from step 3 above |
+| Continue normally | The last **NEXT SESSION PROMPT** |
+| Understand project status | [`PROJECT_DOCTOR.md`](prompts/PROJECT_DOCTOR.md) |
+| Change requirements | [`CHANGE_REQUEST.md`](prompts/CHANGE_REQUEST.md) |
 | Fix a bug | [`BUG_FIX.md`](prompts/BUG_FIX.md) |
+| Review and close a phase | [`REVIEW_CURRENT_PHASE.md`](prompts/REVIEW_CURRENT_PHASE.md) |
+| Recover a lost next step | [`GENERATE_NEXT_SESSION_PROMPT.md`](prompts/GENERATE_NEXT_SESSION_PROMPT.md) |
 
 ---
 
-## Documentation
+# Tooling: what you need to know
 
-| I want to understand... | Open |
+The AI should not make you install ordinary tooling by hand. It first understands
+the product and its tier, then enables only what is useful. If a tool is unavailable,
+the workflow continues with a safe fallback.
+
+```text
+Superpowers  → implementation, TDD, and debugging
+Semble       → find intent-relevant logic in unfamiliar code
+Serena       → symbols, references, and safe refactoring
+RTK          → compact terminal/test/build/git output
+gstack       → review, browser QA, and release checks
+Context7     → current API and library documentation
+```
+
+> Canonical profile: [`integrations/PROFILES.md`](integrations/PROFILES.md).
+> Superpowers and Context7 may help immediately; the other tools are normally
+> added after code exists and their value is clear.
+
+For the detailed context-routing model, see [Workflow](docs/WORKFLOW.md); for
+integration rules, see [Integrations](integrations/README.md). GitHub Spec Kit is
+not required: enable it only as [Advanced Spec Mode](integrations/SPEC_KIT.md) for
+complex phases.
+
+---
+
+# Find more detail
+
+| I want to… | Open |
 |---|---|
-| How to use the workflow | [Usage Guide](docs/USAGE_GUIDE.md) |
-| How it works internally | [End-to-End Workflow](docs/WORKFLOW.md) |
-| What to do next right now | [NEXT_SESSION.md](docs/project/NEXT_SESSION.md) |
-| External tooling | [Integrations](integrations/README.md) |
-| Doctor, Self-Audit, Updates and Versioning | [Maintenance](docs/MAINTENANCE.md) |
-| Version history | [Changelog](CHANGELOG.md) |
-
----
-
-<div align="center">
-
-## License
-
-MIT — see [LICENSE](LICENSE).
+| Follow every workflow scenario step by step | [Usage Guide](docs/USAGE_GUIDE.md) |
+| Understand the workflow model | [End-to-End Workflow](docs/WORKFLOW.md) |
+| See the current project's next step | [NEXT_SESSION.md](docs/project/NEXT_SESSION.md) |
+| Configure or understand integrations | [Integrations](integrations/README.md) |
+| Run doctor, self-audit, or update | [Maintenance](docs/MAINTENANCE.md) |
+| Review version history | [Changelog](CHANGELOG.md) |
 
 ## Workflow integrity check
 
@@ -194,17 +171,15 @@ MIT — see [LICENSE](LICENSE).
 python3 tools/audit.py
 ```
 
-Checks internal links, version consistency, a single Default Read Set definition, the
-current-phase marker and the framework/product boundary. CI runs the same script.
+It checks links, versions, handoff, the tooling profile, and the boundary between
+the framework and a project. CI runs the same check.
 
----
+<div align="center">
 
 ### Describe the outcome. Let the agent handle the engineering and the next step.
 
 **[Start a new project →](prompts/START_NEW_PROJECT.md)**
 
-<br />
-
-Built with ♥ by [Elguajo](https://github.com/Elguajo)
+MIT — see [LICENSE](LICENSE) · Built with ♥ by [Elguajo](https://github.com/Elguajo)
 
 </div>

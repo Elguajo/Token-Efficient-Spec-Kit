@@ -58,13 +58,20 @@ The user must not need engineering knowledge to decide what to do after a coding
 
 At the end of every meaningful implementation/review session, the agent must:
 
-1. determine whether the current phase is IN PROGRESS, COMPLETE, or the PROJECT is COMPLETE;
+1. determine whether status is IN PROGRESS, PHASE COMPLETE, or PROJECT COMPLETE;
 2. decide the correct next action from the roadmap and acceptance criteria;
-3. update `docs/project/NEXT_SESSION.md` with a compact handoff;
-4. end the user-facing response with a ready-to-copy `NEXT SESSION PROMPT` for a fresh AI session.
+3. update the phase markers in `docs/project/ROADMAP.md` so exactly one phase is
+   `[>] IN PROGRESS`, or all are `[x]` when the project is complete;
+4. update `docs/project/NEXT_SESSION.md` with a compact handoff;
+5. end the user-facing response with a ready-to-copy `NEXT SESSION PROMPT` for a fresh AI session.
 
 If the current phase is incomplete, the prompt continues that phase.
 If the phase is complete, the prompt starts the next roadmap phase.
 If the project is complete, the prompt routes to final release/audit or a future change-request flow.
 
 The handoff must reference canonical files instead of retelling the whole project, preserving token efficiency.
+
+An uninitialized template and a framework-only audit/update are non-product
+exceptions: they must not initialize or modify `docs/project/*`, but they still end
+with a ready-to-copy next prompt for the next framework action, the preserved
+product continuation, or `prompts/START_NEW_PROJECT.md`.

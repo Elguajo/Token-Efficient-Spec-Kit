@@ -84,17 +84,24 @@ Semble
 
 Подробнее: [`SERENA.md`](SERENA.md) и [`TOOLING_POLICY.md`](TOOLING_POLICY.md).
 
-## Автоматическая установка
+## Late/scoped tooling bootstrap
 
-При первом `START_NEW_PROJECT.md` агент проверяет `docs/project/TOOLING_STATUS.md`.
+При первом `START_NEW_PROJECT.md` агент рано проверяет harness и
+`docs/project/TOOLING_STATUS.md`, но сначала определяет продукт, stack, roadmap и
+tier:
 
-Если Recommended profile ещё не настроен, он автоматически запускает:
+```text
+Project Brief → Architecture → Roadmap → Scoped Tooling Bootstrap
+```
+
+Только после этого он scoped-запускает:
 
 ```text
 prompts/SETUP_RECOMMENDED_TOOLING.md
 ```
 
-и пытается установить/настроить:
+Каждый tool получает status `INSTALL NOW`, `ALREADY READY`, `DEFERRED`,
+`SKIPPED FOR TIER` или `DEGRADED`. Полный Recommended profile остаётся:
 
 ```text
 Superpowers
@@ -105,7 +112,13 @@ gstack
 Context7
 ```
 
-После успешной настройки состояние записывается в `docs/project/TOOLING_STATUS.md`, поэтому установка не повторяется в каждой сессии.
+Superpowers и Context7 можно настроить сразу, когда это безопасно. Semble, Serena,
+RTK и gstack откладываются до появления codebase, поддерживаемого language backend,
+достаточно шумного output или реального review/QA gate. Tier S может остаться на
+Minimal profile.
+
+Installed/deferred/skipped state записывается в
+`docs/project/TOOLING_STATUS.md`, поэтому bootstrap не повторяется в каждой сессии.
 
 Для Semble предпочтительна MCP-интеграция, когда active harness её поддерживает.
 

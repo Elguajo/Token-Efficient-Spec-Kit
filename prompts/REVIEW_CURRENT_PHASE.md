@@ -37,6 +37,8 @@ C. PROJECT COMPLETE
 - identify the appropriate final release/audit/deployment step, or route future features through prompts/CHANGE_REQUEST.md.
 
 Before responding:
+- update the markers in docs/project/ROADMAP.md so exactly one phase is `[>]`, or
+  all are `[x]` when the project is complete;
 - update docs/project/NEXT_SESSION.md according to docs/system/SESSION_HANDOFF.md.
 
 Return:

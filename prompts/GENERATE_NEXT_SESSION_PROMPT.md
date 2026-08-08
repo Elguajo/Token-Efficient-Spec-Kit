@@ -22,8 +22,10 @@ Inspect repository state and determine one status:
 
 Then:
 1. choose the correct next action yourself;
-2. update `docs/project/NEXT_SESSION.md`;
-3. return only a concise status summary and the next-session prompt.
+2. verify/correct the markers in `docs/project/ROADMAP.md` so exactly one phase is
+   `[>]`, or all are `[x]` when the project is complete;
+3. update `docs/project/NEXT_SESSION.md`;
+4. return only a concise status summary and the next-session prompt.
 
 If IN PROGRESS:
 - continue the same phase;

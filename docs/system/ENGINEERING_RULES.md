@@ -1,6 +1,6 @@
 # Engineering Rules
 
-1. Before coding read only Constitution, Project Brief, Architecture, current phase, relevant ADR/code/tests.
+1. For normal product coding, use the Default Read Set defined only in [`TOKEN_EFFICIENCY.md`](TOKEN_EFFICIENCY.md); do not restate it here.
 2. Use current stable dependencies; verify official docs for fast-changing/security-sensitive APIs.
 3. Use strict typing where practical; do not hide type errors.
 4. Secrets and privileged logic stay server-side.

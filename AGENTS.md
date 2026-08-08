@@ -188,14 +188,23 @@ At the end of every meaningful coding/review session:
 
 1. classify status as `IN PROGRESS`, `PHASE COMPLETE`, or `PROJECT COMPLETE`;
 2. decide the next action from current acceptance criteria and roadmap;
-3. update `docs/project/NEXT_SESSION.md`;
-4. end with a ready-to-copy `NEXT SESSION PROMPT` for a fresh AI session.
+3. update the phase markers in `docs/project/ROADMAP.md` so exactly one phase is
+   `[>] IN PROGRESS`, or all are `[x]` when the project is complete;
+4. update `docs/project/NEXT_SESSION.md`;
+5. end with a ready-to-copy `NEXT SESSION PROMPT` for a fresh AI session.
 
 If the phase is incomplete, continue the same phase.
 If complete, start the next roadmap phase in the new session.
 If project complete, route to release/audit or future `CHANGE_REQUEST` work.
 
 The user must not be forced to invent the next engineering prompt.
+
+Exception: if the template is not initialized, or the task is a framework-only
+audit/update, do not initialize or modify `docs/project/*`. Still provide a
+ready-to-copy `NEXT SESSION PROMPT`: route an uninitialized template to
+`prompts/START_NEW_PROJECT.md`; for framework-only work, name the next framework
+action or preserve the existing product handoff. The full contract is in
+`docs/system/SESSION_HANDOFF.md`.
 
 ## Project Doctor
 

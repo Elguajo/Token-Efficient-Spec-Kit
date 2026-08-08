@@ -9,13 +9,8 @@ The project requirements changed:
 
 Do not rewrite the whole project.
 
-Read:
-- Constitution;
-- Project Brief;
-- Architecture;
-- Roadmap;
-- Session Handoff protocol;
-- only directly affected phases/ADRs/code.
+Read only the Default Read Set defined in `docs/system/TOKEN_EFFICIENCY.md`, plus
+the Session Handoff protocol and directly affected phases/ADRs/code.
 
 Assess:
 1. product intent impact;
@@ -32,6 +27,8 @@ Implement only the first 1–3 required tasks and verify them.
 
 Before responding:
 - determine the resulting current phase/status;
+- update the phase markers in `docs/project/ROADMAP.md` so exactly one phase is
+  `[>]`, or all are `[x]` when the project is complete;
 - update `docs/project/NEXT_SESSION.md` according to `docs/system/SESSION_HANDOFF.md`;
 - generate a ready-to-copy next-session prompt.
 

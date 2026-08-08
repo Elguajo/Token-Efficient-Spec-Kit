@@ -20,6 +20,15 @@ Superpowers
 GitHub Spec Kit is NOT part of the default installation.
 Do not install GitHub Spec Kit or the Spec Kit ↔ Superpowers bridge unless Optional Advanced Spec Mode is explicitly requested or the current project/phase has a documented need for formal deep specification.
 
+This prompt supports a scoped bootstrap. Use the caller's known stack/tier and
+`docs/project/TOOLING_STATUS.md` to classify every Recommended tool as
+`INSTALL NOW`, `ALREADY READY`, `DEFERRED`, `SKIPPED FOR TIER` or `DEGRADED`.
+Execute installation steps only for `INSTALL NOW`; do not turn a deferred tool into
+an eager install merely because its instructions appear below. For an empty
+codebase, normally install only safe immediate capabilities (Superpowers and
+Context7). Add Semble, Serena, RTK and gstack later when code, language support,
+output volume or a real review/QA gate justifies them.
+
 FIRST read:
 1. .specify/memory/constitution.md
 2. integrations/README.md
@@ -55,11 +64,13 @@ Ask only when:
 - the only supported integration would modify global agent hooks/instructions for ALL projects and no safe project-scoped equivalent exists.
 
 STEP 1 — Superpowers
+- run this step only if classified `INSTALL NOW`;
 - install using the current native/recommended mechanism for the active harness;
 - verify skills are discoverable;
 - ensure it does not replace Token-Efficient Project Brief / Architecture / Roadmap / phase docs with a competing canonical planning system.
 
 STEP 2 — Semble
+- run this step only if classified `INSTALL NOW`; otherwise record why it is deferred/skipped;
 - verify current official `MinishLab/semble` installation instructions;
 - install it using the current recommended safe user-level package method;
 - prefer MCP integration for the active harness when supported;
@@ -73,6 +84,7 @@ Semble role:
 CODE DISCOVERY ONLY — intent/semantic retrieval such as “where is the logic related to X?”.
 
 STEP 3 — Serena
+- run this step only if classified `INSTALL NOW`; otherwise record why it is deferred/skipped;
 - verify CURRENT official `oraios/serena` Quick Start and configuration docs;
 - do not rely on third-party MCP/plugin marketplace install recipes when upstream advises another path;
 - install using the current official supported method for the active harness;
@@ -85,7 +97,8 @@ STEP 3 — Serena
 - exclude Serena memory tools so Token-Efficient canonical docs remain the only project memory/source of truth;
 - do not enable optional/BETA tools automatically merely because they exist;
 - verify with one known symbol lookup and one references/overview operation where the project language supports it;
-- if no supported source language exists yet, install/configure Serena but mark symbol verification PENDING rather than blocking project initialization.
+- if no supported source language or source code exists yet, classify Serena as
+  `DEFERRED` or `SKIPPED FOR TIER` rather than installing it speculatively.
 
 Serena role:
 SYMBOL / REFACTOR ONLY — symbol-aware navigation and semantic edits after the relevant code area/symbol is known.
@@ -110,6 +123,7 @@ Tiny exact file/string edit
 Never call Semble + Serena + grep merely to answer the same discovery question.
 
 STEP 4 — RTK
+- run this step only if classified `INSTALL NOW`; otherwise record why it is deferred/skipped;
 - verify current official `rtk-ai/rtk` installation and active-agent setup instructions;
 - install using the safest supported user-level package/binary method;
 - prefer project-scoped integration when currently supported;
@@ -123,6 +137,7 @@ RTK role:
 TOOL OUTPUT ONLY — compact terminal/test/build/git output, not project truth.
 
 STEP 5 — gstack
+- run this step only if classified `INSTALL NOW`; otherwise record why it is deferred/skipped;
 - read the current official `garrytan/gstack` setup instructions;
 - install for the active harness using the upstream-supported mode;
 - verify discoverability;
@@ -130,6 +145,7 @@ STEP 5 — gstack
 - do not enable a parallel canonical roadmap/planning flow by default.
 
 STEP 6 — Context7
+- run this step only if classified `INSTALL NOW`;
 - configure using the best current native mode for the harness (MCP, CLI/skills or current equivalent);
 - never commit API keys, tokens or credentials;
 - verify access to fresh library/API docs.
@@ -179,9 +195,17 @@ Create/update `docs/project/TOOLING_STATUS.md` with:
 
 Do not modify application/business code during this setup task.
 
+When invoked inside `START_NEW_PROJECT.md`, return control to that caller; it owns
+implementation and the final project handoff. When invoked as a standalone
+setup-only task, preserve/verify the current `docs/project/ROADMAP.md` marker,
+update `docs/project/NEXT_SESSION.md` with the next product action, and include the
+ready-to-copy prompt below.
+
 Final response:
 
-RECOMMENDED TOOLING READY
+TOOLING BOOTSTRAP COMPLETE
+or
+TOOLING BOOTSTRAP BLOCKED
 
 Core:
 - Token-Efficient Spec Kit — READY
@@ -213,5 +237,10 @@ Manual action required:
 - None
 or only genuine login/runtime/global-hook/restart steps
 
-Do not start product implementation automatically after this setup-only task.
+NEXT SESSION PROMPT
+
+<ready-to-copy prompt; required for standalone setup>
+
+Do not start product implementation automatically when this is a standalone
+setup-only task.
 ```

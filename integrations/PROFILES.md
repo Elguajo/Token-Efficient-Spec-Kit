@@ -161,7 +161,9 @@ Tier L / High Risk
 → add Advanced Spec Mode only when formal specification provides clear value
 ```
 
-The setup bootstrap may install Recommended tools once even if a particular session does not invoke all of them.
+The scoped bootstrap may install the capabilities selected for the known stack/tier
+once even if a particular later session does not invoke all of them. Deferred or
+skipped capabilities are not installed speculatively.
 
 **Installed does not mean always loaded, always queried or queried together.**
 

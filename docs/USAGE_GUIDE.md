@@ -11,27 +11,30 @@
 ```text
 1. Клонировать repository
 2. Открыть его в AI coding agent
-3. Запустить prompts/START_NEW_PROJECT.md
-4. Заменить <WHAT_I_WANT> на своё описание продукта
-5. AI сам установит/настроит Recommended tooling, если это нужно
+3. Одним сообщением сказать AI, что хочешь создать, и попросить запустить prompts/START_NEW_PROJECT.md
+4. AI предложит product-направления и продолжит с рекомендованным
+5. После определения stack/tier AI сам scoped-настроит полезную часть tooling profile
 6. Дальше копировать NEXT SESSION PROMPT, который AI выдаёт в конце каждой сессии
 ```
 
 Например:
 
 ```text
-Хочу приложение для дизайнеров, где можно хранить,
-искать и автоматически тегировать локальные 3D-ассеты.
+Запусти prompts/START_NEW_PROJECT.md.
+Хочу приложение для дизайнеров, где можно хранить, искать и автоматически
+тегировать локальные 3D-ассеты.
 ```
 
 После этого AI самостоятельно:
 
 ```text
-проверяет tooling
-→ понимает продукт
+понимает продукт
+→ предлагает несколько product-направлений
+→ выбирает рекомендуемое
 → выбирает stack
 → проектирует architecture
 → создаёт roadmap
+→ scoped-проверяет и настраивает tooling
 → делит работу на phases
 → получает только нужный code/context
 → выполняет 1–3 задачи
@@ -74,37 +77,41 @@ cd my-project
 
 Подойдёт repository-aware agent: Codex, Claude Code, Cursor или другой совместимый harness.
 
-## Шаг 3 — запустить START_NEW_PROJECT
+## Шаг 3 — одним сообщением опиши идею
 
-Открой:
-
-```text
-prompts/START_NEW_PROJECT.md
-```
-
-Замени `<WHAT_I_WANT>` на обычное описание того, что хочешь получить.
-
-Например:
+В чате с AI-agent напиши:
 
 ```text
+Запусти prompts/START_NEW_PROJECT.md.
 Хочу сервис для генерации коммерческих предложений для архитекторов.
 ```
 
-Не придумывай технические ограничения, если они тебе не важны.
+Не открывай prompt и не ищи в нём ничего для замены. Не придумывай технические
+ограничения, если они тебе не важны.
+
+Сначала AI обычно предложит три product-направления, отметит рекомендуемое и
+продолжит с ним автоматически. Он попросит выбрать вариант, только когда без этого
+нельзя безопасно разрешить существенный product/business trade-off.
 
 ---
 
 # 3. Что происходит автоматически
 
-## Tooling bootstrap
+## Scoped tooling bootstrap
 
-При первом старте AI проверяет:
+При первом старте AI рано проверяет harness и существующий status:
 
 ```text
 docs/project/TOOLING_STATUS.md
 ```
 
-Если Recommended tooling ещё не готов, AI запускает `prompts/SETUP_RECOMMENDED_TOOLING.md` и пытается самостоятельно установить/настроить:
+Но профиль выбирается только после Product Brief, Architecture и Roadmap, когда
+уже известны stack и tier. При необходимости AI использует
+`prompts/SETUP_RECOMMENDED_TOOLING.md` и scoped-настраивает:
+
+```text
+Project Brief → Architecture → Roadmap → Scoped Tooling Bootstrap
+```
 
 ```text
 Superpowers  → implementation discipline / TDD / debugging
@@ -117,7 +124,13 @@ Context7     → fresh library/API docs
 > Канонический источник профиля: [`../integrations/PROFILES.md`](../integrations/PROFILES.md). Здесь копия для удобства чтения — при расхождении верен PROFILES.md.
 
 
-После проверки состояние сохраняется в `TOOLING_STATUS.md`, поэтому setup не повторяется в каждой сессии.
+Superpowers и Context7 можно установить сразу, когда это безопасно. Semble, Serena,
+RTK и gstack обычно откладываются до появления codebase, поддерживаемого language
+backend, достаточно шумных build/test команд или реального review/QA gate. Tier S может остаться на Minimal profile;
+Tier M/L обычно достигает полного Recommended profile после появления кода.
+
+После проверки installed/deferred/skipped состояние сохраняется в
+`TOOLING_STATUS.md`, поэтому setup не повторяется в каждой сессии.
 
 Тебе может понадобиться вмешаться только если реально нужен login/OAuth, отсутствующий system runtime или глобальная настройка, которая затронет другие проекты.
 
@@ -268,11 +281,17 @@ AI сам находит следующую фазу в `ROADMAP.md` и гото
 ### PROJECT COMPLETE
 AI направляет в final audit / release / deployment либо в `CHANGE_REQUEST` для новой функции.
 
-Текущий handoff всегда должен быть записан в:
+Product handoff всегда обновляется как единое целое:
 
 ```text
-docs/project/NEXT_SESSION.md
+docs/project/ROADMAP.md marker
++ docs/project/NEXT_SESSION.md
++ NEXT SESSION PROMPT
 ```
+
+Исключения: неинициализированный template и framework-only audit/update не должны
+инициализировать или менять `docs/project/*`, но всё равно заканчиваются готовым
+следующим prompt.
 
 Если handoff потерялся:
 

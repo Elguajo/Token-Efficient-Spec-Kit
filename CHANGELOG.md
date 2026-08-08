@@ -4,6 +4,56 @@
 
 Формат основан на принципах Keep a Changelog, версии следуют Semantic Versioning.
 
+## [0.8.2] — 2026-08-08
+
+### Changed
+
+- новый проект теперь запускается разговорно: пользователь отправляет AI одну
+  фразу с желаемым результатом и просьбой открыть `START_NEW_PROJECT.md`; ручной
+  поиск и замена `<WHAT_I_WANT>` больше не требуются;
+- перед инициализацией AI обычно формирует три содержательно разных product-направления,
+  рекомендует одно и продолжает с ним автоматически. Выбор запрашивается только
+  при существенном business, compliance, safety, budget или необратимом scope
+  trade-off;
+- `PROJECT_BRIEF.md` фиксирует рассмотренные направления, выбранный вариант и
+  важные допущения.
+
+### Migration
+
+Ручная миграция не требуется. Для нового проекта отправь AI обычное описание идеи
+вместе с просьбой запустить `prompts/START_NEW_PROJECT.md`.
+
+## [0.8.1] — 2026-08-08
+
+Компактный consistency-fix по результатам framework-аудита v0.8.0.
+
+### Fixed
+
+- повторные prose-варианты Default Read Set в engineering/workflow/change-request
+  инструкциях заменены ссылками на канонический
+  `docs/system/TOKEN_EFFICIENCY.md`;
+- product handoff унифицирован как атомарная тройка: marker в `ROADMAP.md` +
+  `NEXT_SESSION.md` + `NEXT SESSION PROMPT`;
+- добавлены явные исключения: неинициализированный template и framework-only
+  audit/update не создают и не изменяют `docs/project/*`, но всё равно возвращают
+  готовый следующий prompt;
+- README.md, README_EN.md, docs/README.md, docs/USAGE_GUIDE.md, docs/WORKFLOW.md и
+  integrations/README.md синхронизированы с фактическим порядком Product Brief →
+  Architecture → Roadmap → scoped tooling bootstrap; профиль везде включает Serena;
+- tooling setup теперь явно поддерживает `INSTALL NOW` / `DEFERRED` /
+  `SKIPPED FOR TIER`, а Semble, Serena, RTK и gstack не устанавливаются заранее в
+  пустой codebase без подтверждённой пользы;
+- Constitution, Project Doctor и product/setup entry points используют тот же
+  атомарный handoff и полный Semble/Serena/RTK health profile;
+- `tools/audit.py` теперь ловит prose-рестейты Default Read Set, неполные public
+  profile listings, возврат к раннему/eager bootstrap, неполный handoff и потерю
+  template/framework-only исключений.
+
+### Migration
+
+Обратная совместимость сохранена. Project-owned state и существующая `.serena/` не
+изменяются; ручная миграция не требуется.
+
 ## [0.8.0] — 2026-08-08
 
 Релиз консистентности. Правки по результатам внешнего аудита: устранены места, где

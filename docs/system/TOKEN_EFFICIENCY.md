@@ -7,8 +7,8 @@ No other file may restate it. Other files must link here.
 
 ## Default Read Set
 
-Read exactly this for normal implementation, review, bug fix, change request and
-handoff work:
+After project initialization, read exactly this for normal implementation, review,
+bug fix, change request and project handoff work:
 
 ```text
 1. .specify/memory/constitution.md
@@ -20,9 +20,13 @@ handoff work:
 7. only the ADRs, source files and tests directly relevant to the current tasks
 ```
 
-`ROADMAP.md` is mandatory because every session must end with a handoff, and the
-handoff cannot name the next phase without it. It is also the canonical pointer to
-the current phase (see below).
+`ROADMAP.md` is mandatory for product work because its marker is the canonical
+current-phase pointer and one of the three project handoff outputs (see below).
+
+An uninitialized template has no product state to read or hand off. Framework-only
+audits and framework updates use their own explicitly scoped read instructions and
+must not initialize or rewrite `docs/project/*`. See
+[`SESSION_HANDOFF.md`](SESSION_HANDOFF.md#non-product-handoff-exceptions).
 
 Deliberately NOT in the Default Read Set:
 

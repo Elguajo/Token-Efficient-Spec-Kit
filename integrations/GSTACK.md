@@ -44,7 +44,9 @@ Use ship/release checks after the project's own tests/build have passed.
 
 ## Avoid duplicate planning
 
-Token-Efficient Spec Kit + GitHub Spec Kit remain the canonical planning layer.
+Token-Efficient Spec Kit remains the canonical project planning layer. GitHub Spec
+Kit may add formal phase-level planning only when Optional Advanced Spec Mode is
+explicitly enabled.
 
 Do not use gstack `autoplan` or equivalent planning workflows by default when an accepted Spec Kit plan already exists.
 

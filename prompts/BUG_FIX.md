@@ -19,6 +19,8 @@ If the bug exposes a broken architectural invariant, update the canonical archit
 
 Before responding:
 - determine whether the fix changes the current phase status;
+- update the phase markers in `docs/project/ROADMAP.md` so exactly one phase is
+  `[>]`, or all are `[x]` when the project is complete;
 - update `docs/project/NEXT_SESSION.md` according to `docs/system/SESSION_HANDOFF.md`;
 - generate a ready-to-copy next-session prompt.
 

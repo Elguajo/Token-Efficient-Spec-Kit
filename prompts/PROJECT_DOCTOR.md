@@ -30,16 +30,21 @@ Determine:
 - whether relevant tests/build/checks are passing, failing or unknown;
 - whether there is obvious documentation/workflow drift;
 - whether Recommended tooling is ready/degraded;
-- specifically whether Semble code retrieval and RTK shell-output compression are READY / DEGRADED / NOT CONFIGURED;
+- specifically whether Semble discovery, Serena symbol/refactor and RTK shell-output
+  compression are READY / DEGRADED / NOT CONFIGURED / N/A;
 - whether any tooling issue materially affects progress;
 - the single best next action.
 
 Tooling rule:
-Semble or RTK being DEGRADED/NOT CONFIGURED is normally not a product blocker because both have native fallbacks. Report the efficiency loss, but classify the project as BLOCKED only if the actual product work cannot proceed safely.
+Semble, Serena or RTK being DEGRADED/NOT CONFIGURED is normally not a product
+blocker because all have native fallbacks. Report the efficiency loss, but classify
+the project as BLOCKED only if the actual product work cannot proceed safely.
 
 If a deep framework consistency problem is suspected, recommend `prompts/AUDIT_WORKFLOW.md` rather than loading the entire framework automatically.
 
-If `docs/project/NEXT_SESSION.md` is stale or missing and the correct next action can be determined safely, update it with a concise handoff.
+If `docs/project/NEXT_SESSION.md` is stale or missing and the correct next action can
+be determined safely, first verify/correct the marker in
+`docs/project/ROADMAP.md`, then update it with a concise handoff.
 
 Return in plain language:
 
@@ -64,6 +69,7 @@ Checks:
 
 Token-efficiency tooling:
 - Semble: READY / DEGRADED / NOT CONFIGURED / N/A
+- Serena: READY / DEGRADED / NOT CONFIGURED / N/A
 - RTK: READY / DEGRADED / NOT CONFIGURED / N/A
 
 Tooling/workflow:

@@ -69,6 +69,10 @@ After phase-level formal artifacts are ready:
 - gstack may review/QA selectively;
 - final phase status and NEXT SESSION PROMPT are still produced by Token-Efficient Session Handoff.
 
+Before responding, preserve/verify the current marker in
+`docs/project/ROADMAP.md`, update `docs/project/NEXT_SESSION.md` with the next
+product action, and generate the ready-to-copy prompt below.
+
 Final response:
 
 ADVANCED SPEC MODE ENABLED
@@ -89,4 +93,8 @@ Canonical project docs preserved:
 
 Next action:
 - ...
+
+NEXT SESSION PROMPT
+
+<ready-to-copy prompt>
 ```

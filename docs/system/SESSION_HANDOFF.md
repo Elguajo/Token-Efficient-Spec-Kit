@@ -8,7 +8,7 @@ The user should never have to invent the next coding prompt after a phase or ses
 
 ## Core rule
 
-At the end of every meaningful implementation/review session, the AI agent must:
+At the end of every meaningful product implementation/review session, the AI agent must:
 
 1. determine the current project/phase state from canonical repository docs and code;
 2. decide the correct next action;
@@ -21,6 +21,41 @@ Step 3 is what makes the handoff recoverable: `NEXT_SESSION.md` may be lost or g
 stale, `ROADMAP.md` is canonical state.
 
 The user can then open a fresh AI session, paste that prompt, and continue without re-explaining the project.
+
+These three outputs are one atomic project handoff:
+
+```text
+ROADMAP marker + NEXT_SESSION.md + NEXT SESSION PROMPT
+```
+
+Do not update only one or two of them. If a phase completes, move `[>]` to the next
+planned phase before writing `NEXT_SESSION.md`. If no planned phases remain, all
+phases stay `[x]` and the status is `PROJECT COMPLETE`.
+
+---
+
+## Non-product handoff exceptions
+
+### Uninitialized template
+
+If `docs/project/ROADMAP.md` still says `Not initialized`, do not invent a phase,
+change its marker or create/update project state merely to satisfy the handoff rule.
+Do not initialize `docs/project/*` outside `prompts/START_NEW_PROJECT.md`.
+
+End with status `TEMPLATE UNINITIALIZED` and a ready-to-copy **NEXT SESSION PROMPT**
+that routes the user to `prompts/START_NEW_PROJECT.md`.
+
+### Framework-only audit or update
+
+A workflow audit/update maintains the framework layer; it does not advance the
+product roadmap. It must leave `docs/project/ROADMAP.md` and
+`docs/project/NEXT_SESSION.md` unchanged, whether the template is uninitialized or
+a downstream product already exists.
+
+End with the framework audit/update status and a ready-to-copy **NEXT SESSION
+PROMPT** for the next framework action. If no framework action remains, preserve or
+route back to the existing product handoff; for an uninitialized template, route to
+`prompts/START_NEW_PROJECT.md`.
 
 ---
 
@@ -163,7 +198,7 @@ prompts/CHANGE_REQUEST.md
 
 ## Required final-response block
 
-Every implementation/review session must end with:
+Every meaningful product or framework implementation/review session must end with:
 
 ```text
 NEXT SESSION PROMPT

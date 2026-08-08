@@ -86,7 +86,7 @@ Check for obvious contradictions such as:
 - duplicate canonical plans;
 - stale tool ownership;
 - GitHub Spec Kit treated as required default;
-- Recommended profile missing Semble/RTK without an intentional versioned change;
+- Recommended profile missing Semble/Serena/RTK without an intentional versioned change;
 - missing session handoff;
 - stale/broken NEXT_SESSION;
 - project docs that disagree materially.
@@ -98,15 +98,18 @@ For deep workflow consistency, route to `AUDIT_WORKFLOW.md` instead of performin
 Recommended efficiency layers are:
 
 ```text
-Project/docs context → Token-Efficient Spec Kit
-Code retrieval       → Semble
-Shell/tool output     → RTK
-Fresh external docs  → Context7 on demand
+Project/docs context         → Token-Efficient Spec Kit
+Intent-based code discovery  → Semble
+Symbol semantics/refactoring → Serena
+Shell/tool output            → RTK
+Fresh external docs          → Context7 on demand
 ```
 
-Report Semble and RTK as `READY`, `DEGRADED`, `NOT CONFIGURED` or `N/A` when useful.
+Report Semble, Serena and RTK as `READY`, `DEGRADED`, `NOT CONFIGURED` or `N/A`
+when useful.
 
-Semble or RTK being degraded is normally an efficiency issue, not a product blocker, because native search/read/shell fallbacks exist.
+Semble, Serena or RTK being degraded is normally an efficiency issue, not a
+product blocker, because native targeted search/read/refactor/shell fallbacks exist.
 
 Report only materially useful tooling problems.
 Do not fail the whole project merely because an optional/recommended efficiency tool is absent.
@@ -137,6 +140,9 @@ Project Doctor must always recommend one concrete next action when possible.
 
 It should also provide a ready-to-copy `NEXT SESSION PROMPT` unless the project is genuinely blocked and requires human input first.
 
-Doctor may update `docs/project/NEXT_SESSION.md` when the current handoff is clearly stale or missing and the next action can be determined safely.
+Doctor may update `docs/project/NEXT_SESSION.md` when the current handoff is clearly
+stale or missing and the next action can be determined safely. Before doing so it
+must verify/correct the canonical marker in `docs/project/ROADMAP.md`, preserving
+the atomic handoff contract.
 
 It must not modify product requirements, architecture or application code merely to make the health report look better.

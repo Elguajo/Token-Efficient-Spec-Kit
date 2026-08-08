@@ -26,8 +26,10 @@ Update persistent docs only when requirements, important architecture, ADRs, mig
 
 Before responding:
 1. determine whether status is IN PROGRESS, PHASE COMPLETE, or PROJECT COMPLETE;
-2. update docs/project/NEXT_SESSION.md according to docs/system/SESSION_HANDOFF.md;
-3. prepare a ready-to-copy prompt for the user's next fresh AI session.
+2. update the markers in docs/project/ROADMAP.md so exactly one phase is `[>]`, or
+   all are `[x]` when the project is complete;
+3. update docs/project/NEXT_SESSION.md according to docs/system/SESSION_HANDOFF.md;
+4. prepare a ready-to-copy prompt for the user's next fresh AI session.
 
 Return compactly:
 

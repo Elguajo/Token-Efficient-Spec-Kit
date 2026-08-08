@@ -26,7 +26,9 @@
 
 > **Что мне делать дальше?**
 
-AI хранит здесь текущий статус и готовый copy-paste prompt для следующей сессии.
+AI хранит здесь disposable-навигацию и готовый copy-paste prompt. Канонический
+phase status остаётся в marker'е [`project/ROADMAP.md`](project/ROADMAP.md); product
+handoff обновляет оба файла и final prompt вместе.
 
 ### [system/PROJECT_DOCTOR.md](system/PROJECT_DOCTOR.md)
 
@@ -44,10 +46,12 @@ Entry point: [`../prompts/PROJECT_DOCTOR.md`](../prompts/PROJECT_DOCTOR.md).
 
 ```text
 User Intent
-→ Tooling Bootstrap
+→ Product Directions (normally 3)
+→ Recommended Direction (default)
 → Project Brief
 → Architecture
 → Roadmap
+→ Scoped Tooling Bootstrap
 → Current Phase
 → Targeted Code Retrieval
 → 1–3 Tasks
@@ -126,19 +130,27 @@ Default external tooling:
 ```text
 Superpowers
 + Semble
++ Serena
 + RTK
 + gstack
 + Context7
 ```
+> Канонический источник профиля: [`../integrations/PROFILES.md`](../integrations/PROFILES.md).
 
 Token-efficiency layers:
 
 ```text
-Project/docs context → Token-Efficient Spec Kit
-Code retrieval       → Semble
-Shell/tool output     → RTK
-Fresh external docs  → Context7 on demand
+Project/docs context         → Token-Efficient Spec Kit
+Intent-based code discovery  → Semble
+Symbol semantics/refactoring → Serena
+Shell/tool output            → RTK
+Fresh external docs          → Context7 on demand
 ```
+
+Harness/status проверяются рано, но profile выбирается после Product Brief,
+Architecture и Roadmap. Superpowers/Context7 можно настроить сразу; Semble,
+Serena, RTK и gstack откладываются до появления кода и реальной пользы. Tier S может
+остаться на Minimal profile.
 
 GitHub Spec Kit — optional Advanced Spec Mode.
 
@@ -150,7 +162,8 @@ GitHub Spec Kit — optional Advanced Spec Mode.
 
 ```text
 START_NEW_PROJECT
-→ automatic tooling bootstrap when needed
+→ Product Brief / Architecture / Roadmap
+→ scoped tooling bootstrap when useful
 → AI выполняет работу
 → NEXT SESSION PROMPT
 → новая session

@@ -5,6 +5,12 @@ Audit the Token-Efficient Spec Kit workflow itself.
 
 This is a framework consistency audit, not an application feature review.
 
+This is also a framework-only handoff. Do not initialize or modify
+`docs/project/ROADMAP.md`, `docs/project/NEXT_SESSION.md` or any other
+`docs/project/*` file. End with a ready-to-copy `NEXT SESSION PROMPT` for the next
+framework action; if the template is uninitialized and no framework action remains,
+route to `prompts/START_NEW_PROJECT.md`.
+
 STEP 0 — RUN THE MACHINE CHECKS FIRST, AND QUOTE THE OUTPUT
 
 ```bash
@@ -19,9 +25,11 @@ If it exits non-zero, the workflow is NEEDS ATTENTION regardless of how the pros
 reads. Fix what it reports before assessing anything by hand.
 
 The script covers: internal link resolution, version consistency across
-VERSION/READMEs/CHANGELOG, single definition of the Default Read Set, canonical
-pointer on every profile listing, phase file naming, exactly one current-phase
-marker, framework/project ownership boundaries, and required files.
+VERSION/READMEs/CHANGELOG, single definition of the Default Read Set (including
+prose variants), canonical and complete Recommended profile listings, late/scoped
+tooling bootstrap, phase file naming, exactly one current-phase marker, the complete
+handoff plus its non-product exceptions, framework/project ownership boundaries,
+and required files.
 
 Everything below is the judgement layer the script cannot check.
 
@@ -138,6 +146,11 @@ Documentation/path findings:
 Recommended fixes in priority order:
 1. ...
 2. ...
+
+NEXT SESSION PROMPT
+
+<copy-paste prompt for the next framework action, existing product continuation,
+or START_NEW_PROJECT when this is an uninitialized template>
 
 Do not modify files unless the user explicitly asks to apply the audit fixes.
 ```

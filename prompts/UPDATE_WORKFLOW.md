@@ -76,6 +76,12 @@ After applying:
 11. record the installed workflow version only after successful application;
 12. do not modify application/business code merely to complete a framework update.
 
+This is framework-only work. Do not change `docs/project/ROADMAP.md` or
+`docs/project/NEXT_SESSION.md` as a session handoff side effect. End with a
+ready-to-copy `NEXT SESSION PROMPT` for any remaining framework action; if none
+remains, preserve the existing product continuation or route an uninitialized
+template to `prompts/START_NEW_PROJECT.md`.
+
 Do not silently install new global hooks or system runtimes merely because a newer framework version added an integration. Follow the target release's tooling setup policy and request approval when a global change affects unrelated projects.
 
 Return:
@@ -114,6 +120,9 @@ Self-audit:
 
 Manual action required:
 - None / ...
+
+NEXT SESSION PROMPT
+
+<copy-paste prompt>
 ```
 > Canonical profile definition: [`../integrations/PROFILES.md`](../integrations/PROFILES.md). This listing is a copy for reading convenience — if the two disagree, PROFILES.md wins.
-

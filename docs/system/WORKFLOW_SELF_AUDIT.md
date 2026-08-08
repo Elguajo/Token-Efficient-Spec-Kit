@@ -112,7 +112,8 @@ A non-developer should be able to follow:
 ```text
 README
 → START_NEW_PROJECT
-→ automatic tooling bootstrap when needed
+→ Product Brief / Architecture / Roadmap
+→ scoped tooling bootstrap when useful
 → AI performs work
 → NEXT SESSION PROMPT
 → fresh session
@@ -128,9 +129,15 @@ All meaningful implementation/review entry points should preserve:
 ```text
 IN PROGRESS / PHASE COMPLETE / PROJECT COMPLETE
 → decide next action
+→ update ROADMAP marker
 → update NEXT_SESSION.md
 → output NEXT SESSION PROMPT
 ```
+
+For an uninitialized template or a framework-only audit/update, verify the explicit
+exception instead: no `docs/project/*` mutation, but a final `NEXT SESSION PROMPT`
+still routes to the next framework action, the preserved product handoff or
+`START_NEW_PROJECT`.
 
 ### 4. Token-efficiency consistency
 
@@ -168,7 +175,9 @@ unless a deliberate versioned framework change says otherwise.
 
 Check that:
 
-- `START_NEW_PROJECT.md` invokes setup automatically when needed;
+- `START_NEW_PROJECT.md` chooses tooling only after product/stack/tier are known;
+- its setup is scoped to `INSTALL NOW` / `DEFERRED` / `SKIPPED FOR TIER` instead
+  of eagerly installing the full profile in an empty codebase;
 - `TOOLING_STATUS.md` tracks Semble, Serena and RTK;
 - Semble/Serena/RTK have graceful fallback;
 - Serena follows the overlap-reduction policy from `integrations/SERENA.md` when supported;
