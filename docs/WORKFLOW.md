@@ -19,7 +19,10 @@ ROADMAP
     ↓
 CURRENT PHASE
     ↓
-TARGETED CODE RETRIEVAL
+CODE-CONTEXT ROUTER
+    ├── intent / unknown location → Semble
+    ├── known symbol / references / refactor → Serena
+    └── tiny exact edit → native tools
     ↓
 1–3 TASKS
     ↓
@@ -76,7 +79,11 @@ Token-Efficient Spec Kit
 = WHAT + orchestration + project/docs context + handoff
 
 Semble
-= CODE CONTEXT: targeted semantic/hybrid code retrieval
+= CODE DISCOVERY: intent-based semantic/hybrid retrieval
+
+Serena
+= SYMBOL / REFACTOR: symbols, references, implementations,
+  diagnostics and semantic refactoring
 
 RTK
 = TOOL OUTPUT: compact terminal/test/build/git output
@@ -97,10 +104,11 @@ GitHub Spec Kit
 Token-efficiency layers:
 
 ```text
-Project/docs context → Token-Efficient Spec Kit
-Code retrieval       → Semble
-Shell/tool output     → RTK
-Fresh external docs  → Context7 on demand
+Project/docs context         → Token-Efficient Spec Kit
+Intent-based code discovery  → Semble
+Symbol semantics/refactoring → Serena
+Shell/tool output            → RTK
+Fresh external docs          → Context7 on demand
 ```
 
 Если два инструмента пытаются создать competing project-level plans, Token-Efficient canonical docs побеждают.
@@ -134,6 +142,7 @@ Default Recommended profile:
 ```text
 Superpowers
 Semble
+Serena
 RTK
 gstack
 Context7
@@ -146,9 +155,11 @@ Rules:
 - использовать current official installation docs;
 - предпочитать безопасный user/project scope;
 - Semble подключать через MCP, когда active harness это поддерживает;
+- Serena устанавливать через current official Quick Start, а не stale marketplace recipe;
+- Serena project config ограничивать symbol/refactor ролью и отключать generic file/search/shell/memory overlap, когда upstream это поддерживает;
 - RTK реально проверять после install, а не доверять только success installer;
 - если RTK требует global hooks/instructions для всех проектов и нет безопасного project-scoped пути — запросить одноразовое подтверждение;
-- Semble/RTK имеют graceful fallback и не блокируют продукт.
+- Semble/Serena/RTK имеют graceful fallback и не блокируют продукт.
 
 GitHub Spec Kit не устанавливается по умолчанию.
 
@@ -205,7 +216,7 @@ Roadmap depth адаптируется к сложности проекта.
 
 ---
 
-## STATE 5 — CURRENT PHASE + CODE RETRIEVAL
+## STATE 5 — CURRENT PHASE + CODE-CONTEXT ROUTER
 
 Canonical input:
 
@@ -232,32 +243,44 @@ Recommended implementation batch:
 1–3 cohesive tasks
 ```
 
-### Code-context routing
+### Routing rule
 
-For unfamiliar/non-trivial repository exploration:
+**Do not call every code-context tool. Choose one first.**
 
 ```text
-Semble query
-→ relevant snippets/locations
-→ read only files/ranges needed for implementation
+Unknown area / natural-language intent
+“Where is X implemented?”
+→ Semble
+
+Known symbol / declaration / references / implementations
+cross-file rename / semantic edit / symbol diagnostics
+→ Serena
+
+Known tiny file/string/config edit
+→ native tools
 ```
 
-Use native exact search/read instead when the exact symbol/file is already known or the repository is tiny.
+Typical combined flow:
+
+```text
+Semble
+→ finds candidate file/snippet/symbol
+→ broad discovery stops
+→ Serena only if references / diagnostics / semantic refactor are needed
+```
+
+Do not repeat the same discovery via Semble → Serena → grep unless the first result failed, is ambiguous, or independent verification is justified.
+
+If Serena language-server/backend support is unavailable or stale:
+
+```text
+Serena DEGRADED
+→ Semble/native targeted fallback
+```
 
 ### Optional Advanced Spec Mode
 
 Если текущая фаза materially ambiguous, cross-cutting или high-risk, AI может подключить GitHub Spec Kit для formal deep specification.
-
-Примеры:
-
-```text
-payments
-complex authorization
-multi-tenancy boundaries
-critical migrations
-public API contracts
-large cross-system integrations
-```
 
 GitHub Spec Kit работает **внутри текущей фазы** и не заменяет Project Brief, Architecture, Roadmap или Session Handoff.
 
@@ -316,8 +339,6 @@ compact result
 → return to compact mode afterward
 ```
 
-The exact checks depend on project type and risk.
-
 ---
 
 ## STATE 8 — CHALLENGE / QA
@@ -373,8 +394,6 @@ At the end of every meaningful implementation/review session AI must:
 4. create a ready-to-copy `NEXT SESSION PROMPT`;
 5. stop before starting the next phase in the old session.
 
-This is mandatory because the user may not know the correct engineering next step.
-
 ---
 
 ## STATE 11 — RELEASE
@@ -409,9 +428,7 @@ Brief
 → Handoff
 ```
 
-Examples: landing page, CLI, small script, simple automation.
-
-For very small projects, Minimal profile may be sufficient even if Recommended tools are available globally.
+For very small projects, Minimal profile may be sufficient even if Recommended tools are installed globally.
 
 ## Tier M
 
@@ -420,13 +437,11 @@ Brief
 → Architecture
 → Roadmap
 → Phases
-→ Targeted code retrieval
+→ Routed code context
 → Implementation batches
 → Converge
 → Handoff
 ```
-
-Examples: SaaS MVP, ecommerce, internal dashboard, plugin + backend.
 
 ## Tier L / High Risk
 
@@ -459,17 +474,7 @@ public APIs
 production infrastructure
 ```
 
-Use more evidence:
-
-```text
-negative tests
-idempotency tests
-permission tests
-review
-rollback/recovery planning
-```
-
-Do not answer risk by automatically introducing microservices or more frameworks.
+Use more evidence, not automatically more frameworks.
 
 ---
 
@@ -488,12 +493,12 @@ Current Phase
 Relevant ADR
 ```
 
-Then retrieve only relevant source/tests:
+Then choose the cheapest adequate code-context route:
 
 ```text
-Semble when semantic/broad discovery is useful
-or
-native exact search/read for known local context
+Semble → unknown semantic area
+Serena → known symbol / semantic relationship or refactor
+native → exact local edit
 ```
 
 ## Bug fix
@@ -506,19 +511,11 @@ relevant code
 relevant tests
 ```
 
-Use raw diagnostics when RTK compression is insufficient for root-cause analysis.
-Load broader architecture only if needed.
+Use Serena when root cause requires call/reference/implementation relationships. Use raw diagnostics when RTK compression is insufficient.
 
 ## Change request
 
-Read:
-
-```text
-PROJECT_BRIEF
-ARCHITECTURE
-ROADMAP
-affected phases/ADRs/code only
-```
+Read only affected canonical state and code.
 
 ## Advanced Spec Mode
 
@@ -540,10 +537,9 @@ code/tests
 NEXT_SESSION as navigation only
 ```
 
-Semble indexes and RTK savings/output caches are operational tooling state, not canonical product truth.
+Semble indexes, Serena indexes/config/memory, and RTK analytics/output caches are **operational tooling state**, not canonical product truth.
 
-Do not depend on old chats to remember critical project truth.
-Do not copy every chat message into repository docs either.
+Serena memory tools should remain disabled under the Recommended overlap policy so they do not duplicate project memory.
 
 ---
 
@@ -555,11 +551,11 @@ Keep:
 compact canonical files
 small phase specs
 1–3 task batches
-targeted code retrieval
+single routed code-context query first
+symbol-aware operations when semantics matter
 compact tool output
 selective research
 selective reviews
-optional tooling only when useful
 ```
 
 Avoid:
@@ -569,12 +565,13 @@ duplicate PRDs
 parallel roadmaps
 raw research dumps
 reading the whole repo every run
-broad grep + full-file loops when targeted retrieval works
+Semble + Serena + grep for the same question
+full-file/refactor loops when symbol tools can do the job safely
 verbose terminal logs when compact output preserves the signal
 loading installed tools just because they exist
 ```
 
-Token efficiency means giving the agent the **smallest context that still contains all decision-critical information**.
+Token efficiency means giving the agent the **smallest context and tool surface that still contains all decision-critical information**.
 
 ---
 
@@ -592,8 +589,8 @@ At any moment AI should be able to answer:
 3. What are we doing now?
    → CURRENT PHASE
 
-4. What code context is actually needed?
-   → Semble/native targeted retrieval
+4. Which code-context capability is cheapest for this question?
+   → Semble / Serena / native
 
 5. What proves it is done?
    → ACCEPTANCE CRITERIA + TESTS
@@ -602,4 +599,4 @@ At any moment AI should be able to answer:
    → NEXT_SESSION
 ```
 
-If these answers are clear and retrieval/output remains targeted, the workflow is healthy.
+If these answers are clear and tooling is routed rather than stacked, the workflow is healthy.
