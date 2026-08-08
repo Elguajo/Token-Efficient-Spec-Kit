@@ -4,6 +4,24 @@
 
 Формат основан на принципах Keep a Changelog, версии следуют Semantic Versioning.
 
+## [0.6.0] — 2026-08-08
+
+### Added
+
+- Semble как Recommended capability для token-efficient code retrieval;
+- RTK как Recommended capability для сокращения terminal/test/build/git output;
+- автоматическая установка/настройка Semble и RTK во время первого `START_NEW_PROJECT` tooling bootstrap;
+- отдельные integration policies `integrations/SEMBLE.md` и `integrations/RTK.md`;
+- graceful fallback, если Semble/RTK недоступны или небезопасны для активного coding harness.
+
+### Changed
+
+- Recommended profile теперь: Token-Efficient Spec Kit + Superpowers + Semble + RTK + gstack + Context7;
+- token-efficiency разделена на уровни: project/docs context, code retrieval, shell/tool output и fresh external docs;
+- RTK должен проходить реальную post-install verification и не считается готовым только по success-ответу installer;
+- глобальные RTK hooks/instructions не должны применяться без одноразового подтверждения, если нет безопасного project-scoped варианта;
+- Semble предпочтительно подключается через MCP, когда active harness это поддерживает.
+
 ## [0.5.0] — 2026-08-08
 
 ### Added
