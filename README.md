@@ -8,7 +8,7 @@
 
 `Идея → Архитектура → Фазы → 1–3 задачи → Код → Проверка → Следующий prompt`
 
-**v0.5.0**
+**v0.6.0**
 
 [English](README_EN.md) · [Подробное руководство](docs/USAGE_GUIDE.md) · [Workflow](docs/WORKFLOW.md) · [Maintenance](docs/MAINTENANCE.md) · [Changelog](CHANGELOG.md)
 
@@ -43,6 +43,7 @@ Vercel или AWS?
 - создать Architecture и Roadmap;
 - разбить работу на небольшие phases;
 - выполнять обычно по 1–3 связанные задачи за сессию;
+- использовать только нужный code/context;
 - запускать нужные tests / review / QA;
 - определить правильный следующий шаг;
 - выдать готовый prompt для новой сессии.
@@ -54,8 +55,6 @@ Vercel или AWS?
 # Начать проект — пошагово
 
 ## 1. Скопируй шаблон
-
-Самый простой способ:
 
 ```bash
 git clone https://github.com/Elguajo/Token-Efficient-Spec-Kit.git my-project
@@ -89,7 +88,7 @@ Cursor
 prompts/START_NEW_PROJECT.md
 ```
 
-В нём найди:
+Найди:
 
 ```text
 <WHAT_I_WANT>
@@ -109,9 +108,29 @@ prompts/START_NEW_PROJECT.md
 
 ---
 
-## 4. Дай AI самому организовать работу
+## 4. AI сам подготовит рабочее окружение
 
-После первого запуска AI должен самостоятельно создать и поддерживать:
+При первом запуске AI проверяет `docs/project/TOOLING_STATUS.md` и, если нужно, автоматически настраивает Recommended tooling:
+
+```text
+Superpowers  → как реализовывать и отлаживать
+Semble       → находить только релевантные куски кода
+RTK          → сокращать шум terminal/test/build output
+gstack       → review / QA / release checks
+Context7     → свежая документация API/libraries
+```
+
+Тебе не нужно отдельно устанавливать каждый инструмент вручную.
+
+Если инструмент уже настроен — AI его не переустанавливает. Если Semble или RTK недоступны, проект **не блокируется**: AI продолжает обычными средствами.
+
+Иногда потребуется твоё участие только для login/OAuth, отсутствующего system runtime или глобального hook/config изменения, которое затронет другие проекты.
+
+---
+
+## 5. AI создаст структуру проекта и начнёт первую фазу
+
+После запуска AI самостоятельно создаёт и поддерживает:
 
 ```text
 PROJECT_BRIEF.md   → что мы строим
@@ -121,20 +140,13 @@ phases/            → текущие этапы разработки
 NEXT_SESSION.md    → что делать дальше
 ```
 
-Он также начнёт первую небольшую implementation-сессию, если нет настоящего блокера.
-
-AI может остановиться и спросить тебя, если реально нужны:
-
-- login / OAuth / API credentials;
-- важное product/business решение;
-- подтверждение destructive action;
-- информация, без которой возможны два существенно разных продукта.
+Он начнёт первую небольшую implementation-сессию, если нет настоящего блокера.
 
 Обычный выбор framework, database или library не должен перекладываться на тебя.
 
 ---
 
-## 5. В конце сессии просто скопируй следующий prompt
+## 6. В конце сессии просто скопируй следующий prompt
 
 Каждая meaningful coding/review session должна заканчиваться блоком:
 
@@ -144,7 +156,7 @@ NEXT SESSION PROMPT
 <готовый prompt>
 ```
 
-Дальше всё просто:
+Дальше:
 
 ```text
 AI закончил работу
@@ -158,16 +170,7 @@ AI закончил работу
 AI продолжает с правильного места
 ```
 
-Тебе не нужно самому решать:
-
-```text
-закончена ли текущая phase?
-что реализовывать следующим?
-пора ли делать QA?
-какую phase открывать дальше?
-```
-
-AI определяет это из состояния repository.
+Тебе не нужно самому решать, закончена ли phase, пора ли делать QA или какой этап открывать дальше.
 
 Текущий handoff также хранится в:
 
@@ -183,19 +186,20 @@ docs/project/NEXT_SESSION.md
 
 ```mermaid
 flowchart TD
-    A[Ты описываешь идею] --> B[Project Brief]
-    B --> C[Architecture]
-    C --> D[Roadmap]
-    D --> E[Current Phase]
-    E --> F[1–3 задачи]
-    F --> G[Implementation]
-    G --> H[Tests / Review / QA]
-    H --> I{Phase готова?}
-    I -- Нет --> J[Prompt продолжить эту Phase]
-    I -- Да --> K[Prompt начать следующую Phase]
-    J --> L[Новая AI-сессия]
-    K --> L
-    L --> E
+    A[Ты описываешь идею] --> B[Tooling bootstrap]
+    B --> C[Project Brief]
+    C --> D[Architecture]
+    D --> E[Roadmap]
+    E --> F[Current Phase]
+    F --> G[1–3 задачи]
+    G --> H[Implementation]
+    H --> I[Tests / Review / QA]
+    I --> J{Phase готова?}
+    J -- Нет --> K[Prompt продолжить эту Phase]
+    J -- Да --> L[Prompt начать следующую Phase]
+    K --> M[Новая AI-сессия]
+    L --> M
+    M --> F
 ```
 
 Project knowledge хранится в repository, поэтому следующей сессии не нужно перечитывать всю историю чатов.
@@ -204,7 +208,7 @@ Project knowledge хранится в repository, поэтому следующ�
 
 # Если ты уже опытный пользователь
 
-Можно воспринимать Token-Efficient Spec Kit как компактный orchestration layer:
+Можно воспринимать Token-Efficient Spec Kit как компактный orchestration + context-routing layer:
 
 ```text
 User Intent
@@ -212,11 +216,22 @@ User Intent
 → Architecture
 → Roadmap
 → Current Phase
+→ targeted code retrieval
 → 1–3 cohesive tasks
 → Implementation
-→ Verification / QA
+→ compact verification output
+→ Review / QA
 → Convergence
 → Session Handoff
+```
+
+Token-efficiency разделена по слоям:
+
+```text
+Project/docs context → Token-Efficient Spec Kit
+Code retrieval       → Semble
+Shell/tool output     → RTK
+Fresh external docs  → Context7 on demand
 ```
 
 Основные правила:
@@ -235,29 +250,11 @@ User Intent
 
 ## Почему это экономит токены
 
-Обычная implementation-сессия читает примерно:
+Обычная implementation-сессия читает только нужный project context, а для codebase exploration при наличии Semble сначала получает релевантные chunks вместо широкого `grep → read full file` цикла.
 
-```text
-Constitution
-+ Project Brief
-+ Architecture
-+ Engineering Rules
-+ Current Phase
-+ relevant ADR if needed
-+ relevant code/tests
-```
+RTK, когда безопасно поддерживается активным agent, сокращает verbose output тестов, git, build и других команд до decision-relevant информации.
 
-По умолчанию она **не должна** перечитывать:
-
-```text
-все завершённые phases
-все ADR
-всю историю чатов
-гигантские master specs
-весь repository без причины
-```
-
-> **Один факт — одно canonical место. Одна сессия — обычно 1–3 связанные задачи.**
+> **Один факт — одно canonical место. Одна сессия — обычно 1–3 связанные задачи. Читай только то, что нужно сейчас.**
 
 ---
 
@@ -270,8 +267,12 @@ Constitution
 | Инструмент | Для чего |
 |---|---|
 | **Superpowers** | TDD, implementation discipline, systematic debugging |
+| **Semble** | Token-efficient semantic/hybrid code retrieval |
+| **RTK** | Сжатие terminal/test/build/git output |
 | **gstack** | Engineering/design review, browser QA, release checks |
 | **Context7** | Актуальная документация libraries/API по необходимости |
+
+Они устанавливаются во время первого automatic tooling bootstrap, когда это безопасно для текущего coding harness.
 
 GitHub Spec Kit **не обязателен**. Он используется как [Optional Advanced Spec Mode](integrations/SPEC_KIT.md) только для сложных фаз, где formal deep specification действительно улучшает результат.
 
@@ -292,7 +293,7 @@ GitHub Spec Kit **не обязателен**. Он используется к�
 | 🐛 Нужно исправить bug | [`BUG_FIX.md`](prompts/BUG_FIX.md) |
 | 🧠 Нужна formal deep-spec сложной phase | [`ENABLE_ADVANCED_SPEC_MODE.md`](prompts/ENABLE_ADVANCED_SPEC_MODE.md) |
 
-Для большинства новичков реальный цикл будет вообще таким:
+Для большинства новичков реальный цикл будет таким:
 
 ```text
 START_NEW_PROJECT
@@ -312,40 +313,15 @@ PROJECT COMPLETE
 
 ### «Я открыл проект спустя неделю и ничего не понимаю»
 
-Запусти:
-
-```text
-prompts/PROJECT_DOCTOR.md
-```
-
-AI объяснит человеческим языком:
-
-- где сейчас находится проект;
-- что уже сделано;
-- что осталось;
-- какие проверки проходят или падают;
-- что лучше сделать следующим;
-- какой prompt вставить в новую сессию.
+Запусти `prompts/PROJECT_DOCTOR.md` — AI объяснит состояние проекта человеческим языком и даст следующий prompt.
 
 ### «Я хочу поменять идею или добавить новую функцию»
 
-Используй:
-
-```text
-prompts/CHANGE_REQUEST.md
-```
-
-Не нужно вручную переписывать Roadmap или Architecture.
+Используй `prompts/CHANGE_REQUEST.md`. Не нужно вручную переписывать Roadmap или Architecture.
 
 ### «Появился bug»
 
-Используй:
-
-```text
-prompts/BUG_FIX.md
-```
-
-AI должен искать root cause и делать минимальный корректный fix, а не переписывать весь проект.
+Используй `prompts/BUG_FIX.md`. AI должен искать root cause и делать минимальный корректный fix.
 
 ---
 
@@ -356,7 +332,7 @@ AI должен искать root cause и делать минимальный �
 | Пошагово разобраться во всех сценариях | [Usage Guide](docs/USAGE_GUIDE.md) |
 | Понять внутреннюю архитектуру workflow | [End-to-End Workflow](docs/WORKFLOW.md) |
 | Посмотреть следующий шаг текущего проекта | [NEXT_SESSION.md](docs/project/NEXT_SESSION.md) |
-| Разобраться с Superpowers / gstack / Context7 / Spec Kit | [Integrations](integrations/README.md) |
+| Разобраться с Superpowers / Semble / RTK / gstack / Context7 / Spec Kit | [Integrations](integrations/README.md) |
 | Project Doctor, Self-Audit, Updates, Versioning | [Maintenance](docs/MAINTENANCE.md) |
 | Посмотреть изменения между версиями | [Changelog](CHANGELOG.md) |
 | Предложить улучшение проекта | [Contributing](CONTRIBUTING.md) |
