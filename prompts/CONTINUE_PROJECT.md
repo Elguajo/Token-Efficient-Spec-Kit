@@ -10,6 +10,11 @@ Do not read all completed phases or full project history.
 Resolve the current phase from the status markers in `docs/project/ROADMAP.md`
 (the phase marked `[>]`), then inspect repository state and determine its status.
 
+The usual 1–3-task batch is a planning guideline, not a completion gate. Determine
+phase status solely from verified acceptance criteria. If an external blocker
+prevents a required check, keep the phase in progress and report that concrete
+blocker and affected criterion; never cite the batch size as the reason.
+
 If the current phase is still in progress:
 - implement the next 1–3 cohesive unfinished tasks;
 - do not start unrelated future phases.

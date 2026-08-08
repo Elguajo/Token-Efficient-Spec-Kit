@@ -29,6 +29,9 @@ Define sources of truth, use migrations, preserve historical business records, e
 
 ## 9. Verification before completion
 Completion requires evidence: relevant build/typecheck/lint/tests/acceptance criteria/security negatives/manual QA pass.
+An acceptance criterion that cannot be verified remains unfinished. When an external
+blocker prevents verification, report that concrete blocker rather than attributing
+the unfinished state to a task-batch guideline.
 
 ## 10. Token efficiency
 The Default Read Set is defined once, in `docs/system/TOKEN_EFFICIENCY.md`. Use it as written and do not restate it elsewhere. Avoid rereading all phases, all ADRs, master specs or full chat history.
@@ -39,7 +42,10 @@ Create only durable docs: Project Brief, Architecture, Roadmap, current phase sp
 `docs/project/NEXT_SESSION.md` is allowed as a tiny navigation/handoff document. It must not duplicate canonical project specifications.
 
 ## 12. Scope discipline
-Implement one phase or 1–3 cohesive tasks at a time. Do not implement unrelated future work while here.
+Work in one phase and normally plan 1–3 cohesive tasks per implementation batch.
+This is a planning guideline, not a completion gate: phase status is determined by
+verified acceptance criteria, never by the number of tasks attempted or completed.
+Do not implement unrelated future work while here.
 
 ## 13. Dependency discipline
 Before adding a dependency: check platform capability, maintenance, complexity reduction, security and operational cost.

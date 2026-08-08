@@ -287,15 +287,45 @@ for name in ("docs/system/PROJECT_DOCTOR.md", "prompts/PROJECT_DOCTOR.md"):
 ok("ROADMAP marker + NEXT_SESSION + next prompt, with explicit exceptions") \
     if not handoff_drift else bad("handoff contract drift", handoff_drift)
 
-# ----------------------------------------------- 9. ownership boundary
-sect("9. Framework files are outside project-owned directories")
+# ----------------------------------- 9. phase completion vs. batch size
+sect("9. Phase completion is determined by acceptance criteria, not batch size")
+PHASE_RULE_FILES = [
+    ".specify/memory/constitution.md",
+    "AGENTS.md",
+    "docs/system/TOKEN_EFFICIENCY.md",
+    "docs/system/SESSION_HANDOFF.md",
+    "prompts/CONTINUE_PROJECT.md",
+    "prompts/REVIEW_CURRENT_PHASE.md",
+]
+phase_rule_drift = []
+for name in PHASE_RULE_FILES:
+    body = text(ROOT / name).lower()
+    if not re.search(r"planning\s+guideline,\s+not a completion\s+gate", body):
+        phase_rule_drift.append(f"{name} does not make the batch/completion distinction explicit")
+    if not re.search(
+        r"verified\s+acceptance criteria|acceptance criteria\s+(?:have been |are )?verified",
+        body,
+    ):
+        phase_rule_drift.append(f"{name} does not make verified acceptance criteria the completion test")
+
+for name in ("AGENTS.md", "docs/system/TOKEN_EFFICIENCY.md",
+             "docs/system/SESSION_HANDOFF.md", "prompts/CONTINUE_PROJECT.md",
+             "prompts/REVIEW_CURRENT_PHASE.md"):
+    if not re.search(r"external\s+blocker", text(ROOT / name), re.I):
+        phase_rule_drift.append(f"{name} does not require reporting an external blocker")
+
+ok("batch guidance cannot override acceptance-criteria completion") \
+    if not phase_rule_drift else bad("phase-completion guidance drift", phase_rule_drift)
+
+# ----------------------------------------------- 10. ownership boundary
+sect("10. Framework files are outside project-owned directories")
 stray = [rel(f) for f in (ROOT / "docs/decisions").glob("ADR-*.md")
          if "Scope: framework decision" in text(f)]
 ok("framework ADRs live in .specify/decisions/") if not stray else bad(
     "framework ADR sits in project-owned docs/decisions/ and cannot be updated", stray)
 
-# -------------------------------------------------- 10. required files
-sect("10. Repository hygiene")
+# -------------------------------------------------- 11. required files
+sect("11. Repository hygiene")
 for f in ["LICENSE", ".gitignore", "docs/phases/README.md",
           "docs/decisions/README.md", "tools/audit.py"]:
     ok(f"{f} present") if (ROOT / f).exists() else bad(f"{f} missing")

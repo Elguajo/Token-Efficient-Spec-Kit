@@ -23,7 +23,10 @@ Assess:
 Prefer the smallest coherent change.
 Update only canonical docs whose truth changed.
 Create an ADR only if a consequential architecture decision changed.
-Implement only the first 1–3 required tasks and verify them.
+Start with a normal batch of 1–3 required tasks and verify them. This is a planning
+guideline, not a completion gate: resulting phase status depends only on verified
+acceptance criteria. If an external blocker prevents verification, report that
+concrete blocker and affected criterion.
 
 Before responding:
 - determine the resulting current phase/status;

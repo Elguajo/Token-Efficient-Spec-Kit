@@ -20,6 +20,11 @@ Inspect repository state and determine one status:
 - PHASE COMPLETE — current phase is done and the next roadmap phase should start;
 - PROJECT COMPLETE — implementation roadmap is complete.
 
+The usual 1–3-task batch is a planning guideline, not a completion gate. Use
+verified acceptance criteria to choose the status. If an external blocker prevents
+verification, name that blocker and the affected criterion as the reason for
+`IN PROGRESS`.
+
 Then:
 1. choose the correct next action yourself;
 2. verify/correct the markers in `docs/project/ROADMAP.md` so exactly one phase is

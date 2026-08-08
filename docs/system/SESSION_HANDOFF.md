@@ -32,6 +32,18 @@ Do not update only one or two of them. If a phase completes, move `[>]` to the n
 planned phase before writing `NEXT_SESSION.md`. If no planned phases remain, all
 phases stay `[x]` and the status is `PROJECT COMPLETE`.
 
+## Completion precedence and external blockers
+
+The usual 1–3-task implementation batch is a planning guideline, not a completion
+gate. Classify a phase solely from its verified acceptance criteria: mark it `PHASE
+COMPLETE` when all pass, even if the work spanned more or fewer tasks than usual.
+
+If an external blocker—such as unavailable staging credentials, a pending provider
+integration, or inaccessible production infrastructure—prevents a required check,
+the phase remains in progress. State that concrete blocker, the affected acceptance
+criterion, and the required follow-up; never present the task-batch guideline as
+the reason for non-completion.
+
 ---
 
 ## Non-product handoff exceptions

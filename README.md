@@ -7,7 +7,7 @@
 
 [Начать новый проект](prompts/START_NEW_PROJECT.md) · [Как пользоваться](docs/USAGE_GUIDE.md) · [Visual Guide](docs/VISUAL_GUIDE.md) · [English](README_EN.md)
 
-<sub>**v0.9.0** · [Workflow](docs/WORKFLOW.md) · [Maintenance](docs/MAINTENANCE.md) · [Changelog](CHANGELOG.md)</sub>
+<sub>**v0.9.1** · [Workflow](docs/WORKFLOW.md) · [Maintenance](docs/MAINTENANCE.md) · [Changelog](CHANGELOG.md)</sub>
 
 </div>
 
@@ -76,8 +76,12 @@ database или хостинг.
 3. Он попросит тебя выбрать вариант только при существенном business, budget,
    safety, compliance или другом необратимом trade-off.
 4. AI создаст `PROJECT_BRIEF.md`, `ARCHITECTURE.md`, `ROADMAP.md` и фазы.
-5. Подключит только полезный tooling и возьмёт первые 1–3 связанные задачи.
+5. Подключит только полезный tooling и начнёт с обычного batch из 1–3 связанных задач.
 6. В конце проверит результат и вернёт готовый `NEXT SESSION PROMPT`.
+
+Размер batch — ориентир планирования, а не ограничение завершения фазы: `PHASE
+COMPLETE` определяется только проверенными acceptance criteria. Внешний блокер
+должен быть назван как причина невыполненной проверки.
 
 ### Путь от идеи до следующей сессии
 

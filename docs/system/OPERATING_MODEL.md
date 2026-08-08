@@ -34,7 +34,9 @@ Normally choose one recommended approach. Explain rejected alternatives only for
 A phase should produce a verifiable outcome. Prefer vertical slices over arbitrary frontend/backend/database layers when possible.
 
 ## 8. Implementation batch
-Default 1–3 cohesive tasks per run. Split a huge phase before increasing context.
+Default to 1–3 cohesive tasks per implementation batch. This is a planning
+guideline, not a completion gate; verified acceptance criteria alone determine
+whether the phase is complete. Split a huge phase before increasing context.
 
 ## 9. Convergence
 Compare code vs spec vs acceptance criteria vs tests. Gaps become small follow-up tasks.

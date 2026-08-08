@@ -43,7 +43,7 @@ User outcome
 → Roadmap
 → Current Phase
 → route code question to Semble OR Serena OR native tools
-→ 1–3 tasks
+→ usual 1–3-task batch (acceptance criteria determine phase completion)
 → Superpowers/native implementation
 → RTK for compact shell output when safe
 → tests

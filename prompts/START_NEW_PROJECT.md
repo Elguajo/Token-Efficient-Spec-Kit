@@ -211,7 +211,10 @@ If Advanced Spec Mode is enabled:
 STEP 7 — START IMPLEMENTATION
 
 Unless there is a true blocker, start the phase marked `[>]` after project docs are ready.
-Implement only the first 1-3 cohesive tasks.
+Start with a normal batch of 1–3 cohesive tasks. This is a planning guideline, not
+a completion gate: phase status depends only on verified acceptance criteria. If an
+external blocker prevents verification, report that concrete blocker and affected
+criterion.
 Use current stable dependencies.
 Do not implement future phases opportunistically.
 

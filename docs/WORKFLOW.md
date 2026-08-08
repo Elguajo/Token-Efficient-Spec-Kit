@@ -28,7 +28,7 @@ CODE-CONTEXT ROUTER
     ├── known symbol / references / refactor → Serena
     └── tiny exact edit → native tools
     ↓
-1–3 TASKS
+USUAL 1–3-TASK BATCH
     ↓
 IMPLEMENTATION
     ↓
@@ -266,6 +266,10 @@ Recommended implementation batch:
 ```text
 1–3 cohesive tasks
 ```
+
+This is a planning guideline, not a completion gate. A phase is complete only when
+its acceptance criteria have been verified; external blockers must be reported as
+the concrete reason a required check remains unfinished.
 
 ### Routing rule
 

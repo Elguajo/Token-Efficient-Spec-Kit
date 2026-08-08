@@ -21,6 +21,11 @@ Check:
 Fix only gaps required to complete the current phase.
 If Spec Kit converge is available, use equivalent converge behavior: compare code against spec and execute only missing work.
 
+The usual 1–3-task batch is a planning guideline, not a completion gate. Classify
+the phase solely from verified acceptance criteria. If an external blocker prevents
+a required check, report that concrete blocker and affected criterion; never treat
+the batch size as the reason the phase is not complete.
+
 Then determine one state:
 
 A. PHASE NOT COMPLETE

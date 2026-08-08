@@ -8,7 +8,7 @@
 
 [Start a new project](prompts/START_NEW_PROJECT.md) · [How to use it](docs/USAGE_GUIDE.md) · [Visual Guide](docs/VISUAL_GUIDE.md) · [Русская версия](README.md)
 
-<sub>**v0.9.0** · [Workflow](docs/WORKFLOW.md) · [Maintenance](docs/MAINTENANCE.md) · [Changelog](CHANGELOG.md)</sub>
+<sub>**v0.9.1** · [Workflow](docs/WORKFLOW.md) · [Maintenance](docs/MAINTENANCE.md) · [Changelog](CHANGELOG.md)</sub>
 
 </div>
 
@@ -38,8 +38,12 @@ In a typical session, the AI:
 - understands the users, outcome, and constraints;
 - asks a question only when it cannot proceed safely without the answer;
 - chooses one practical stack and explains consequential decisions;
-- splits work into verifiable phases and takes usually 1–3 cohesive tasks;
+- splits work into verifiable phases and starts with a usual batch of 1–3 cohesive tasks;
 - runs appropriate tests, review, or QA and prepares the next prompt.
+
+Batch size is a planning guideline, not a completion gate: `PHASE COMPLETE` depends
+only on verified acceptance criteria. An external blocker must be named as the
+reason a required check remains unfinished.
 
 ---
 
@@ -85,7 +89,7 @@ database, or hosting provider first.
 3. It asks you to choose only when the alternatives have material budget, safety,
    compliance, or another irreversible product/business trade-off.
 4. It creates `PROJECT_BRIEF.md`, `ARCHITECTURE.md`, `ROADMAP.md`, and phases, then
-   starts the first 1–3 cohesive tasks.
+   starts with a usual batch of 1–3 cohesive tasks.
 5. At the end of the session, it verifies the result and returns a ready-to-copy
    `NEXT SESSION PROMPT`.
 

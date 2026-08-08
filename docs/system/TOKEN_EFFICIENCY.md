@@ -104,7 +104,11 @@ Phase files live at `docs/phases/NN-kebab-name.md`. See `docs/phases/README.md`.
 
 ## Granularity
 
-Implement 1-3 related tasks per run.
+Normally plan 1–3 related tasks per implementation batch. This is a planning
+guideline, not a completion gate: a phase is `PHASE COMPLETE` exactly when its
+acceptance criteria have been verified, regardless of batch size. An external
+blocker that prevents verification must be reported as the actual reason the phase
+remains in progress.
 
 ---
 

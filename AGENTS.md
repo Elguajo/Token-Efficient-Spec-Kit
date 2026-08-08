@@ -54,7 +54,11 @@ For fast-changing libraries, providers, coding tools, security APIs and installa
 ## Scope
 
 Work on one current phase.
-Usually implement only 1–3 cohesive tasks per run.
+Normally plan 1–3 cohesive tasks per implementation batch. This is a planning
+guideline, not a completion gate: determine phase status only from verified
+acceptance criteria, never from the number of tasks in a run. If an external
+blocker prevents verification, name that concrete blocker rather than blaming the
+batch guideline.
 
 ## Recommended tooling profile
 
