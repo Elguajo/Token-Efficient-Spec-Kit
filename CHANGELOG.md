@@ -4,6 +4,24 @@
 
 Формат основан на принципах Keep a Changelog, версии следуют Semantic Versioning.
 
+## [0.7.0] — 2026-08-08
+
+### Added
+
+- Serena как Recommended symbol/refactor capability;
+- `integrations/SERENA.md` с project-level overlap policy;
+- автоматическая установка/настройка Serena во время первого tooling bootstrap;
+- явный code-context router между Semble, Serena и native agent tools;
+- graceful fallback при unsupported/stale Serena language backend.
+
+### Changed
+
+- Recommended profile теперь: Token-Efficient Spec Kit + Superpowers + Semble + Serena + RTK + gstack + Context7;
+- Semble отвечает за intent-based discovery: «где находится логика X?»;
+- Serena отвечает за symbol semantics: declarations, references, implementations, diagnostics и semantic refactoring;
+- Serena generic file/search/shell/memory tools должны исключаться на project level, когда текущая upstream-версия это поддерживает;
+- добавлено правило `no-double-discovery`: Semble и Serena не должны независимо переискать один и тот же code context без причины.
+
 ## [0.6.0] — 2026-08-08
 
 ### Added
