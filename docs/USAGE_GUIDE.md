@@ -70,8 +70,6 @@ git clone https://github.com/Elguajo/Token-Efficient-Spec-Kit.git my-project
 cd my-project
 ```
 
-Для реального продукта лучше затем привязать папку к своему новому Git repository.
-
 ## Шаг 2 — открыть в AI coding agent
 
 Подойдёт repository-aware agent: Codex, Claude Code, Cursor или другой совместимый harness.
@@ -86,7 +84,7 @@ prompts/START_NEW_PROJECT.md
 
 Замени `<WHAT_I_WANT>` на обычное описание того, что хочешь получить.
 
-Можно коротко:
+Например:
 
 ```text
 Хочу сервис для генерации коммерческих предложений для архитекторов.
@@ -106,11 +104,12 @@ prompts/START_NEW_PROJECT.md
 docs/project/TOOLING_STATUS.md
 ```
 
-Если Recommended tooling ещё не готов для активного coding harness, AI запускает `prompts/SETUP_RECOMMENDED_TOOLING.md` и пытается самостоятельно установить/настроить:
+Если Recommended tooling ещё не готов, AI запускает `prompts/SETUP_RECOMMENDED_TOOLING.md` и пытается самостоятельно установить/настроить:
 
 ```text
 Superpowers  → implementation discipline / TDD / debugging
-Semble       → token-efficient code retrieval
+Semble       → intent-based code discovery
+Serena       → symbols / references / diagnostics / semantic refactoring
 RTK          → compact terminal/test/build/git output
 gstack       → review / QA / release checks
 Context7     → fresh library/API docs
@@ -118,9 +117,9 @@ Context7     → fresh library/API docs
 
 После проверки состояние сохраняется в `TOOLING_STATUS.md`, поэтому setup не повторяется в каждой сессии.
 
-Тебе может понадобиться вмешаться только если реально нужен login/OAuth, отсутствующий system runtime или глобальная настройка hooks/instructions, которая затронет другие проекты.
+Тебе может понадобиться вмешаться только если реально нужен login/OAuth, отсутствующий system runtime или глобальная настройка, которая затронет другие проекты.
 
-Semble и RTK имеют graceful fallback: если их нельзя безопасно подключить, проект продолжает работу обычными search/read/shell средствами.
+Semble, Serena и RTK имеют graceful fallback: если их нельзя безопасно использовать, проект продолжает работу обычными средствами.
 
 ## Project state
 
@@ -138,7 +137,7 @@ docs/project/NEXT_SESSION.md    → что делать дальше
 
 ```text
 Current Phase
-→ targeted code retrieval
+→ routed code context
 → 1–3 tasks
 → Implementation
 → compact verification output
@@ -150,7 +149,58 @@ Current Phase
 
 ---
 
-# 4. Recommended tooling
+# 4. Как Semble, Serena и RTK работают вместе
+
+Это важно: **AI не запускает все инструменты подряд.**
+
+Он сначала определяет тип вопроса.
+
+| Вопрос / действие | Что использовать |
+|---|---|
+| «Где находится логика оплаты подписки?» | **Semble** |
+| «Кто вызывает `refreshSession`?» | **Serena** |
+| «Какие implementations у этого interface?» | **Serena** |
+| «Переименуй symbol во всём проекте безопасно» | **Serena** |
+| «Измени одну известную строку в config» | native tools |
+| Запустить tests / build / git и не засорить context | **RTK** |
+
+Типичный совместный flow:
+
+```text
+Semble
+→ нашёл file/snippet/symbol
+→ broad discovery закончен
+→ Serena только если нужны references / diagnostics / semantic refactor
+→ implementation
+→ RTK только для shell/test/build output
+```
+
+### Почему они не конфликтуют
+
+Serena настраивается как **symbol/refactor layer**.
+
+По возможности у неё отключаются overlapping generic tools:
+
+```text
+file reading/search
+regex search/replace
+shell execution
+Serena memory
+```
+
+Долговременная память проекта остаётся в Token-Efficient canonical docs, а broad semantic discovery остаётся за Semble.
+
+Главное правило:
+
+> **Не задавай Semble и Serena один и тот же discovery-вопрос без причины.**
+
+Если Semble уже нашёл exact symbol, Serena получает его как вход для отдельной symbol-level задачи, а не начинает поиск заново.
+
+Подробнее: [`../integrations/SERENA.md`](../integrations/SERENA.md).
+
+---
+
+# 5. Recommended tooling
 
 Token-Efficient Spec Kit работает **самостоятельно** и является core workflow.
 
@@ -159,81 +209,39 @@ Default external tooling:
 ```text
 Superpowers
 + Semble
++ Serena
 + RTK
 + gstack
 + Context7
 ```
 
-Роли:
+Token-efficiency модель:
 
 ```text
-Token-Efficient Spec Kit
-→ WHAT + orchestration + project/docs context + architecture + phases + handoff
-
-Semble
-→ CODE CONTEXT: находит только релевантные chunks/locations
-
-RTK
-→ TOOL OUTPUT: сокращает verbose shell/test/build/git output
-
-Superpowers
-→ HOW: TDD, implementation, debugging, verification
-
-gstack
-→ challenge / review / browser QA / release checks
-
-Context7
-→ fresh library/API docs on demand
+Project/docs context         → Token-Efficient Spec Kit
+Intent-based code discovery  → Semble
+Symbol semantics/refactoring → Serena
+Shell/tool output            → RTK
+External docs                → Context7 on demand
 ```
 
-Главная token-efficiency модель:
-
-```text
-Project/docs context → Token-Efficient Spec Kit
-Code retrieval       → Semble
-Shell/tool output     → RTK
-External docs        → Context7 on demand
-```
-
-Semble не нужно насильно использовать для известного маленького файла. RTK не нужно использовать, если для debugging требуется полный raw output. Correctness всегда важнее token savings.
+Correctness всегда важнее token savings. Не нужно использовать внешний tool, если native operation дешевле и надёжнее.
 
 ---
 
-# 5. Нужен ли GitHub Spec Kit?
+# 6. Нужен ли GitHub Spec Kit?
 
 **Нет, не по умолчанию.**
 
-Наш core уже делает project-level:
+Наш core уже делает project-level Brief, Architecture, Roadmap, Phases, Tasks, Acceptance Criteria, Convergence и Session Handoff.
 
-```text
-Brief
-Architecture
-Roadmap
-Phases
-Tasks
-Acceptance Criteria
-Convergence
-Session Handoff
-```
-
-GitHub Spec Kit можно подключить как **Optional Advanced Spec Mode** только для сложных фаз, где formal specification реально полезна:
-
-```text
-payments
-complex permissions
-multi-tenancy
-critical migrations
-public API contracts
-large ambiguous integrations
-```
-
-В таком режиме он углубляет спецификацию внутри текущей фазы, но не заменяет Project Brief, Architecture, Roadmap или Session Handoff.
+GitHub Spec Kit можно подключить как **Optional Advanced Spec Mode** только для сложных фаз, где formal specification реально полезна.
 
 Подробнее: [`../integrations/SPEC_KIT.md`](../integrations/SPEC_KIT.md).
 
 ---
 
-# 6. Как работать по сессиям
+# 7. Как работать по сессиям
 
 В конце каждой meaningful session AI обязан определить:
 
@@ -272,7 +280,7 @@ prompts/GENERATE_NEXT_SESSION_PROMPT.md
 
 ---
 
-# 7. Ежедневные entry points
+# 8. Ежедневные entry points
 
 | Ситуация | Prompt |
 |---|---|
@@ -286,45 +294,32 @@ prompts/GENERATE_NEXT_SESSION_PROMPT.md
 | Проверить сам workflow | `prompts/AUDIT_WORKFLOW.md` |
 | Обновить framework | `prompts/UPDATE_WORKFLOW.md` |
 
-В идеальном процессе после первого запуска тебе чаще всего достаточно просто копировать `NEXT SESSION PROMPT`.
-
 ---
 
-# 8. Почему это экономит токены
-
-Token-Efficient Spec Kit экономит контекст на нескольких уровнях:
+# 9. Почему это экономит токены
 
 ```text
 1. Не загружает весь project history
 2. Держит current work в маленькой phase
-3. Использует Semble для targeted code retrieval
-4. Использует RTK для compact shell output
-5. Подтягивает Context7 только когда нужны свежие docs
+3. Использует Semble только для broad intent-based discovery
+4. Использует Serena только для точных symbol-level операций
+5. Использует RTK для compact shell output
+6. Подтягивает Context7 только когда нужны свежие docs
 ```
 
-> **Один факт — одно canonical место. Одна сессия — 1–3 связанные задачи. Загружай только decision-critical context.**
+> **Один факт — одно canonical место. Одна сессия — 1–3 связанные задачи. Один вопрос — сначала один подходящий tool.**
 
 ---
 
-# 9. Если изменились требования
+# 10. Если изменились требования
 
-Используй:
-
-```text
-prompts/CHANGE_REQUEST.md
-```
-
-AI сам определит, какие canonical docs, phases, migrations или security rules затронуты.
+Используй `prompts/CHANGE_REQUEST.md`. AI сам определит, какие canonical docs, phases, migrations или security rules затронуты.
 
 ---
 
-# 10. Если появился bug
+# 11. Если появился bug
 
-Используй:
-
-```text
-prompts/BUG_FIX.md
-```
+Используй `prompts/BUG_FIX.md`.
 
 Workflow:
 
@@ -337,114 +332,55 @@ Reproduce
 → NEXT SESSION PROMPT
 ```
 
-При debugging Semble/RTK не должны скрывать нужную информацию: AI может перейти к точечному raw/full context, если это необходимо для root cause.
+Если root cause требует понимания call/reference graph, Serena полезнее повторных grep/read циклов. Если для debugging нужен полный лог, RTK должен уступить raw output.
 
 ---
 
-# 11. Перед release
+# 12. Перед release
 
-AI выбирает релевантные quality gates по риску проекта:
-
-```text
-Acceptance criteria
-Build
-Typecheck
-Lint
-Unit / Integration tests
-E2E/browser tests
-Security negative tests
-Migrations
-Secrets/config
-Monitoring
-Critical user flow
-Rollback/recovery where relevant
-```
-
-Не каждый проект требует каждый пункт, но high-risk части не должны выпускаться только потому, что happy path работает.
+AI выбирает релевантные quality gates по риску проекта: acceptance criteria, build, typecheck, lint, tests, E2E/browser, security negatives, migrations, secrets/config, monitoring и critical flows.
 
 ---
 
-# 12. Project Doctor — если ты не понимаешь состояние проекта
+# 13. Project Doctor
 
-Запусти:
+Если не понимаешь состояние проекта, запусти:
 
 ```text
 prompts/PROJECT_DOCTOR.md
 ```
 
-Doctor не начинает новую feature-разработку. Он диагностирует repository и объясняет простыми словами:
-
-```text
-HEALTHY / NEEDS ATTENTION / BLOCKED / UNKNOWN
-какая сейчас фаза
-что уже завершено
-что осталось
-какие checks проходят или падают
-есть ли проблема с tooling/workflow
-какое одно действие лучше сделать следующим
-```
-
-В конце он также даёт `NEXT SESSION PROMPT`, если безопасный следующий шаг можно определить.
+Doctor объясняет состояние проекта простыми словами и даёт следующий безопасный шаг.
 
 ---
 
-# 13. Workflow Self-Audit — проверить сам framework
+# 14. Workflow Self-Audit
 
-Project Doctor проверяет **проект**.
-
-Workflow Self-Audit проверяет **наши правила и prompts**.
-
-Запусти:
+После значимых изменений самого framework используй:
 
 ```text
 prompts/AUDIT_WORKFLOW.md
 ```
 
-Он ищет противоречия, stale docs/prompts, duplicate ownership, лишний context loading, broken handoff, unsafe update behavior и VERSION/CHANGELOG drift.
-
-Обычно Self-Audit нужен после значимого изменения самого Token-Efficient Spec Kit, а не после каждой feature.
+Self-Audit должен также проверять, что Semble и Serena не получили overlapping default ownership.
 
 ---
 
-# 14. Версии
+# 15. Версии и обновление
 
-Текущая версия workflow:
+Текущая версия хранится в `VERSION`, история — в `CHANGELOG.md`.
 
-```text
-VERSION
-```
-
-История:
-
-```text
-CHANGELOG.md
-```
-
-Используется Semantic Versioning: `MAJOR.MINOR.PATCH`.
-
----
-
-# 15. Как безопасно обновить Token-Efficient Spec Kit
-
-Не копируй новую версию шаблона поверх проекта целиком.
-
-Используй:
+Для безопасного обновления workflow используй:
 
 ```text
 prompts/UPDATE_WORKFLOW.md
 ```
 
-Updater различает framework-managed, merge-sensitive и project-owned files. `docs/project/*`, phases, ADRs, application code, tests и migrations нельзя автоматически перезаписывать template defaults.
-
-После обновления выполняется Workflow Self-Audit.
-
-Подробнее: [`system/WORKFLOW_UPDATE_POLICY.md`](system/WORKFLOW_UPDATE_POLICY.md).
+Не копируй новую версию шаблона поверх проекта целиком.
 
 ---
 
 # Главный принцип
-
-Не управляй AI как junior-разработчиком через тысячи микроинструкций.
 
 Опиши:
 
@@ -460,8 +396,8 @@ Updater различает framework-managed, merge-sensitive и project-owned f
 как лучше построить
 как разбить работу
 какой context нужен
+какой tool дешевле и точнее для текущего вопроса
 что проверить
-какой инструмент нужен
 что делать дальше
 ```
 
