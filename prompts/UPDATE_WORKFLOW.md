@@ -63,12 +63,15 @@ After applying:
 1. run the equivalent of prompts/AUDIT_WORKFLOW.md;
 2. verify internal paths used by main prompts;
 3. verify NEXT_SESSION / Session Handoff behavior still exists;
-4. verify the target release's documented Recommended profile; for v0.6.x this is Token-Efficient Spec Kit + Superpowers + Semble + RTK + gstack + Context7;
-5. verify Semble remains code-retrieval-only and RTK remains shell/tool-output-only;
-6. verify Semble/RTK graceful fallback still exists;
-7. verify GitHub Spec Kit remains optional unless the target release explicitly documents a deliberate architecture change;
-8. record the installed workflow version only after successful application;
-9. do not modify application/business code merely to complete a framework update.
+4. verify the target release's documented Recommended profile; for v0.7.x this is Token-Efficient Spec Kit + Superpowers + Semble + Serena + RTK + gstack + Context7;
+5. verify Semble remains intent-based code-discovery-only;
+6. verify Serena remains symbol/refactor-only and does not reintroduce generic search/shell/memory ownership when the overlap policy can be applied;
+7. verify RTK remains shell/tool-output-only;
+8. verify Semble/Serena/RTK graceful fallback still exists;
+9. verify the no-double-discovery rule still routes a code-context question to one cheapest adequate tool first;
+10. verify GitHub Spec Kit remains optional unless the target release explicitly documents a deliberate architecture change;
+11. record the installed workflow version only after successful application;
+12. do not modify application/business code merely to complete a framework update.
 
 Do not silently install new global hooks or system runtimes merely because a newer framework version added an integration. Follow the target release's tooling setup policy and request approval when a global change affects unrelated projects.
 
