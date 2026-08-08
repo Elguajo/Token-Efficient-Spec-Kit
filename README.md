@@ -81,29 +81,16 @@ database или хостинг.
 
 ### Путь от идеи до следующей сессии
 
-```text
-┌───────────────────────────────┐
-│           ТВОЯ ИДЕЯ           │
-└───────────────┬───────────────┘
-                ▼
-      Product Directions
-                ↓
-      Recommended Direction
-                ↓
- Project Brief → Architecture → Roadmap
-                ↓
-       Scoped Tooling Bootstrap
-                ↓
-┌───────────────────────────────┐
-│        CURRENT PHASE          │
-│       1–3 связанные задачи    │
-└───────────────┬───────────────┘
-                ▼
-      Implement → Verify
-                ↓
-       NEXT SESSION PROMPT
-                │
-                └────► новая AI-сессия ────► Current Phase
+```mermaid
+flowchart TD
+    A["Ты описываешь идею"] --> B["Product directions"]
+    B --> C["Recommended direction"]
+    C --> D["Project Brief → Architecture → Roadmap"]
+    D --> E["Scoped Tooling Bootstrap"]
+    E --> F["Current phase: 1–3 связанные задачи"]
+    F --> G["Реализация и проверка"]
+    G --> H["NEXT SESSION PROMPT"]
+    H --> F
 ```
 
 [Все визуальные схемы →](docs/VISUAL_GUIDE.md)
