@@ -13,7 +13,8 @@
 2. Открыть его в AI coding agent
 3. Запустить prompts/START_NEW_PROJECT.md
 4. Заменить <WHAT_I_WANT> на своё описание продукта
-5. Дальше копировать NEXT SESSION PROMPT, который AI выдаёт в конце каждой сессии
+5. AI сам установит/настроит Recommended tooling, если это нужно
+6. Дальше копировать NEXT SESSION PROMPT, который AI выдаёт в конце каждой сессии
 ```
 
 Например:
@@ -26,11 +27,13 @@
 После этого AI самостоятельно:
 
 ```text
-понимает продукт
+проверяет tooling
+→ понимает продукт
 → выбирает stack
 → проектирует architecture
 → создаёт roadmap
 → делит работу на phases
+→ получает только нужный code/context
 → выполняет 1–3 задачи
 → проверяет результат
 → определяет следующий шаг
@@ -95,6 +98,32 @@ prompts/START_NEW_PROJECT.md
 
 # 3. Что происходит автоматически
 
+## Tooling bootstrap
+
+При первом старте AI проверяет:
+
+```text
+docs/project/TOOLING_STATUS.md
+```
+
+Если Recommended tooling ещё не готов для активного coding harness, AI запускает `prompts/SETUP_RECOMMENDED_TOOLING.md` и пытается самостоятельно установить/настроить:
+
+```text
+Superpowers  → implementation discipline / TDD / debugging
+Semble       → token-efficient code retrieval
+RTK          → compact terminal/test/build/git output
+gstack       → review / QA / release checks
+Context7     → fresh library/API docs
+```
+
+После проверки состояние сохраняется в `TOOLING_STATUS.md`, поэтому setup не повторяется в каждой сессии.
+
+Тебе может понадобиться вмешаться только если реально нужен login/OAuth, отсутствующий system runtime или глобальная настройка hooks/instructions, которая затронет другие проекты.
+
+Semble и RTK имеют graceful fallback: если их нельзя безопасно подключить, проект продолжает работу обычными search/read/shell средствами.
+
+## Project state
+
 AI создаёт и поддерживает:
 
 ```text
@@ -109,8 +138,10 @@ docs/project/NEXT_SESSION.md    → что делать дальше
 
 ```text
 Current Phase
+→ targeted code retrieval
 → 1–3 tasks
 → Implementation
+→ compact verification output
 → Tests / Review / QA
 → Converge
 → NEXT SESSION PROMPT
@@ -127,6 +158,8 @@ Default external tooling:
 
 ```text
 Superpowers
++ Semble
++ RTK
 + gstack
 + Context7
 ```
@@ -135,7 +168,13 @@ Superpowers
 
 ```text
 Token-Efficient Spec Kit
-→ WHAT + orchestration + architecture + phases + handoff
+→ WHAT + orchestration + project/docs context + architecture + phases + handoff
+
+Semble
+→ CODE CONTEXT: находит только релевантные chunks/locations
+
+RTK
+→ TOOL OUTPUT: сокращает verbose shell/test/build/git output
 
 Superpowers
 → HOW: TDD, implementation, debugging, verification
@@ -147,7 +186,16 @@ Context7
 → fresh library/API docs on demand
 ```
 
-`START_NEW_PROJECT.md` проверяет tooling status и может автоматически запустить setup.
+Главная token-efficiency модель:
+
+```text
+Project/docs context → Token-Efficient Spec Kit
+Code retrieval       → Semble
+Shell/tool output     → RTK
+External docs        → Context7 on demand
+```
+
+Semble не нужно насильно использовать для известного маленького файла. RTK не нужно использовать, если для debugging требуется полный raw output. Correctness всегда важнее token savings.
 
 ---
 
@@ -229,7 +277,7 @@ prompts/GENERATE_NEXT_SESSION_PROMPT.md
 | Ситуация | Prompt |
 |---|---|
 | Новый проект | `prompts/START_NEW_PROJECT.md` |
-| Продолжить работу | `prompts/CONTINUE_PROJECT.md` |
+| Продолжить работу | предыдущий `NEXT SESSION PROMPT` |
 | Проверить/закрыть phase | `prompts/REVIEW_CURRENT_PHASE.md` |
 | Не понимаю следующий шаг | `prompts/GENERATE_NEXT_SESSION_PROMPT.md` |
 | Хочу понять состояние проекта | `prompts/PROJECT_DOCTOR.md` |
@@ -244,21 +292,17 @@ prompts/GENERATE_NEXT_SESSION_PROMPT.md
 
 # 8. Почему это экономит токены
 
-Обычная сессия читает:
+Token-Efficient Spec Kit экономит контекст на нескольких уровнях:
 
 ```text
-Constitution
-Project Brief
-Architecture
-Engineering Rules
-Current Phase
-relevant ADR
-relevant code/tests
+1. Не загружает весь project history
+2. Держит current work в маленькой phase
+3. Использует Semble для targeted code retrieval
+4. Использует RTK для compact shell output
+5. Подтягивает Context7 только когда нужны свежие docs
 ```
 
-И не перечитывает весь проект без необходимости.
-
-> **Один факт — одно canonical место. Одна сессия — 1–3 связанные задачи.**
+> **Один факт — одно canonical место. Одна сессия — 1–3 связанные задачи. Загружай только decision-critical context.**
 
 ---
 
@@ -292,6 +336,8 @@ Reproduce
 → Verification
 → NEXT SESSION PROMPT
 ```
+
+При debugging Semble/RTK не должны скрывать нужную информацию: AI может перейти к точечному raw/full context, если это необходимо для root cause.
 
 ---
 
@@ -340,13 +386,6 @@ HEALTHY / NEEDS ATTENTION / BLOCKED / UNKNOWN
 
 В конце он также даёт `NEXT SESSION PROMPT`, если безопасный следующий шаг можно определить.
 
-Это полезно, если:
-
-- давно не открывал проект;
-- другая AI-сессия закончилась непонятно;
-- не уверен, завершён ли текущий phase;
-- видишь ошибки, но не понимаешь насколько они критичны.
-
 ---
 
 # 13. Workflow Self-Audit — проверить сам framework
@@ -361,17 +400,7 @@ Workflow Self-Audit проверяет **наши правила и prompts**.
 prompts/AUDIT_WORKFLOW.md
 ```
 
-Он ищет:
-
-```text
-противоречия между Constitution / AGENTS / README / prompts
-stale documentation
-duplicate planning ownership
-лишний context loading
-сломанный Session Handoff
-небезопасный update behavior
-несовпадение VERSION / CHANGELOG
-```
+Он ищет противоречия, stale docs/prompts, duplicate ownership, лишний context loading, broken handoff, unsafe update behavior и VERSION/CHANGELOG drift.
 
 Обычно Self-Audit нужен после значимого изменения самого Token-Efficient Spec Kit, а не после каждой feature.
 
@@ -391,13 +420,7 @@ VERSION
 CHANGELOG.md
 ```
 
-Используется Semantic Versioning:
-
-```text
-MAJOR.MINOR.PATCH
-```
-
-Это помогает понять, насколько далеко конкретный проект от актуальной версии workflow и нужны ли migration steps.
+Используется Semantic Versioning: `MAJOR.MINOR.PATCH`.
 
 ---
 
@@ -411,39 +434,9 @@ MAJOR.MINOR.PATCH
 prompts/UPDATE_WORKFLOW.md
 ```
 
-Updater должен разделять файлы на:
+Updater различает framework-managed, merge-sensitive и project-owned files. `docs/project/*`, phases, ADRs, application code, tests и migrations нельзя автоматически перезаписывать template defaults.
 
-### Framework-managed
-
-```text
-docs/system/*
-integrations/*
-templates/*
-prompts/*
-VERSION
-CHANGELOG.md
-```
-
-### Merge-sensitive
-
-```text
-.specify/memory/constitution.md
-AGENTS.md
-```
-
-### Project-owned — нельзя автоматически перезаписывать
-
-```text
-docs/project/*
-docs/phases/*
-docs/decisions/*
-source code
-tests
-migrations
-credentials
-```
-
-После обновления обязательно выполняется Workflow Self-Audit.
+После обновления выполняется Workflow Self-Audit.
 
 Подробнее: [`system/WORKFLOW_UPDATE_POLICY.md`](system/WORKFLOW_UPDATE_POLICY.md).
 
@@ -466,6 +459,7 @@ credentials
 ```text
 как лучше построить
 как разбить работу
+какой context нужен
 что проверить
 какой инструмент нужен
 что делать дальше
