@@ -6,7 +6,7 @@
 
 **From idea to verified result.**
 
-[Start a new project](prompts/START_NEW_PROJECT.md) · [How to use it](docs/USAGE_GUIDE.md) · [Русская версия](README.md)
+[Start a new project](prompts/START_NEW_PROJECT.md) · [How to use it](docs/USAGE_GUIDE.md) · [Visual Guide](docs/VISUAL_GUIDE.md) · [Русская версия](README.md)
 
 <sub>**v0.8.2** · [Workflow](docs/WORKFLOW.md) · [Maintenance](docs/MAINTENANCE.md) · [Changelog](CHANGELOG.md)</sub>
 
@@ -100,16 +100,8 @@ Your idea
 → NEXT SESSION PROMPT
 ```
 
-```mermaid
-flowchart TD
-    A["Describe your idea"] --> B["Product directions"]
-    B --> C["Recommended direction"]
-    C --> D["Brief, Architecture, and Roadmap"]
-    D --> E["Current phase: 1–3 tasks"]
-    E --> F["Implementation and verification"]
-    F --> G["NEXT SESSION PROMPT"]
-    G --> E
-```
+See the full [Visual Guide](docs/VISUAL_GUIDE.md) for the architecture, tool router,
+session handoff, context budget, and maintenance diagrams.
 
 ---
 
@@ -158,7 +150,8 @@ reason. Project Brief, Architecture, Roadmap, and phase files remain the project
 long-term memory; tools do not create a second source of truth.
 
 For the complete model, fallback behavior, and ownership boundaries, see the
-[End-to-End Workflow](docs/WORKFLOW.md) and [Integrations](integrations/README.md).
+[End-to-End Workflow](docs/WORKFLOW.md), [Visual Guide](docs/VISUAL_GUIDE.md), and
+[Integrations](integrations/README.md).
 
 ---
 
@@ -197,6 +190,7 @@ complex phases.
 | I want to… | Open |
 |---|---|
 | Follow every workflow scenario step by step | [Usage Guide](docs/USAGE_GUIDE.md) |
+| Understand the system visually | [Visual Guide](docs/VISUAL_GUIDE.md) |
 | Understand the workflow model | [End-to-End Workflow](docs/WORKFLOW.md) |
 | See the current project's next step | [NEXT_SESSION.md](docs/project/NEXT_SESSION.md) |
 | Configure or understand integrations | [Integrations](integrations/README.md) |
