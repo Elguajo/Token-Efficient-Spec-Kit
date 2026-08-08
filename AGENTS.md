@@ -70,7 +70,10 @@ Token-Efficient Spec Kit
 → CORE: WHAT + orchestration + project/docs context + handoff
 
 Semble
-→ CODE CONTEXT: targeted semantic/hybrid code retrieval
+→ CODE DISCOVERY: intent-based semantic/hybrid retrieval
+
+Serena
+→ SYMBOL / REFACTOR: references, implementations, diagnostics, semantic edits
 
 RTK
 → TOOL OUTPUT: compact terminal/test/build/git output
@@ -93,11 +96,18 @@ Use the smallest context source that can answer the current question.
 Project/docs context
 → canonical Token-Efficient project files
 
-Unfamiliar/non-trivial code discovery
-→ prefer Semble when available
+Intent question / unfamiliar code area / “where is X implemented?”
+→ Semble
 
-Known exact symbol/small file
-→ native exact search/read is fine
+Known symbol / references / implementations / diagnostics / semantic rename or edit
+→ Serena
+
+Semble already found the exact relevant symbol
+→ do NOT repeat broad discovery in Serena
+→ use Serena only for the distinct symbol-level operation
+
+Known tiny file/string edit
+→ native exact search/read/edit is fine
 
 Verbose supported shell output
 → prefer RTK when verified safe
@@ -106,11 +116,17 @@ Fresh external API/library behavior
 → Context7 / current primary docs on demand
 ```
 
+Do not independently call Semble + Serena + grep for the same discovery question.
+A second tool is justified when it answers a different question, verifies an ambiguous result, or provides a fallback after failure.
+
+Serena should be configured according to `integrations/SERENA.md` so generic file/search/shell/memory tools are excluded when current upstream supports that configuration.
+Serena memory must not compete with Project Brief / Architecture / Roadmap / NEXT_SESSION.
+
 Do not use Semble just because it is installed when a direct small read is cheaper.
 Do not use RTK when raw output is needed or filtering may remove critical diagnostics.
 Correctness outranks token savings.
 
-If Semble or RTK is unavailable or unsafe, degrade gracefully to native targeted search/read or native shell output. They must not block product work.
+If Semble, Serena or RTK is unavailable or unsafe, degrade gracefully to native targeted tools. They must not block product work.
 
 ### Optional Advanced Spec Mode
 
@@ -143,7 +159,7 @@ Do not create a second project roadmap or duplicate canonical project docs.
 
 Read `integrations/TOOLING_POLICY.md` only when configuring/invoking integrations or when ownership is ambiguous.
 
-Installed does not mean always loaded.
+Installed does not mean always loaded or always called.
 Invoke a tool only when the task benefits from it.
 
 ## Security-sensitive work
