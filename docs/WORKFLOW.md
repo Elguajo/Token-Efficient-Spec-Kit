@@ -19,11 +19,15 @@ ROADMAP
     ↓
 CURRENT PHASE
     ↓
+TARGETED CODE RETRIEVAL
+    ↓
 1–3 TASKS
     ↓
 IMPLEMENTATION
     ↓
-VERIFICATION / REVIEW / QA
+COMPACT VERIFICATION OUTPUT
+    ↓
+REVIEW / QA
     ↓
 CONVERGENCE
     ↓
@@ -69,7 +73,13 @@ Session Handoff
 
 ```text
 Token-Efficient Spec Kit
-= WHAT + orchestration + project memory + handoff
+= WHAT + orchestration + project/docs context + handoff
+
+Semble
+= CODE CONTEXT: targeted semantic/hybrid code retrieval
+
+RTK
+= TOOL OUTPUT: compact terminal/test/build/git output
 
 Superpowers
 = HOW: TDD, implementation discipline, systematic debugging, verification
@@ -82,6 +92,15 @@ Context7
 
 GitHub Spec Kit
 = OPTIONAL Advanced Spec Mode for formal deep specification inside a difficult phase
+```
+
+Token-efficiency layers:
+
+```text
+Project/docs context → Token-Efficient Spec Kit
+Code retrieval       → Semble
+Shell/tool output     → RTK
+Fresh external docs  → Context7 on demand
 ```
 
 Если два инструмента пытаются создать competing project-level plans, Token-Efficient canonical docs побеждают.
@@ -114,9 +133,22 @@ Default Recommended profile:
 
 ```text
 Superpowers
+Semble
+RTK
 gstack
 Context7
 ```
+
+Bootstrap запускается автоматически из `START_NEW_PROJECT.md`, если `TOOLING_STATUS.md` показывает, что environment не готов.
+
+Rules:
+
+- использовать current official installation docs;
+- предпочитать безопасный user/project scope;
+- Semble подключать через MCP, когда active harness это поддерживает;
+- RTK реально проверять после install, а не доверять только success installer;
+- если RTK требует global hooks/instructions для всех проектов и нет безопасного project-scoped пути — запросить одноразовое подтверждение;
+- Semble/RTK имеют graceful fallback и не блокируют продукт.
 
 GitHub Spec Kit не устанавливается по умолчанию.
 
@@ -173,7 +205,7 @@ Roadmap depth адаптируется к сложности проекта.
 
 ---
 
-## STATE 5 — CURRENT PHASE
+## STATE 5 — CURRENT PHASE + CODE RETRIEVAL
 
 Canonical input:
 
@@ -199,6 +231,18 @@ Recommended implementation batch:
 ```text
 1–3 cohesive tasks
 ```
+
+### Code-context routing
+
+For unfamiliar/non-trivial repository exploration:
+
+```text
+Semble query
+→ relevant snippets/locations
+→ read only files/ranges needed for implementation
+```
+
+Use native exact search/read instead when the exact symbol/file is already known or the repository is tiny.
 
 ### Optional Advanced Spec Mode
 
@@ -246,7 +290,7 @@ entire repository without need
 
 ---
 
-## STATE 7 — VERIFICATION
+## STATE 7 — VERIFICATION / TOOL OUTPUT
 
 Relevant checks may include:
 
@@ -261,7 +305,18 @@ security negative tests
 manual QA
 ```
 
-The exact set depends on project type and risk.
+When RTK is installed and verified safe for the active command/harness, use it to reduce verbose output before it enters AI context.
+
+Correctness outranks compression. If compact output is insufficient:
+
+```text
+compact result
+→ recover raw/full diagnostics
+→ diagnose
+→ return to compact mode afterward
+```
+
+The exact checks depend on project type and risk.
 
 ---
 
@@ -356,6 +411,8 @@ Brief
 
 Examples: landing page, CLI, small script, simple automation.
 
+For very small projects, Minimal profile may be sufficient even if Recommended tools are available globally.
+
 ## Tier M
 
 ```text
@@ -363,6 +420,7 @@ Brief
 → Architecture
 → Roadmap
 → Phases
+→ Targeted code retrieval
 → Implementation batches
 → Converge
 → Handoff
@@ -428,7 +486,14 @@ ARCHITECTURE
 ENGINEERING_RULES
 Current Phase
 Relevant ADR
-Relevant source/tests
+```
+
+Then retrieve only relevant source/tests:
+
+```text
+Semble when semantic/broad discovery is useful
+or
+native exact search/read for known local context
 ```
 
 ## Bug fix
@@ -441,6 +506,7 @@ relevant code
 relevant tests
 ```
 
+Use raw diagnostics when RTK compression is insufficient for root-cause analysis.
 Load broader architecture only if needed.
 
 ## Change request
@@ -474,6 +540,8 @@ code/tests
 NEXT_SESSION as navigation only
 ```
 
+Semble indexes and RTK savings/output caches are operational tooling state, not canonical product truth.
+
 Do not depend on old chats to remember critical project truth.
 Do not copy every chat message into repository docs either.
 
@@ -487,6 +555,8 @@ Keep:
 compact canonical files
 small phase specs
 1–3 task batches
+targeted code retrieval
+compact tool output
 selective research
 selective reviews
 optional tooling only when useful
@@ -499,6 +569,8 @@ duplicate PRDs
 parallel roadmaps
 raw research dumps
 reading the whole repo every run
+broad grep + full-file loops when targeted retrieval works
+verbose terminal logs when compact output preserves the signal
 loading installed tools just because they exist
 ```
 
@@ -520,11 +592,14 @@ At any moment AI should be able to answer:
 3. What are we doing now?
    → CURRENT PHASE
 
-4. What proves it is done?
+4. What code context is actually needed?
+   → Semble/native targeted retrieval
+
+5. What proves it is done?
    → ACCEPTANCE CRITERIA + TESTS
 
-5. What should the user do next?
+6. What should the user do next?
    → NEXT_SESSION
 ```
 
-If these five answers are clear, the workflow is healthy.
+If these answers are clear and retrieval/output remains targeted, the workflow is healthy.
