@@ -1,0 +1,59 @@
+# This repository is cloned as the root of your product, so this file covers
+# the noise a real project generates. Add stack-specific entries as you go.
+
+# secrets - never commit
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets.*
+.specify/credentials*
+
+# dependencies
+node_modules/
+vendor/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pnpm-store/
+
+# build output
+dist/
+build/
+out/
+target/
+*.tsbuildinfo
+.next/
+.nuxt/
+.svelte-kit/
+
+# test / coverage
+coverage/
+.nyc_output/
+.pytest_cache/
+htmlcov/
+
+# tooling caches
+.cache/
+.turbo/
+.parcel-cache/
+.eslintcache
+.ruff_cache/
+.mypy_cache/
+.serena/cache/
+.semble/
+
+# editors / OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.swp
+
+# logs
+*.log
+npm-debug.log*
+yarn-error.log*

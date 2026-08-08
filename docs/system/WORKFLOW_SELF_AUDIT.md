@@ -6,6 +6,25 @@ This audit checks the **workflow itself**, not application code quality.
 
 ---
 
+## Evidence comes from tools/audit.py
+
+```bash
+python3 tools/audit.py
+```
+
+Run it first and quote its verdict. Everything it checks is decided by the script,
+not by reading. The prose checks below only cover what a script cannot judge:
+whether the guidance is coherent, whether autonomy boundaries still make sense, and
+whether the workflow is still explainable to a non-developer.
+
+A self-audit that reports HEALTHY without the script's output is a claim without
+evidence and violates Constitution section 9.
+
+CI runs the same script on every push and pull request
+(`.github/workflows/audit.yml`), so a red audit blocks the change.
+
+---
+
 ## What to compare
 
 Audit these layers against each other:
@@ -74,6 +93,8 @@ Context7
 GitHub Spec Kit
 → optional Advanced Spec Mode only
 ```
+> Canonical profile definition: [`../../integrations/PROFILES.md`](../../integrations/PROFILES.md). This listing is a copy for reading convenience — if the two disagree, PROFILES.md wins.
+
 
 Flag any file that:
 

@@ -12,8 +12,13 @@ At the end of every meaningful implementation/review session, the AI agent must:
 
 1. determine the current project/phase state from canonical repository docs and code;
 2. decide the correct next action;
-3. update `docs/project/NEXT_SESSION.md`;
-4. include a ready-to-copy **NEXT SESSION PROMPT** in the final response.
+3. update the phase status markers in `docs/project/ROADMAP.md` so that exactly one
+   phase is marked `[>] IN PROGRESS` (or all are `[x]` when the project is complete);
+4. update `docs/project/NEXT_SESSION.md`;
+5. include a ready-to-copy **NEXT SESSION PROMPT** in the final response.
+
+Step 3 is what makes the handoff recoverable: `NEXT_SESSION.md` may be lost or go
+stale, `ROADMAP.md` is canonical state.
 
 The user can then open a fresh AI session, paste that prompt, and continue without re-explaining the project.
 
@@ -65,20 +70,25 @@ The handoff must:
 Example:
 
 ```text
-Continue Phase 03 — Authentication.
+Continue Phase 01 - Authentication.
 
-Read only the Constitution, Project Brief, Architecture, Engineering Rules,
-current Phase 03 spec, relevant ADRs and directly relevant auth code/tests.
+Read only the Default Read Set from docs/system/TOKEN_EFFICIENCY.md, plus the
+auth code and tests directly relevant to the tasks below.
 
-Current phase is not complete. Implement the next unfinished tasks:
+docs/project/ROADMAP.md marks Phase 01 as [>] IN PROGRESS. Implement the next
+unfinished tasks:
 1. email verification;
 2. password reset;
 3. negative authorization tests.
 
-Do not start Phase 04.
+Do not start Phase 02.
+Route code questions through one tool: Semble if the location is unknown, Serena
+if the symbol is known, native tools for a tiny exact edit. Do not rediscover the
+same code twice.
+
 Run relevant lint/typecheck/tests/build.
-At the end update docs/project/NEXT_SESSION.md and give me a ready-to-copy
-NEXT SESSION PROMPT.
+At the end update the ROADMAP marker and docs/project/NEXT_SESSION.md, then give
+me a ready-to-copy NEXT SESSION PROMPT.
 ```
 
 ---
@@ -105,27 +115,23 @@ The handoff must:
 Example:
 
 ```text
-Phase 03 — Authentication is complete.
-Start Phase 04 — Asset Library.
+Phase 01 - Authentication is complete.
+Start Phase 02 - Asset Library.
 
-Read only:
-1. .specify/memory/constitution.md
-2. docs/project/PROJECT_BRIEF.md
-3. docs/project/ARCHITECTURE.md
-4. docs/system/ENGINEERING_RULES.md
-5. docs/phases/04-asset-library.md
-6. directly relevant ADRs and source/tests
+Read only the Default Read Set from docs/system/TOKEN_EFFICIENCY.md. The current
+phase file is docs/phases/02-asset-library.md.
 
 Do not reread all completed phases unless a real cross-phase dependency requires it.
-Inspect the repository first, then identify and implement the first 1–3 cohesive
-Phase 04 tasks.
+Inspect the repository first, then identify and implement the first 1-3 cohesive
+Phase 02 tasks.
 
-Use Spec Kit for WHAT, Superpowers for HOW, gstack selectively for review/QA,
-and Context7 only when fresh library/API docs are needed.
+Token-Efficient Spec Kit owns WHAT and orchestration. Superpowers owns HOW.
+Route a code question to exactly one of Semble / Serena / native tools. Use gstack
+selectively for review or QA, Context7 only when fresh library/API docs are needed.
 
 Run relevant verification.
-At the end update docs/project/NEXT_SESSION.md and give me the next ready-to-copy
-NEXT SESSION PROMPT.
+At the end mark Phase 02 as [>] in docs/project/ROADMAP.md, update
+docs/project/NEXT_SESSION.md, and give me the next ready-to-copy NEXT SESSION PROMPT.
 ```
 
 ---
@@ -192,12 +198,12 @@ The prompt should contain only information that the next agent cannot reliably r
 Canonical product truth remains in:
 
 ```text
-PROJECT_BRIEF.md
-ARCHITECTURE.md
-ROADMAP.md
-current phase spec
-ADRs
-code/tests
+PROJECT_BRIEF.md      product truth
+ARCHITECTURE.md       chosen stack/system
+ROADMAP.md            phase order AND the current-phase marker
+current phase spec    scope and acceptance criteria
+ADRs                  why a major decision was made
+code/tests            the product itself
 ```
 
 `NEXT_SESSION.md` only answers:

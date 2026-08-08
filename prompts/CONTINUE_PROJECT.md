@@ -3,21 +3,12 @@
 ````text
 Continue the current project autonomously.
 
-Read only:
-1. .specify/memory/constitution.md
-2. docs/project/PROJECT_BRIEF.md
-3. docs/project/ARCHITECTURE.md
-4. docs/project/ROADMAP.md
-5. docs/system/ENGINEERING_RULES.md
-6. docs/system/TOKEN_EFFICIENCY.md
-7. docs/system/SESSION_HANDOFF.md
-8. current phase file
-9. directly relevant ADR(s)
-10. relevant source/tests
+Read only the Default Read Set defined in `docs/system/TOKEN_EFFICIENCY.md`.
 
 Do not read all completed phases or full project history.
 
-Inspect repository state and determine the current phase status.
+Resolve the current phase from the status markers in `docs/project/ROADMAP.md`
+(the phase marked `[>]`), then inspect repository state and determine its status.
 
 If the current phase is still in progress:
 - implement the next 1–3 cohesive unfinished tasks;

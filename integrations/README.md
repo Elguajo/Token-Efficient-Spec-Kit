@@ -15,6 +15,8 @@ Token-Efficient Spec Kit
 + gstack
 + Context7
 ```
+> Canonical profile definition: [`PROFILES.md`](PROFILES.md). This listing is a copy for reading convenience — if the two disagree, PROFILES.md wins.
+
 
 Роли:
 

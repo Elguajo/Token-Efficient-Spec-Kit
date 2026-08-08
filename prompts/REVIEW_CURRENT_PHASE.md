@@ -3,16 +3,8 @@
 ````text
 Review the current implementation against the current phase spec.
 
-Read only:
-- .specify/memory/constitution.md
-- docs/project/PROJECT_BRIEF.md
-- docs/project/ARCHITECTURE.md
-- docs/project/ROADMAP.md
-- docs/system/ENGINEERING_RULES.md
-- docs/system/SESSION_HANDOFF.md
-- current phase
-- relevant ADR(s)
-- relevant source/tests
+Read only the Default Read Set defined in `docs/system/TOKEN_EFFICIENCY.md`.
+Resolve the current phase from the `[>]` marker in `docs/project/ROADMAP.md`.
 
 Do not start the next phase during this review.
 

@@ -21,64 +21,33 @@ Act as a senior engineering decision-maker:
 - use creative ideas where requirements are unspecified;
 - never override explicit constraints.
 
-READ FIRST:
+READ FIRST (initialization only, once):
 1. .specify/memory/constitution.md
 2. docs/system/OPERATING_MODEL.md
 3. docs/system/DECISION_FRAMEWORK.md
 4. docs/system/ENGINEERING_RULES.md
 5. docs/system/TOKEN_EFFICIENCY.md
 6. docs/system/CREATIVE_AUTONOMY.md
-7. docs/system/SESSION_HANDOFF.md
-8. docs/project/TOOLING_STATUS.md
+
+The session handoff contract is already in AGENTS.md; do not load
+docs/system/SESSION_HANDOFF.md unless the handoff format is unclear.
 
 Token-Efficient Spec Kit is the canonical core workflow.
 Do not assume GitHub Spec Kit is required.
 
 Ask a question only if a missing fact is a true blocker according to the Constitution. Otherwise proceed autonomously.
 
-STEP 0 — AUTOMATIC TOOLING BOOTSTRAP
+STEP 0 — DETECT THE HARNESS
 
-Inspect `docs/project/TOOLING_STATUS.md`.
+Identify the active coding harness, OS and available runtimes.
+Read docs/project/TOOLING_STATUS.md to see what is already configured.
 
-If Recommended tooling is ready for the active harness, do not reinstall it or reread all integration docs.
+Install nothing yet. At this point you do not know the language, the stack or the
+size of the project, so you cannot know which tooling is worth its setup cost.
 
-If tooling is not initialized, incomplete, stale, or belongs to another harness:
-1. read `prompts/SETUP_RECOMMENDED_TOOLING.md`;
-2. automatically install/configure the default Recommended profile when safe:
-   - Superpowers;
-   - Semble;
-   - Serena;
-   - RTK;
-   - gstack;
-   - Context7;
-3. preserve the Constitution and project docs;
-4. use current official upstream installation instructions;
-5. prefer safe user/project-scoped integration;
-6. verify each tool instead of trusting installer success;
-7. update `docs/project/TOOLING_STATUS.md`;
-8. continue automatically once tooling is ready or safely degraded.
+Pause only if you cannot determine the harness at all.
 
-Recommended token-efficiency layers:
-
-```text
-Project/docs context         → Token-Efficient Spec Kit
-Intent-based code discovery  → Semble
-Symbol semantics/refactoring → Serena
-Shell/tool output            → RTK
-Fresh external docs          → Context7 on demand
-```
-
-Graceful fallback:
-- Semble unavailable → use native targeted search/read;
-- Serena unavailable/unsupported/stale → use Semble/native targeted search/refactor;
-- RTK unavailable/unsafe → use native shell commands with scoped output;
-- external tooling must not block product initialization unless the product itself requires it.
-
-GitHub Spec Kit and the Spec Kit ↔ Superpowers bridge are OPTIONAL Advanced Spec Mode tools. Do not install them during default bootstrap.
-
-Pause only for genuine login/OAuth, missing global/system runtime approval, destructive overwrite approval, inability to determine the coding harness, or a global agent hook/instruction change that would affect unrelated projects and has no safe project-scoped alternative.
-
-STEP 1 — UNDERSTAND
+STEP 1 — UNDERSTAND AND CLASSIFY
 
 Create/update `docs/project/PROJECT_BRIEF.md` with:
 - desired outcome;
@@ -96,13 +65,24 @@ Create/update `docs/project/PROJECT_BRIEF.md` with:
 
 Keep it compact.
 
-STEP 2 — RESEARCH ONLY WHERE NEEDED
+STEP 2 — ROUTE PROCESS BY COMPLEXITY/RISK
+
+Tier S:
+brief -> short plan -> tasks -> implement -> verify
+Do not create a heavy roadmap.
+
+Tier M:
+brief -> architecture -> roadmap -> phase tasks -> implementation batches -> converge
+
+Tier L/high-risk:
+smaller phases + stronger review/negative tests/analysis only where justified.
+
+STEP 3 — RESEARCH ONLY WHERE NEEDED
 
 Before choosing fast-changing technologies, providers or security-sensitive APIs, verify current official documentation.
-Use Context7 when fresh library/API documentation is useful, but not for every trivial decision.
 Save only conclusions that influence implementation.
 
-STEP 3 — CHOOSE ARCHITECTURE
+STEP 4 — CHOOSE ARCHITECTURE
 
 Create/update `docs/project/ARCHITECTURE.md`.
 Choose ONE recommended default stack unless alternatives have materially different business/product tradeoffs.
@@ -116,11 +96,18 @@ Include:
 - operational assumptions;
 - what would trigger architecture change.
 
-Create ADRs only for consequential hard-to-reverse decisions.
+Create ADRs only for consequential hard-to-reverse decisions, in `docs/decisions/`
+starting at ADR-001.
 
-STEP 4 — CREATE ROADMAP
+STEP 5 — CREATE ROADMAP
 
-Create/update `docs/project/ROADMAP.md` and phase files in `docs/phases/`.
+Create/update `docs/project/ROADMAP.md` from `templates/ROADMAP.template.md` and
+phase files in `docs/phases/` named `NN-kebab-name.md`.
+
+The roadmap carries the phase status markers. Mark exactly one phase `[>] IN PROGRESS`
+and the rest `[ ] PLANNED`. This marker is the canonical answer to "which phase is
+current" for every later session.
+
 Prefer independently verifiable vertical outcomes.
 Do not create unnecessary phases for small projects.
 
@@ -134,16 +121,47 @@ Each phase contains only:
 - relevant negative/security tests;
 - Verification.
 
-STEP 5 — ROUTE PROCESS BY COMPLEXITY/RISK
+STEP 6 — TOOLING BOOTSTRAP, SCOPED TO WHAT YOU NOW KNOW
 
-Tier S:
-brief → short plan → tasks → implement → verify
+Only now are the language, stack and tier known, so the profile can be chosen
+instead of guessed.
 
-Tier M:
-brief → architecture → roadmap → phase tasks → implementation batches → converge
+Install immediately when safe (useful before any code exists):
+- Superpowers  -> implementation discipline, TDD, debugging;
+- Context7     -> fresh library/API docs.
 
-Tier L/high-risk:
-smaller phases + stronger review/negative tests/analysis only where justified.
+Defer until a codebase actually exists — normally the end of the first
+implementation phase, and record the intent in docs/project/TOOLING_STATUS.md:
+- Semble -> intent-based code discovery. Nothing to discover in an empty repo.
+- Serena -> symbol navigation. Requires a language backend for the chosen stack;
+            skip entirely if the stack has no supported backend.
+- RTK    -> terminal output compression. Worth it once builds and test suites are
+            verbose enough to matter.
+
+Skip by tier:
+- Tier S -> Superpowers + Context7 are usually the whole profile. Do not install a
+            language server and a semantic index for a landing page or a small CLI.
+- Tier M/L -> full Recommended profile once code exists.
+
+Rules:
+1. read `prompts/SETUP_RECOMMENDED_TOOLING.md` before installing;
+2. use current official upstream installation instructions;
+3. prefer safe user/project-scoped integration;
+4. verify each tool instead of trusting installer success;
+5. preserve the Constitution and project docs;
+6. update `docs/project/TOOLING_STATUS.md` with what was installed, what was
+   deferred and why;
+7. continue automatically once tooling is ready or safely degraded.
+
+Graceful fallback:
+- Semble unavailable -> native targeted search/read;
+- Serena unavailable/unsupported/stale -> Semble/native targeted search/refactor;
+- RTK unavailable/unsafe -> native shell commands with scoped output;
+- external tooling must not block product work unless the product itself requires it.
+
+GitHub Spec Kit and the Spec Kit <-> Superpowers bridge are OPTIONAL Advanced Spec Mode tools. Do not install them during default bootstrap.
+
+Pause only for genuine login/OAuth, missing global/system runtime approval, destructive overwrite approval, or a global agent hook/instruction change that would affect unrelated projects and has no safe project-scoped alternative.
 
 OPTIONAL ADVANCED SPEC MODE:
 If the CURRENT phase is materially ambiguous, cross-cutting or high-risk and formal specification would clearly improve quality, you may recommend or enable GitHub Spec Kit for that phase only.
@@ -152,61 +170,32 @@ Examples: payments, complex authorization, public APIs, multi-tenancy boundaries
 If Advanced Spec Mode is enabled:
 - Token-Efficient Spec Kit remains project-level source of truth;
 - GitHub Spec Kit may deepen specification/planning inside the current phase;
-- an optional current Spec Kit ↔ Superpowers bridge may be used;
 - do not create a second project roadmap or duplicate canonical project docs.
 
-STEP 6 — START IMPLEMENTATION
+STEP 7 — START IMPLEMENTATION
 
-Unless there is a true blocker, start the first roadmap phase after project docs are ready.
-Implement only the first 1–3 cohesive tasks.
+Unless there is a true blocker, start the phase marked `[>]` after project docs are ready.
+Implement only the first 1-3 cohesive tasks.
 Use current stable dependencies.
 Do not implement future phases opportunistically.
 
-Context/tool ownership:
-- Token-Efficient Spec Kit = WHAT + orchestration + project/docs context + phases + convergence + handoff;
-- Semble = intent-based CODE DISCOVERY when location is unknown;
-- Serena = SYMBOL / REFACTOR layer when a symbol/candidate area is known or semantic references/refactoring are needed;
-- RTK = compact SHELL/TOOL OUTPUT when safe;
-- Superpowers = HOW / TDD / debugging / implementation discipline;
-- gstack = selective challenge / review / QA;
-- Context7 = fresh external docs when needed;
-- GitHub Spec Kit = optional Advanced Spec Mode only.
+Context/tool ownership and the code-context router are defined once in
+`integrations/TOOLING_POLICY.md`. The short form: route a code question to exactly
+one of Semble (location unknown), Serena (symbol known), or native tools (tiny exact
+edit). Do not rediscover the same code with two tools. Correctness outranks token
+savings; retrieve raw output when debugging requires it.
 
-CODE-CONTEXT ROUTER:
-
-```text
-Question: “Where is the logic related to X?” / unfamiliar area
-→ Semble
-
-Question: “Who references this symbol?” / implementations / diagnostics / semantic rename/edit
-→ Serena
-
-Semble already found the exact relevant symbol
-→ do NOT make Serena rediscover the repository
-→ use Serena only for the distinct symbol-level operation
-
-Known tiny file/string edit
-→ native agent tools
-```
-
-Do not independently call Semble + Serena + grep for the same discovery question.
-Escalate only when the next capability answers a different question or the previous one failed.
-
-For verbose supported terminal commands, prefer RTK when its integration is verified safe.
-Correctness always outranks token savings; retrieve raw/full output when debugging requires it.
-
-STEP 7 — VERIFY
+STEP 8 — VERIFY
 
 Run all relevant checks and do not claim success if they fail.
 
-STEP 8 — PREPARE THE NEXT SESSION
+STEP 9 — PREPARE THE NEXT SESSION
 
 Before finishing:
 1. classify state as IN PROGRESS / PHASE COMPLETE / PROJECT COMPLETE;
-2. inspect current acceptance criteria and roadmap;
-3. decide the correct next action yourself;
-4. update `docs/project/NEXT_SESSION.md`;
-5. create a ready-to-copy prompt for a fresh AI session.
+2. update the phase markers in `docs/project/ROADMAP.md` so exactly one phase is `[>]`;
+3. update `docs/project/NEXT_SESSION.md`;
+4. create a ready-to-copy prompt for a fresh AI session.
 
 Do not make the user decide the next engineering step.
 
@@ -226,19 +215,16 @@ Recommended stack:
 - ...
 
 Tooling profile:
-- Minimal / Recommended / Recommended + Advanced Spec Mode
-
-Token-efficiency tooling:
-- Semble: READY / DEGRADED / NOT NEEDED
-- Serena: READY / DEGRADED / PENDING / NOT NEEDED
-- RTK: READY / DEGRADED / NOT NEEDED
+- Installed now: ...
+- Deferred until code exists: ...
+- Skipped for this tier: ...
 
 Key decisions:
 - ...
 
 Roadmap:
-- Phase 00 ...
-- Phase 01 ...
+- [>] Phase 00 ...
+- [ ] Phase 01 ...
 
 Implemented now:
 - ...

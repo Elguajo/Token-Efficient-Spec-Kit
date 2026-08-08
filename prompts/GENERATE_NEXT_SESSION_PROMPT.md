@@ -7,14 +7,12 @@ Determine the correct next step for this project and generate a ready-to-copy pr
 
 Do NOT implement new product work in this task.
 
-Read only:
-1. .specify/memory/constitution.md
-2. docs/project/PROJECT_BRIEF.md
-3. docs/project/ARCHITECTURE.md
-4. docs/project/ROADMAP.md
-5. docs/system/SESSION_HANDOFF.md
-6. current phase file
-7. directly relevant verification/task state
+Read only the Default Read Set defined in `docs/system/TOKEN_EFFICIENCY.md`,
+plus directly relevant verification/task state.
+
+Resolve the current phase from the `[>]` marker in `docs/project/ROADMAP.md`.
+This marker is canonical, which is why this prompt still works when
+`docs/project/NEXT_SESSION.md` has been lost or is stale.
 
 Inspect repository state and determine one status:
 

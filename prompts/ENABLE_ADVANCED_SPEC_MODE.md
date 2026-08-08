@@ -14,15 +14,10 @@ Do not replace or duplicate:
 - existing phase boundaries
 - docs/project/NEXT_SESSION.md
 
-First read:
-1. .specify/memory/constitution.md
-2. docs/project/PROJECT_BRIEF.md
-3. docs/project/ARCHITECTURE.md
-4. docs/project/ROADMAP.md
-5. current phase file
-6. integrations/TOOLING_POLICY.md
-7. integrations/SPEC_KIT.md
-8. docs/project/TOOLING_STATUS.md
+First read the Default Read Set from docs/system/TOKEN_EFFICIENCY.md, plus:
+- integrations/TOOLING_POLICY.md
+- integrations/SPEC_KIT.md
+- docs/project/TOOLING_STATUS.md
 
 STEP 1 — JUSTIFY
 

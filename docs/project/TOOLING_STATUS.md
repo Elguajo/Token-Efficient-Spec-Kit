@@ -49,6 +49,8 @@ Spec Kit ↔ Superpowers bridge: NOT ENABLED / ENABLED / N/A
 Verification:
 Manual action required:
 ```
+> Canonical profile definition: [`../../integrations/PROFILES.md`](../../integrations/PROFILES.md). This listing is a copy for reading convenience — if the two disagree, PROFILES.md wins.
+
 
 Rules:
 

@@ -33,9 +33,17 @@ docs/system/*
 integrations/*
 templates/*
 prompts/*
+.specify/decisions/*
+tools/*
+.github/workflows/*
 ```
 
 These may be replaced by newer upstream framework versions after comparing local changes.
+
+`.specify/decisions/*` holds ADRs about the framework itself. They are listed here
+precisely so they stay maintainable: an earlier layout put a framework ADR inside
+the project-owned `docs/decisions/`, where the updater was forbidden to touch it and
+it silently went stale.
 
 ### B. Merge-sensitive framework files
 
@@ -71,7 +79,7 @@ Preserve intentional local rules/history unless incompatible with the new framew
 ```text
 docs/project/*
 docs/phases/*
-docs/decisions/*
+docs/decisions/*        product ADRs only; framework ADRs live in .specify/decisions/
 application source code
 tests
 migrations
@@ -92,8 +100,18 @@ Default upstream:
 https://github.com/Elguajo/Token-Efficient-Spec-Kit
 ```
 
-Prefer a tagged/released version when available.
-If no release/tag exists, the updater may compare against the documented upstream version on the default branch, but it must report that it is updating from an unreleased source.
+Update source, in order of preference:
+
+```text
+1. a published release or annotated tag        -> preferred
+2. a pinned commit SHA on the default branch   -> acceptable, must be recorded
+3. the moving default branch                   -> last resort, must be reported
+```
+
+Whichever is used, the updater records the exact source in the project's
+`docs/project/TOOLING_STATUS.md` so the next update has a real baseline to diff
+against. Never report "updated to latest" without a tag or SHA: that is a claim
+without evidence, which Constitution section 9 forbids.
 
 Do not update from an untrusted fork unless the user explicitly selects it.
 

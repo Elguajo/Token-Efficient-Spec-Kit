@@ -8,7 +8,7 @@
 
 `Idea → Architecture → Phases → 1–3 Tasks → Code → Verification → Next Prompt`
 
-**v0.7.0**
+**v0.8.0**
 
 [Русская версия](README.md) · [Usage Guide](docs/USAGE_GUIDE.md) · [Workflow](docs/WORKFLOW.md) · [Maintenance](docs/MAINTENANCE.md) · [Changelog](CHANGELOG.md)
 
@@ -31,7 +31,11 @@ You describe the product you want. The AI should then understand the product, ch
 ```bash
 git clone https://github.com/Elguajo/Token-Efficient-Spec-Kit.git my-project
 cd my-project
+rm -rf .git && git init
 ```
+
+The last line matters: without it `origin` still points at this repository and your
+first `git push` goes to the wrong place.
 
 Open the repository in Codex, Claude Code, Cursor, or another repository-aware AI coding agent, then run:
 
@@ -55,6 +59,8 @@ RTK          → compact terminal/test/build/git output
 gstack       → review / browser QA / release checks
 Context7     → fresh library/API documentation
 ```
+> Canonical profile definition: [`integrations/PROFILES.md`](integrations/PROFILES.md). This listing is a copy for reading convenience — if the two disagree, PROFILES.md wins.
+
 
 You do not need to install each tool manually.
 
@@ -177,6 +183,21 @@ GitHub Spec Kit is **optional** and can be enabled as [Advanced Spec Mode](integ
 ---
 
 <div align="center">
+
+## License
+
+MIT — see [LICENSE](LICENSE).
+
+## Workflow integrity check
+
+```bash
+python3 tools/audit.py
+```
+
+Checks internal links, version consistency, a single Default Read Set definition, the
+current-phase marker and the framework/product boundary. CI runs the same script.
+
+---
 
 ### Describe the outcome. Let the agent handle the engineering and the next step.
 

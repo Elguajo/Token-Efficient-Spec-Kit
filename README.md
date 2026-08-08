@@ -8,7 +8,7 @@
 
 `Идея → Архитектура → Фазы → 1–3 задачи → Код → Проверка → Следующий prompt`
 
-**v0.7.0**
+**v0.8.0**
 
 [English](README_EN.md) · [Подробное руководство](docs/USAGE_GUIDE.md) · [Workflow](docs/WORKFLOW.md) · [Maintenance](docs/MAINTENANCE.md) · [Changelog](CHANGELOG.md)
 
@@ -59,7 +59,11 @@ Vercel или AWS?
 ```bash
 git clone https://github.com/Elguajo/Token-Efficient-Spec-Kit.git my-project
 cd my-project
+rm -rf .git && git init
 ```
+
+Последняя строка обязательна: без неё `origin` продолжает указывать на этот
+репозиторий, и первый же `git push` уйдёт не туда.
 
 Если у тебя уже есть проект, workflow можно добавить в существующий repository.
 
@@ -120,6 +124,8 @@ RTK          → сокращать шум terminal/test/build output
 gstack       → review / QA / release checks
 Context7     → свежая документация API/libraries
 ```
+> Канонический источник профиля: [`integrations/PROFILES.md`](integrations/PROFILES.md). Здесь копия для удобства чтения — при расхождении верен PROFILES.md.
+
 
 Тебе не нужно отдельно устанавливать каждый инструмент вручную.
 
@@ -359,6 +365,21 @@ PROJECT COMPLETE
 ### Не обязательно знать, как это программировать. Достаточно ясно описать, что ты хочешь получить.
 
 **[Начать новый проект →](prompts/START_NEW_PROJECT.md)**
+
+<br />
+
+## Лицензия
+
+MIT — см. [LICENSE](LICENSE).
+
+## Проверка целостности workflow
+
+```bash
+python3 tools/audit.py
+```
+
+Проверяет внутренние ссылки, консистентность версии, единственность Default Read Set,
+маркер текущей фазы и границы framework/product. Тот же скрипт гоняется в CI.
 
 <br />
 

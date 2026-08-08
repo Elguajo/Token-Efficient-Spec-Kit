@@ -2,6 +2,10 @@
 
 Status: Accepted
 
+Scope: framework decision. Lives in `.specify/decisions/` so that framework updates
+can maintain it and so that it does not consume a number in the product's own
+`docs/decisions/` sequence.
+
 ## Context
 
 The project originally evolved as a lightweight workflow layered on top of GitHub Spec Kit.
@@ -31,29 +35,20 @@ This conflicts with the project's primary goal: use the smallest amount of proce
 
 Token-Efficient Spec Kit becomes the standalone canonical project workflow.
 
-Default profile:
+This ADR deliberately does **not** list the Recommended tooling profile. The profile
+changes between minor versions; a copy here would go stale and contradict the
+canonical source. The profile and the ownership matrix live in
+`integrations/TOOLING_POLICY.md`.
 
-```text
-Token-Efficient Spec Kit
-+ Superpowers
-+ gstack
-+ Context7
-```
-
-Ownership:
+What this decision fixes, and what remains true regardless of the profile:
 
 ```text
 Token-Efficient Spec Kit
 = WHAT + project orchestration + project memory + phases + convergence + handoff
+= the project-level source of truth
 
-Superpowers
-= HOW + TDD + systematic debugging + implementation discipline
-
-gstack
-= challenge / review / browser QA / release checks
-
-Context7
-= fresh technical documentation on demand
+every external tool
+= an optional capability, never a second canonical planning system
 ```
 
 GitHub Spec Kit is moved to Optional Advanced Spec Mode.

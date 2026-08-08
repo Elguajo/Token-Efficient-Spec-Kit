@@ -114,6 +114,8 @@ RTK          → compact terminal/test/build/git output
 gstack       → review / QA / release checks
 Context7     → fresh library/API docs
 ```
+> Канонический источник профиля: [`../integrations/PROFILES.md`](../integrations/PROFILES.md). Здесь копия для удобства чтения — при расхождении верен PROFILES.md.
+
 
 После проверки состояние сохраняется в `TOOLING_STATUS.md`, поэтому setup не повторяется в каждой сессии.
 

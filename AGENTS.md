@@ -23,18 +23,11 @@ External tools are optional capabilities, not project-level sources of truth.
 
 ## Default read set
 
-For normal implementation read only:
+Defined once in `docs/system/TOKEN_EFFICIENCY.md`. Read it from there; it is not
+restated here, so there is no second copy to drift.
 
-```text
-.specify/memory/constitution.md
-docs/project/PROJECT_BRIEF.md
-docs/project/ARCHITECTURE.md
-docs/system/ENGINEERING_RULES.md
-docs/system/SESSION_HANDOFF.md
-current phase
-relevant ADR only if needed
-relevant code/tests
-```
+The current phase is resolved from the status markers in `docs/project/ROADMAP.md`,
+never by scanning `docs/phases/`.
 
 Never load all project documentation automatically.
 
@@ -87,6 +80,8 @@ gstack
 Context7
 → fresh library/API documentation on demand
 ```
+> Canonical profile definition: [`integrations/PROFILES.md`](integrations/PROFILES.md). This listing is a copy for reading convenience — if the two disagree, PROFILES.md wins.
+
 
 ### Token-efficiency routing
 

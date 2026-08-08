@@ -16,7 +16,8 @@ https://github.com/Elguajo/Token-Efficient-Spec-Kit
 
 Your job:
 - determine the installed local workflow version;
-- determine the latest appropriate upstream release/tag/version;
+- determine the target upstream version, preferring a release/tag, then a pinned
+  commit SHA, then the moving default branch; record which one you used;
 - read upstream changelog/migration notes;
 - compare framework-managed files;
 - detect local customizations;
@@ -54,13 +55,15 @@ Project-owned, NEVER automatically overwrite:
 Before changing anything:
 1. produce a compact update plan;
 2. identify any breaking/migration-sensitive changes;
-3. report whether the update source is a release/tag or an unreleased default-branch version;
+3. report the exact update source: release/tag name, or commit SHA, or default branch;
 4. stop for approval only if the update requires destructive/ambiguous changes to project-owned state.
 
 For normal compatible framework updates, proceed autonomously.
 
 After applying:
-1. run the equivalent of prompts/AUDIT_WORKFLOW.md;
+1. run `python3 tools/audit.py` and quote its verdict; it must exit 0 before the
+   update can be called successful, then run prompts/AUDIT_WORKFLOW.md for the
+   judgement checks;
 2. verify internal paths used by main prompts;
 3. verify NEXT_SESSION / Session Handoff behavior still exists;
 4. verify the target release's documented Recommended profile; for v0.7.x this is Token-Efficient Spec Kit + Superpowers + Semble + Serena + RTK + gstack + Context7;
@@ -112,3 +115,5 @@ Self-audit:
 Manual action required:
 - None / ...
 ```
+> Canonical profile definition: [`../integrations/PROFILES.md`](../integrations/PROFILES.md). This listing is a copy for reading convenience — if the two disagree, PROFILES.md wins.
+

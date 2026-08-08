@@ -31,7 +31,7 @@ Define sources of truth, use migrations, preserve historical business records, e
 Completion requires evidence: relevant build/typecheck/lint/tests/acceptance criteria/security negatives/manual QA pass.
 
 ## 10. Token efficiency
-Default read set: Constitution + Project Brief + compact Architecture + Engineering Rules + Current Phase + relevant ADR/code/tests. Avoid rereading all phases, all ADRs, master specs or full chat history.
+The Default Read Set is defined once, in `docs/system/TOKEN_EFFICIENCY.md`. Use it as written and do not restate it elsewhere. Avoid rereading all phases, all ADRs, master specs or full chat history.
 
 ## 11. Documentation economy
 Create only durable docs: Project Brief, Architecture, Roadmap, current phase spec, important ADRs, README. Avoid duplicate PRDs, duplicate specs, role-play docs and verbose status reports.

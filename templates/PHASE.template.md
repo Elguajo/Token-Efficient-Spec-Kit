@@ -1,5 +1,8 @@
 # Phase XX — Name
 
+File name convention: `docs/phases/NN-kebab-name.md` (zero-padded, lowercase,
+hyphen-separated). Must match the entry in `docs/project/ROADMAP.md`.
+
 ## Goal
 One verifiable outcome.
 

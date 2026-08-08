@@ -100,6 +100,8 @@ Context7
 GitHub Spec Kit
 = OPTIONAL Advanced Spec Mode for formal deep specification inside a difficult phase
 ```
+> Канонический источник профиля: [`../integrations/PROFILES.md`](../integrations/PROFILES.md). Здесь копия для удобства чтения — при расхождении верен PROFILES.md.
+
 
 Token-efficiency layers:
 

@@ -5,8 +5,28 @@ Audit the Token-Efficient Spec Kit workflow itself.
 
 This is a framework consistency audit, not an application feature review.
 
+STEP 0 — RUN THE MACHINE CHECKS FIRST, AND QUOTE THE OUTPUT
+
+```bash
+python3 tools/audit.py
+```
+
+This is the evidence for this audit. Constitution section 9 forbids claiming a
+result without it, and an agent grading its own prose is not evidence. Paste the
+script's verdict verbatim into your report.
+
+If it exits non-zero, the workflow is NEEDS ATTENTION regardless of how the prose
+reads. Fix what it reports before assessing anything by hand.
+
+The script covers: internal link resolution, version consistency across
+VERSION/READMEs/CHANGELOG, single definition of the Default Read Set, canonical
+pointer on every profile listing, phase file naming, exactly one current-phase
+marker, framework/project ownership boundaries, and required files.
+
+Everything below is the judgement layer the script cannot check.
+
 Read:
-1. VERSION
+1. tools/audit.py output from STEP 0
 2. CHANGELOG.md
 3. .specify/memory/constitution.md
 4. AGENTS.md
