@@ -163,7 +163,7 @@ for required in ("normally three", "**Recommended**", "same session"):
             f"START_NEW_PROJECT omits conversational product framing: {required!r}")
 
 entry_docs = {
-    "README.md": "Не открывай файл и не заменяй плейсхолдеры",
+    "README.md": "Не открывай prompt вручную и не заменяй плейсхолдеры",
     "README_EN.md": "Do not edit the prompt or replace a placeholder",
     "docs/USAGE_GUIDE.md": "Не открывай prompt и не ищи в нём ничего для замены",
 }
