@@ -8,7 +8,7 @@
 
 `Идея → Архитектура → Фазы → 1–3 задачи → Код → Проверка → Следующий prompt`
 
-**v0.6.0**
+**v0.7.0**
 
 [English](README_EN.md) · [Подробное руководство](docs/USAGE_GUIDE.md) · [Workflow](docs/WORKFLOW.md) · [Maintenance](docs/MAINTENANCE.md) · [Changelog](CHANGELOG.md)
 
@@ -114,7 +114,8 @@ prompts/START_NEW_PROJECT.md
 
 ```text
 Superpowers  → как реализовывать и отлаживать
-Semble       → находить только релевантные куски кода
+Semble       → находить релевантную логику по смыслу
+Serena       → понимать symbols/references и безопасно рефакторить
 RTK          → сокращать шум terminal/test/build output
 gstack       → review / QA / release checks
 Context7     → свежая документация API/libraries
@@ -122,9 +123,7 @@ Context7     → свежая документация API/libraries
 
 Тебе не нужно отдельно устанавливать каждый инструмент вручную.
 
-Если инструмент уже настроен — AI его не переустанавливает. Если Semble или RTK недоступны, проект **не блокируется**: AI продолжает обычными средствами.
-
-Иногда потребуется твоё участие только для login/OAuth, отсутствующего system runtime или глобального hook/config изменения, которое затронет другие проекты.
+Если инструмент уже настроен — AI его не переустанавливает. Если Semble, Serena или RTK недоступны, проект **не блокируется**: AI продолжает обычными средствами.
 
 ---
 
@@ -216,7 +215,7 @@ User Intent
 → Architecture
 → Roadmap
 → Current Phase
-→ targeted code retrieval
+→ targeted code context
 → 1–3 cohesive tasks
 → Implementation
 → compact verification output
@@ -225,24 +224,39 @@ User Intent
 → Session Handoff
 ```
 
+### Когда Semble, Serena и RTK уже установлены
+
+AI **не запускает их все подряд**. Он маршрутизирует вопрос:
+
+| Тип задачи | Инструмент |
+|---|---|
+| «Где находится логика X?» / незнакомая часть codebase | **Semble** |
+| «Кто вызывает этот symbol?» / implementations / rename / semantic refactor | **Serena** |
+| Маленький известный файл или точная строка | native tools агента |
+| Tests / build / git / verbose terminal output | **RTK** |
+
+Типичный совместный сценарий:
+
+```text
+Semble
+→ нашёл file/snippet/symbol
+→ discovery закончен
+→ Serena только если нужны references / diagnostics / semantic refactor
+→ implementation
+→ RTK только для terminal output
+```
+
+То есть Semble и Serena **не должны независимо переискать один и тот же код**.
+
 Token-efficiency разделена по слоям:
 
 ```text
-Project/docs context → Token-Efficient Spec Kit
-Code retrieval       → Semble
-Shell/tool output     → RTK
-Fresh external docs  → Context7 on demand
+Project/docs context         → Token-Efficient Spec Kit
+Intent-based code discovery  → Semble
+Symbol semantics/refactoring → Serena
+Shell/tool output            → RTK
+Fresh external docs          → Context7 on demand
 ```
-
-Основные правила:
-
-- **Token-Efficient Spec Kit — canonical core workflow**;
-- одна рабочая сессия обычно = 1–3 связанные задачи;
-- context загружается по необходимости, а не весь repository;
-- один факт хранится в одном canonical месте;
-- архитектурная сложность добавляется только при реальной необходимости;
-- completion требует evidence, а не просто написанного кода;
-- внешние tools усиливают workflow, но не создают второй roadmap или source of truth.
 
 [Подробная техническая модель →](docs/WORKFLOW.md)
 
@@ -250,9 +264,9 @@ Fresh external docs  → Context7 on demand
 
 ## Почему это экономит токены
 
-Обычная implementation-сессия читает только нужный project context, а для codebase exploration при наличии Semble сначала получает релевантные chunks вместо широкого `grep → read full file` цикла.
+Обычная implementation-сессия читает только нужный project context.
 
-RTK, когда безопасно поддерживается активным agent, сокращает verbose output тестов, git, build и других команд до decision-relevant информации.
+Semble помогает не читать широкие области codebase, Serena выполняет точные symbol-level операции вместо повторных text-search/refactor циклов, а RTK сокращает verbose terminal output.
 
 > **Один факт — одно canonical место. Одна сессия — обычно 1–3 связанные задачи. Читай только то, что нужно сейчас.**
 
@@ -267,7 +281,8 @@ RTK, когда безопасно поддерживается активным
 | Инструмент | Для чего |
 |---|---|
 | **Superpowers** | TDD, implementation discipline, systematic debugging |
-| **Semble** | Token-efficient semantic/hybrid code retrieval |
+| **Semble** | Intent-based semantic/hybrid code discovery |
+| **Serena** | Symbol navigation, references, diagnostics и semantic refactoring |
 | **RTK** | Сжатие terminal/test/build/git output |
 | **gstack** | Engineering/design review, browser QA, release checks |
 | **Context7** | Актуальная документация libraries/API по необходимости |
@@ -332,7 +347,7 @@ PROJECT COMPLETE
 | Пошагово разобраться во всех сценариях | [Usage Guide](docs/USAGE_GUIDE.md) |
 | Понять внутреннюю архитектуру workflow | [End-to-End Workflow](docs/WORKFLOW.md) |
 | Посмотреть следующий шаг текущего проекта | [NEXT_SESSION.md](docs/project/NEXT_SESSION.md) |
-| Разобраться с Superpowers / Semble / RTK / gstack / Context7 / Spec Kit | [Integrations](integrations/README.md) |
+| Разобраться с Superpowers / Semble / Serena / RTK / gstack / Context7 / Spec Kit | [Integrations](integrations/README.md) |
 | Project Doctor, Self-Audit, Updates, Versioning | [Maintenance](docs/MAINTENANCE.md) |
 | Посмотреть изменения между версиями | [Changelog](CHANGELOG.md) |
 | Предложить улучшение проекта | [Contributing](CONTRIBUTING.md) |
