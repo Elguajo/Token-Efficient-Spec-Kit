@@ -22,9 +22,10 @@ Read:
 14. integrations/PROFILES.md
 15. integrations/TOOLING_POLICY.md
 16. integrations/SEMBLE.md if present
-17. integrations/RTK.md if present
-18. all main files under prompts/
-19. templates only where needed to validate current workflow behavior
+17. integrations/SERENA.md if present
+18. integrations/RTK.md if present
+19. all main files under prompts/
+20. templates only where needed to validate current workflow behavior
 
 Do NOT inspect all application source code unless a framework instruction directly depends on it.
 
@@ -32,13 +33,16 @@ Check:
 - ownership contradictions;
 - default-vs-optional tooling contradictions;
 - stale references to GitHub Spec Kit as a required default;
-- stale Recommended profiles that omit or misassign Semble/RTK;
+- stale Recommended profiles that omit/misassign Semble, Serena or RTK;
 - duplicate planning/specification systems;
+- Semble and Serena overlapping as broad discovery owners;
+- Serena memory becoming a competing project-memory/source-of-truth layer;
 - inconsistent phase/session handoff behavior;
 - places where the user is forced to manually install ordinary Recommended tooling without a real blocker;
 - places where the user is forced to decide routine engineering next steps;
 - instructions that cause unnecessary full-project context loading;
-- broad grep/full-file exploration where targeted code retrieval should be preferred;
+- broad grep/full-file exploration where routed retrieval should be preferred;
+- Semble + Serena + grep being used for the same discovery question without failure/ambiguity/verification justification;
 - verbose shell/test/build output where safe compact output is available;
 - any token-saving instruction that could hide critical diagnostics or change command semantics;
 - unsafe workflow-update behavior;
@@ -49,21 +53,28 @@ Check:
 
 Verify the current default token-efficiency architecture:
 
-Project/docs context → Token-Efficient Spec Kit
-Code retrieval       → Semble
-Shell/tool output     → RTK
-Fresh external docs  → Context7 on demand
+Project/docs context         → Token-Efficient Spec Kit
+Intent-based code discovery  → Semble
+Symbol semantics/refactoring → Serena
+Shell/tool output            → RTK
+Fresh external docs          → Context7 on demand
 
 Verify Recommended profile unless a deliberate versioned change says otherwise:
 
 Token-Efficient Spec Kit
 + Superpowers
 + Semble
++ Serena
 + RTK
 + gstack
 + Context7
 
-Verify Semble and RTK both have graceful fallback and do not become blockers or sources of project truth.
+Verify:
+- Semble owns intent-based discovery;
+- Serena owns symbol navigation/relationships/refactoring;
+- Serena generic file/search/shell/memory overlap is excluded when supported;
+- Semble/Serena/RTK all have graceful fallback and do not become blockers or sources of project truth;
+- one code-context capability is chosen first, rather than stacking all installed tools.
 
 Classify findings:
 CRITICAL / HIGH / MEDIUM / LOW.
