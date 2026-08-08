@@ -36,7 +36,7 @@ Do not assume GitHub Spec Kit is required.
 
 Ask a question only if a missing fact is a true blocker according to the Constitution. Otherwise proceed autonomously.
 
-STEP 0 — TOOLING BOOTSTRAP
+STEP 0 — AUTOMATIC TOOLING BOOTSTRAP
 
 Inspect `docs/project/TOOLING_STATUS.md`.
 
@@ -44,18 +44,36 @@ If Recommended tooling is ready for the active harness, do not reinstall it or r
 
 If tooling is not initialized, incomplete, stale, or belongs to another harness:
 1. read `prompts/SETUP_RECOMMENDED_TOOLING.md`;
-2. install/configure the default Recommended profile:
+2. automatically install/configure the default Recommended profile when safe:
    - Superpowers;
+   - Semble;
+   - RTK;
    - gstack;
    - Context7;
 3. preserve the Constitution and project docs;
 4. use current official upstream installation instructions;
-5. update `docs/project/TOOLING_STATUS.md`;
-6. continue automatically once tooling is ready.
+5. prefer safe user/project-scoped integration;
+6. verify each tool instead of trusting installer success;
+7. update `docs/project/TOOLING_STATUS.md`;
+8. continue automatically once tooling is ready or safely degraded.
+
+Recommended token-efficiency layers:
+
+```text
+Project/docs context → Token-Efficient Spec Kit
+Code retrieval       → Semble
+Shell/tool output     → RTK
+Fresh external docs  → Context7 on demand
+```
+
+Graceful fallback:
+- Semble unavailable → use native targeted search/read;
+- RTK unavailable/unsafe → use native shell commands with scoped output;
+- external tooling must not block product initialization unless the product itself requires it.
 
 GitHub Spec Kit and the Spec Kit ↔ Superpowers bridge are OPTIONAL Advanced Spec Mode tools. Do not install them during default bootstrap.
 
-Pause only for genuine login/OAuth, missing global runtime approval, destructive overwrite approval, or inability to determine the coding harness.
+Pause only for genuine login/OAuth, missing global/system runtime approval, destructive overwrite approval, inability to determine the coding harness, or a global agent hook/instruction change that would affect unrelated projects and has no safe project-scoped alternative.
 
 STEP 1 — UNDERSTAND
 
@@ -141,12 +159,18 @@ Implement only the first 1–3 cohesive tasks.
 Use current stable dependencies.
 Do not implement future phases opportunistically.
 
-Tool ownership:
-- Token-Efficient Spec Kit = WHAT + orchestration + phases + convergence + handoff;
+Context/tool ownership:
+- Token-Efficient Spec Kit = WHAT + orchestration + project/docs context + phases + convergence + handoff;
+- Semble = targeted CODE CONTEXT retrieval when useful;
+- RTK = compact SHELL/TOOL OUTPUT when safe;
 - Superpowers = HOW / TDD / debugging / implementation discipline;
 - gstack = selective challenge / review / QA;
-- Context7 = fresh docs when needed;
+- Context7 = fresh external docs when needed;
 - GitHub Spec Kit = optional Advanced Spec Mode only.
+
+For unfamiliar or non-trivial code discovery, prefer Semble before broad grep + full-file reading when Semble is available.
+For verbose supported terminal commands, prefer RTK when its integration is verified safe.
+Correctness always outranks token savings; retrieve raw/full output when debugging requires it.
 
 STEP 7 — VERIFY
 
@@ -180,6 +204,10 @@ Recommended stack:
 
 Tooling profile:
 - Minimal / Recommended / Recommended + Advanced Spec Mode
+
+Token-efficiency tooling:
+- Semble: READY / DEGRADED / NOT NEEDED
+- RTK: READY / DEGRADED / NOT NEEDED
 
 Key decisions:
 - ...
