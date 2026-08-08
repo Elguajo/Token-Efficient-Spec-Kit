@@ -86,6 +86,7 @@ Check for obvious contradictions such as:
 - duplicate canonical plans;
 - stale tool ownership;
 - GitHub Spec Kit treated as required default;
+- Recommended profile missing Semble/RTK without an intentional versioned change;
 - missing session handoff;
 - stale/broken NEXT_SESSION;
 - project docs that disagree materially.
@@ -94,8 +95,21 @@ For deep workflow consistency, route to `AUDIT_WORKFLOW.md` instead of performin
 
 ### Tooling
 
+Recommended efficiency layers are:
+
+```text
+Project/docs context → Token-Efficient Spec Kit
+Code retrieval       → Semble
+Shell/tool output     → RTK
+Fresh external docs  → Context7 on demand
+```
+
+Report Semble and RTK as `READY`, `DEGRADED`, `NOT CONFIGURED` or `N/A` when useful.
+
+Semble or RTK being degraded is normally an efficiency issue, not a product blocker, because native search/read/shell fallbacks exist.
+
 Report only materially useful tooling problems.
-Do not fail the whole project merely because an optional tool is absent.
+Do not fail the whole project merely because an optional/recommended efficiency tool is absent.
 
 ---
 
