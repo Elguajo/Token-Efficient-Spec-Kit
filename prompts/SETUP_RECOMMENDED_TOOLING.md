@@ -12,6 +12,7 @@ Recommended external tooling:
 
 Superpowers
 + Semble
++ Serena
 + RTK
 + gstack
 + Context7
@@ -26,9 +27,10 @@ FIRST read:
 4. integrations/TOOLING_POLICY.md
 5. integrations/SUPERPOWERS.md
 6. integrations/SEMBLE.md
-7. integrations/RTK.md
-8. integrations/GSTACK.md
-9. integrations/CONTEXT7.md
+7. integrations/SERENA.md
+8. integrations/RTK.md
+9. integrations/GSTACK.md
+10. integrations/CONTEXT7.md
 
 Then detect:
 - operating system;
@@ -50,7 +52,7 @@ Ask only when:
 - a missing global/system runtime or package manager needs approval;
 - an installer requires destructive overwrite permission;
 - the active coding harness cannot be determined reliably;
-- the only supported RTK integration would modify global agent hooks/instructions for ALL projects and no safe project-scoped equivalent exists.
+- the only supported integration would modify global agent hooks/instructions for ALL projects and no safe project-scoped equivalent exists.
 
 STEP 1 — Superpowers
 - install using the current native/recommended mechanism for the active harness;
@@ -68,9 +70,46 @@ STEP 2 — Semble
 - record a graceful fallback if Semble cannot be integrated safely.
 
 Semble role:
-CODE CONTEXT ONLY — targeted code retrieval, not planning or architecture.
+CODE DISCOVERY ONLY — intent/semantic retrieval such as “where is the logic related to X?”.
 
-STEP 3 — RTK
+STEP 3 — Serena
+- verify CURRENT official `oraios/serena` Quick Start and configuration docs;
+- do not rely on third-party MCP/plugin marketplace install recipes when upstream advises another path;
+- install using the current official supported method for the active harness;
+- prefer MCP integration;
+- create/index the current project when required by the current Serena version;
+- inspect Serena's current tool list before configuring exclusions (use the current equivalent of `serena tools list --all` when available);
+- apply the overlap-reduction policy from `integrations/SERENA.md` at project scope when supported;
+- keep Serena focused on symbol navigation, references, implementations, diagnostics and semantic refactoring;
+- exclude Serena generic file/search/shell tools when those current tool names exist and the harness already has Semble/native equivalents;
+- exclude Serena memory tools so Token-Efficient canonical docs remain the only project memory/source of truth;
+- do not enable optional/BETA tools automatically merely because they exist;
+- verify with one known symbol lookup and one references/overview operation where the project language supports it;
+- if no supported source language exists yet, install/configure Serena but mark symbol verification PENDING rather than blocking project initialization.
+
+Serena role:
+SYMBOL / REFACTOR ONLY — symbol-aware navigation and semantic edits after the relevant code area/symbol is known.
+
+SEMBlE ↔ SERENA ROUTING:
+
+```text
+Intent question / unknown location
+→ Semble
+
+Known symbol / references / implementations / diagnostics / semantic rename
+→ Serena
+
+Semble found exact symbol
+→ do NOT repeat broad discovery in Serena
+→ use Serena only for the distinct symbol-level operation
+
+Tiny exact file/string edit
+→ native agent tools
+```
+
+Never call Semble + Serena + grep merely to answer the same discovery question.
+
+STEP 4 — RTK
 - verify current official `rtk-ai/rtk` installation and active-agent setup instructions;
 - install using the safest supported user-level package/binary method;
 - prefer project-scoped integration when currently supported;
@@ -83,25 +122,28 @@ STEP 3 — RTK
 RTK role:
 TOOL OUTPUT ONLY — compact terminal/test/build/git output, not project truth.
 
-STEP 4 — gstack
+STEP 5 — gstack
 - read the current official `garrytan/gstack` setup instructions;
 - install for the active harness using the upstream-supported mode;
 - verify discoverability;
 - use it as challenge/review/QA tooling;
 - do not enable a parallel canonical roadmap/planning flow by default.
 
-STEP 5 — Context7
+STEP 6 — Context7
 - configure using the best current native mode for the harness (MCP, CLI/skills or current equivalent);
 - never commit API keys, tokens or credentials;
 - verify access to fresh library/API docs.
 
-STEP 6 — Verify token-efficiency architecture
+STEP 7 — Verify token-efficiency architecture
 
 Effective workflow must remain:
 
 User outcome
 → Token-Efficient Project Brief / Architecture / Roadmap / Current Phase
-→ Semble for targeted code retrieval when useful
+→ route code question to the cheapest adequate capability
+   - Semble for intent-based discovery
+   - Serena for symbol semantics/refactoring
+   - native tools for tiny exact operations
 → 1–3 tasks
 → Superpowers/native implementation
 → RTK for compact shell output when safe
@@ -113,10 +155,11 @@ User outcome
 
 Graceful fallback is mandatory:
 - Semble unavailable → native targeted search/read;
+- Serena unavailable/unsupported/stale → Semble/native targeted search/refactor;
 - RTK unavailable/unsafe → native shell output with manual scoping;
 - any external tool failure must NOT block starting the product unless the product itself depends on it.
 
-STEP 7 — Record status
+STEP 8 — Record status
 
 Create/update `docs/project/TOOLING_STATUS.md` with:
 - date checked;
@@ -125,6 +168,8 @@ Create/update `docs/project/TOOLING_STATUS.md` with:
 - profile;
 - Superpowers status/version/mode if known;
 - Semble status/version/integration mode;
+- Serena status/version/backend/integration mode;
+- Serena overlap policy: ACTIVE / PARTIAL / NOT APPLICABLE;
 - RTK status/version/integration scope;
 - gstack status/version/mode if known;
 - Context7 status/mode;
@@ -144,14 +189,19 @@ Core:
 External tooling:
 - Superpowers — ...
 - Semble — ...
+- Serena — ...
 - RTK — ...
 - gstack — ...
 - Context7 — ...
 
-Token-efficiency:
+Token-efficiency routing:
 - Project/docs context — Token-Efficient Spec Kit
-- Code retrieval — Semble: READY / DEGRADED
+- Intent-based code discovery — Semble: READY / DEGRADED
+- Symbol/refactor layer — Serena: READY / DEGRADED / PENDING
 - Shell output — RTK: READY / DEGRADED
+
+Semble ↔ Serena overlap policy:
+- ACTIVE / PARTIAL / NOT APPLICABLE
 
 Optional Advanced Spec Mode:
 - GitHub Spec Kit — NOT ENABLED / ENABLED: ...
