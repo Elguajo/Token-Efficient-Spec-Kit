@@ -15,6 +15,7 @@
 - как начать новый проект;
 - что написать AI;
 - что AI решает самостоятельно;
+- как автоматически настраивается Recommended tooling;
 - как работать по phases;
 - как переносить работу между сессиями;
 - как менять требования и исправлять bugs.
@@ -43,13 +44,16 @@ Entry point: [`../prompts/PROJECT_DOCTOR.md`](../prompts/PROJECT_DOCTOR.md).
 
 ```text
 User Intent
+→ Tooling Bootstrap
 → Project Brief
 → Architecture
 → Roadmap
 → Current Phase
+→ Targeted Code Retrieval
 → 1–3 Tasks
 → Implementation
-→ Verification / QA
+→ Compact Verification Output
+→ Review / QA
 → Convergence
 → Session Handoff
 → Fresh Session
@@ -121,8 +125,19 @@ Default external tooling:
 
 ```text
 Superpowers
++ Semble
++ RTK
 + gstack
 + Context7
+```
+
+Token-efficiency layers:
+
+```text
+Project/docs context → Token-Efficient Spec Kit
+Code retrieval       → Semble
+Shell/tool output     → RTK
+Fresh external docs  → Context7 on demand
 ```
 
 GitHub Spec Kit — optional Advanced Spec Mode.
@@ -135,6 +150,7 @@ GitHub Spec Kit — optional Advanced Spec Mode.
 
 ```text
 START_NEW_PROJECT
+→ automatic tooling bootstrap when needed
 → AI выполняет работу
 → NEXT SESSION PROMPT
 → новая session
