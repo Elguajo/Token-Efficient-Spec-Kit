@@ -219,8 +219,9 @@ Check that each main prompt has:
 
 When framework behavior changes materially:
 
-- update `VERSION`;
-- update `CHANGELOG.md`;
+- in the framework source repository, update `VERSION` and `CHANGELOG.md`;
+- verify the generated Starter records the same installed version in
+  `.token-efficient-spec-kit/VERSION`;
 - update migration/update notes when compatibility changes.
 
 ### 10. Link / path integrity

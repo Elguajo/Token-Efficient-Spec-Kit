@@ -4,12 +4,11 @@
 Update the Token-Efficient Spec Kit framework in this project without overwriting project-owned state.
 
 Read first:
-1. VERSION
-2. CHANGELOG.md
-3. docs/system/WORKFLOW_UPDATE_POLICY.md
-4. docs/system/WORKFLOW_SELF_AUDIT.md
-5. .specify/memory/constitution.md
-6. AGENTS.md
+1. `.token-efficient-spec-kit/VERSION` when it exists; otherwise `VERSION`
+2. docs/system/WORKFLOW_UPDATE_POLICY.md
+3. docs/system/WORKFLOW_SELF_AUDIT.md
+4. .specify/memory/constitution.md
+5. AGENTS.md
 
 Upstream framework repository:
 https://github.com/Elguajo/Token-Efficient-Spec-Kit
@@ -18,7 +17,7 @@ Your job:
 - determine the installed local workflow version;
 - determine the target upstream version, preferring a release/tag, then a pinned
   commit SHA, then the moving default branch; record which one you used;
-- read upstream changelog/migration notes;
+- read the target upstream release notes/changelog and migration notes;
 - compare framework-managed files;
 - detect local customizations;
 - apply the smallest safe framework update;
@@ -35,12 +34,12 @@ Framework-managed, update with review:
 Merge-sensitive, NEVER blindly replace:
 - .specify/memory/constitution.md
 - AGENTS.md
-- VERSION
-- CHANGELOG.md
 
-For VERSION and CHANGELOG.md:
-- if they clearly still belong only to Token-Efficient Spec Kit, update them normally;
-- if the downstream product has repurposed or extended them, preserve product history and merge instead of replacing.
+Source-repository metadata:
+- `VERSION` and `CHANGELOG.md` exist only in the upstream framework source repository.
+- In a downstream Starter, record the completed update by changing only
+  `.token-efficient-spec-kit/VERSION`; never create, overwrite or merge a root
+  `VERSION` or `CHANGELOG.md`, because those names belong to the product.
 
 Project-owned, NEVER automatically overwrite:
 - docs/project/*

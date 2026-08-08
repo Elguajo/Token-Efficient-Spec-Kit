@@ -16,3 +16,5 @@ jobs:
           python-version: '3.12'
       - name: Run machine-checkable self-audit
         run: python3 tools/audit.py
+      - name: Build and validate clean Starter artifact
+        run: python3 tools/build_starter.py --output "$RUNNER_TEMP/token-efficient-spec-kit-starter.zip"

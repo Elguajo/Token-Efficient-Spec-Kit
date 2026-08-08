@@ -8,7 +8,7 @@
 
 [Start a new project](prompts/START_NEW_PROJECT.md) · [How to use it](docs/USAGE_GUIDE.md) · [Visual Guide](docs/VISUAL_GUIDE.md) · [Русская версия](README.md)
 
-<sub>**v0.8.2** · [Workflow](docs/WORKFLOW.md) · [Maintenance](docs/MAINTENANCE.md) · [Changelog](CHANGELOG.md)</sub>
+<sub>**v0.9.0** · [Workflow](docs/WORKFLOW.md) · [Maintenance](docs/MAINTENANCE.md) · [Changelog](CHANGELOG.md)</sub>
 
 </div>
 
@@ -45,17 +45,20 @@ In a typical session, the AI:
 
 # Start a new project
 
-## 1. Prepare a copy of the template
+## 1. Download the clean Starter
+
+Download `token-efficient-spec-kit-starter.zip` from the appropriate
+[GitHub Release](https://github.com/Elguajo/Token-Efficient-Spec-Kit/releases),
+extract it, then create your Git repository:
 
 ```bash
-git clone https://github.com/Elguajo/Token-Efficient-Spec-Kit.git my-project
-cd my-project
-rm -rf .git && git init
+cd token-efficient-spec-kit-starter-<version>
+git init
 ```
 
-Use the last line only for a fresh template clone: it removes the link to this
-repository so you cannot accidentally push your project here. If you are adding the
-workflow to an existing repository, see the [Usage Guide](docs/USAGE_GUIDE.md).
+The Starter omits the source framework repository's changelog, contribution and
+maintenance documentation. To add the workflow to an existing repository, see the
+[Usage Guide](docs/USAGE_GUIDE.md).
 
 ## 2. Open the folder in an AI coding agent
 

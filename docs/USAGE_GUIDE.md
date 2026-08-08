@@ -9,7 +9,7 @@
 # Самая короткая версия
 
 ```text
-1. Клонировать repository
+1. Скачать чистый Starter из GitHub Release
 2. Открыть его в AI coding agent
 3. Одним сообщением сказать AI, что хочешь создать, и попросить запустить prompts/START_NEW_PROJECT.md
 4. AI предложит product-направления и продолжит с рекомендованным
@@ -66,11 +66,15 @@
 
 # 2. Новый проект
 
-## Шаг 1 — клонировать шаблон
+## Шаг 1 — получить чистый Starter
+
+Скачай `token-efficient-spec-kit-starter.zip` из
+[GitHub Release](https://github.com/Elguajo/Token-Efficient-Spec-Kit/releases),
+распакуй его и инициализируй Git:
 
 ```bash
-git clone https://github.com/Elguajo/Token-Efficient-Spec-Kit.git my-project
-cd my-project
+cd token-efficient-spec-kit-starter-<version>
+git init
 ```
 
 ## Шаг 2 — открыть в AI coding agent

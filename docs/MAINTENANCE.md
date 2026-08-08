@@ -141,6 +141,21 @@ MAJOR.MINOR.PATCH
 
 При изменении поведения framework нужно обновить `VERSION` и `CHANGELOG.md` согласованно.
 
+## Distribution: source repository and Starter
+
+Этот repository — исходник framework: в нём намеренно остаются release history,
+contribution guidance и документация для maintainer'ов. Эти файлы не должны
+попадать в новый product repository.
+
+`starter/MANIFEST.txt` is the explicit allowlist for the downstream Starter.
+`tools/build_starter.py` creates a clean ZIP with only the workflow files and puts
+the installed framework version at `.token-efficient-spec-kit/VERSION`.
+
+GitHub Action `Publish Starter asset` запускается при публикации release. Он
+требует, чтобы release tag равнялся `v` + root `VERSION`, затем прикладывает к нему
+собранный Starter archive. Отдельный GitHub Template repository может использовать
+то же содержимое artifact; его публикация — действие maintainer'а, не часть build.
+
 ---
 
 ## Optional Advanced Spec Mode

@@ -50,17 +50,20 @@ it silently went stale.
 ```text
 .specify/memory/constitution.md
 AGENTS.md
-VERSION
-CHANGELOG.md
 ```
 
-`VERSION` and `CHANGELOG.md` are framework metadata in the template repository, but a downstream product may later repurpose or extend root-level version/changelog files.
+`VERSION` and `CHANGELOG.md` are framework metadata in the source repository.
+They are deliberately excluded from the generated Starter because a downstream
+project may use those root-level names for its own release history.
 
-Therefore:
+In a downstream Starter, the installed framework version is tracked at:
 
-- if they still clearly belong to Token-Efficient Spec Kit, update them normally;
-- if local project-specific changes exist, merge/review instead of blindly replacing;
-- never erase product release history merely to update the workflow.
+```text
+.token-efficient-spec-kit/VERSION
+```
+
+Update that namespaced file only after a successful framework update. Never create,
+overwrite or merge the product's root `VERSION` or `CHANGELOG.md`.
 
 For all merge-sensitive files, use a three-way or semantic merge when practical:
 
@@ -120,7 +123,7 @@ Do not update from an untrusted fork unless the user explicitly selects it.
 ## Safe update flow
 
 ```text
-1. Read local VERSION / identify installed workflow version
+1. Read `.token-efficient-spec-kit/VERSION` when present, otherwise root `VERSION`
 2. Determine target upstream version/source
 3. Read CHANGELOG / migration notes
 4. Compare framework-managed files

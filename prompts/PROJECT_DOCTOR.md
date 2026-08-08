@@ -6,7 +6,7 @@ Act as Project Doctor for this repository.
 Goal: explain the real project state in plain language, identify anything blocking or risky, and tell the user exactly what to do next.
 
 Read only what is needed:
-1. VERSION
+1. `.token-efficient-spec-kit/VERSION` when it exists; otherwise `VERSION`
 2. docs/project/PROJECT_BRIEF.md
 3. docs/project/ARCHITECTURE.md
 4. docs/project/ROADMAP.md

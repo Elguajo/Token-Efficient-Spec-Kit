@@ -1,0 +1,17 @@
+# Files that become part of a user's project.
+# Paths ending in / are copied recursively. This is an allowlist on purpose:
+# source-repository maintenance material must never leak into the Starter.
+.gitignore
+.specify/memory/constitution.md
+AGENTS.md
+LICENSE
+SECURITY.md
+docs/decisions/README.md
+docs/phases/README.md
+docs/project/
+docs/system/
+integrations/
+prompts/
+templates/
+tools/audit.py
+.github/workflows/audit.yml

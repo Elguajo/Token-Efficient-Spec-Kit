@@ -13,7 +13,7 @@ Project Doctor is diagnostic. It does not implement features by default.
 Read the smallest useful set:
 
 ```text
-VERSION
+`.token-efficient-spec-kit/VERSION` when present, otherwise `VERSION`
 PROJECT_BRIEF
 ARCHITECTURE
 ROADMAP

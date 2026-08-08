@@ -28,6 +28,51 @@ def rel(p): return str(p.relative_to(ROOT))
 def text(p): return p.read_text(encoding="utf-8", errors="replace")
 def fenced_blocks(body): return re.findall(r"```[a-z]*\n(.*?)```", body, re.S | re.I)
 
+STARTER_VERSION = ROOT / ".token-efficient-spec-kit" / "VERSION"
+IS_STARTER = STARTER_VERSION.exists()
+
+if IS_STARTER:
+    sect("1. Starter distribution integrity")
+    required = [
+        "README.md", "AGENTS.md", ".specify/memory/constitution.md",
+        ".token-efficient-spec-kit/VERSION", "prompts/START_NEW_PROJECT.md",
+        "docs/project/ROADMAP.md", "docs/system/WORKFLOW_UPDATE_POLICY.md",
+        "integrations/PROFILES.md", "templates/PROJECT_BRIEF.template.md",
+    ]
+    missing = [name for name in required if not (ROOT / name).exists()]
+    ok("all required Starter files present") if not missing else bad(
+        "Starter is missing required files", missing)
+
+    leaked = [name for name in [
+        "CHANGELOG.md", "CODE_OF_CONDUCT.md", "CONTRIBUTING.md", "README_EN.md",
+        "VERSION", "docs/MAINTENANCE.md", "docs/USAGE_GUIDE.md",
+        "docs/VISUAL_GUIDE.md", "docs/WORKFLOW.md",
+    ] if (ROOT / name).exists()]
+    ok("no source-only maintenance files leaked") if not leaked else bad(
+        "source-only files leaked into Starter", leaked)
+
+    starter_version = STARTER_VERSION.read_text().strip()
+    ok(f"Starter version = {starter_version}") if re.fullmatch(
+        r"\d+\.\d+\.\d+", starter_version) else bad(
+        f"invalid Starter version: {starter_version!r}")
+
+    sect("2. Internal markdown links resolve")
+    broken = []
+    for p in MD:
+        for m in re.finditer(r"\]\(([^)]+?\.md)(?:#[^)]*)?\)", text(p)):
+            link = m.group(1)
+            if link.startswith("http"): continue
+            if not (p.parent / link).exists() and not (ROOT / link).exists():
+                broken.append(f"{rel(p)} -> {link}")
+    ok("no broken internal links") if not broken else bad("broken internal links", broken)
+
+    print("\n" + "-" * 44)
+    if FAIL:
+        print(f"WORKFLOW SELF-AUDIT: NEEDS ATTENTION ({len(FAIL)} failing)")
+        sys.exit(1)
+    print("WORKFLOW SELF-AUDIT: HEALTHY")
+    sys.exit(0)
+
 # ------------------------------------------------------------- 1. links
 sect("1. Internal markdown links resolve")
 broken = []

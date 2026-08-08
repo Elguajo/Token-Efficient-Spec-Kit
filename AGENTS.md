@@ -221,13 +221,19 @@ Do not load it into every implementation session.
 
 ## Framework versioning
 
-Current framework version lives in:
+In this source repository, the current framework version lives in:
 
 ```text
 VERSION
 ```
 
-Material framework behavior changes must update:
+The generated Starter keeps its installed workflow version in:
+
+```text
+.token-efficient-spec-kit/VERSION
+```
+
+Material framework behavior changes in this source repository must update:
 
 ```text
 VERSION

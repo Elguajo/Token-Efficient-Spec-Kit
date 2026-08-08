@@ -4,6 +4,24 @@
 
 Формат основан на принципах Keep a Changelog, версии следуют Semantic Versioning.
 
+## [0.9.0] — 2026-08-08
+
+### Added
+
+- чистый Starter distribution: `starter/MANIFEST.txt` определяет явный allowlist
+  файлов, а `tools/build_starter.py` собирает версионированный ZIP без исходных
+  README, CHANGELOG, contribution и maintenance-материалов;
+- `.github/workflows/release-starter.yml` прикладывает Starter ZIP к опубликованному
+  GitHub Release и проверяет, что тег соответствует `VERSION`;
+- Starter хранит установленную версию framework в
+  `.token-efficient-spec-kit/VERSION`, не занимая root-level `VERSION` и
+  `CHANGELOG.md` будущего продукта.
+
+### Changed
+
+- self-audit теперь понимает как исходный framework repository, так и чистый
+  downstream Starter; CI дополнительно собирает Starter artifact.
+
 ## [0.8.2] — 2026-08-08
 
 ### Changed
