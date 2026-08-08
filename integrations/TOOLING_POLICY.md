@@ -6,7 +6,7 @@ Purpose: prevent duplicate planning, duplicate context and conflicting agent ins
 
 **Token-Efficient Spec Kit is the canonical orchestration and specification layer.**
 
-External tools may strengthen implementation, review or research, but they do not become the project source of truth.
+External tools may strengthen implementation, retrieval, review or research, but they do not become the project source of truth.
 
 ## Ownership matrix
 
@@ -19,6 +19,8 @@ External tools may strengthen implementation, review or research, but they do no
 | Phase scope / tasks | Current phase | optional GitHub Spec Kit in Advanced Spec Mode |
 | Acceptance criteria / convergence | Token-Efficient current phase | gstack review where useful |
 | Context routing | Token-Efficient Spec Kit | — |
+| Code retrieval | Semble when useful | native exact search/read fallback |
+| Shell/tool output compression | RTK when safe/useful | native shell fallback |
 | Session handoff | Token-Efficient Spec Kit | — |
 | Implementation discipline | Superpowers | native coding agent |
 | TDD | Superpowers | project test tooling |
@@ -39,13 +41,47 @@ User outcome
 → Architecture
 → Roadmap
 → Current Phase
+→ retrieve only needed code with Semble/native search
 → 1–3 tasks
 → Superpowers/native implementation
+→ compact shell output through RTK when safe
 → tests
 → selective gstack review/QA
 → convergence
 → NEXT SESSION PROMPT
 ```
+
+## Semble owns targeted code retrieval
+
+Use Semble when it reduces broad repository exploration.
+
+Prefer:
+
+```text
+semantic/hybrid query
+→ relevant snippets/locations
+→ read only implementation-critical files/ranges
+```
+
+Do not force Semble for tiny repositories, known small files or exact local edits where native search/read is cheaper.
+
+Semble never owns project decisions or architecture.
+
+## RTK owns terminal-output compression
+
+Use RTK only when its filter preserves the command's semantics and decision-critical diagnostics.
+
+Correctness outranks token savings.
+
+If compact output is insufficient or an integration is unreliable:
+
+```text
+RTK compact output
+→ recover raw/full output if needed
+→ or disable/fallback to native command
+```
+
+Do not let RTK hide failures or block debugging.
 
 ## Superpowers owns HOW
 
@@ -116,3 +152,12 @@ If a Spec Kit ↔ Superpowers bridge is used, it exists only to coordinate that 
 
 A tool being installed does **not** mean its instructions should be loaded in every session.
 Invoke only the capability that benefits the current task.
+
+Recommended token-efficiency layers:
+
+```text
+project/docs context → Token-Efficient Spec Kit
+code retrieval        → Semble
+shell/tool output      → RTK
+fresh external docs   → Context7 on demand
+```
