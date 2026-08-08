@@ -66,7 +66,7 @@ After applying:
    judgement checks;
 2. verify internal paths used by main prompts;
 3. verify NEXT_SESSION / Session Handoff behavior still exists;
-4. verify the target release's documented Recommended profile; for v0.7.x this is Token-Efficient Spec Kit + Superpowers + Semble + Serena + RTK + gstack + Context7;
+4. verify the target release's documented Recommended profile against that release's own `integrations/PROFILES.md`; the canonical list travels with the release, so never compare against a profile hardcoded in this prompt;
 5. verify Semble remains intent-based code-discovery-only;
 6. verify Serena remains symbol/refactor-only and does not reintroduce generic search/shell/memory ownership when the overlap policy can be applied;
 7. verify RTK remains shell/tool-output-only;
