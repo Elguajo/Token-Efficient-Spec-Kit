@@ -67,7 +67,13 @@ Usually implement only 1–3 cohesive tasks per run.
 
 ```text
 Token-Efficient Spec Kit
-→ CORE: WHAT + orchestration + context + handoff
+→ CORE: WHAT + orchestration + project/docs context + handoff
+
+Semble
+→ CODE CONTEXT: targeted semantic/hybrid code retrieval
+
+RTK
+→ TOOL OUTPUT: compact terminal/test/build/git output
 
 Superpowers
 → HOW: implementation discipline, TDD, systematic debugging, verification
@@ -78,6 +84,33 @@ gstack
 Context7
 → fresh library/API documentation on demand
 ```
+
+### Token-efficiency routing
+
+Use the smallest context source that can answer the current question.
+
+```text
+Project/docs context
+→ canonical Token-Efficient project files
+
+Unfamiliar/non-trivial code discovery
+→ prefer Semble when available
+
+Known exact symbol/small file
+→ native exact search/read is fine
+
+Verbose supported shell output
+→ prefer RTK when verified safe
+
+Fresh external API/library behavior
+→ Context7 / current primary docs on demand
+```
+
+Do not use Semble just because it is installed when a direct small read is cheaper.
+Do not use RTK when raw output is needed or filtering may remove critical diagnostics.
+Correctness outranks token savings.
+
+If Semble or RTK is unavailable or unsafe, degrade gracefully to native targeted search/read or native shell output. They must not block product work.
 
 ### Optional Advanced Spec Mode
 
