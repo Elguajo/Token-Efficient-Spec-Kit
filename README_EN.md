@@ -35,6 +35,14 @@ What should I ask the AI next?
 You own the desired outcome and real constraints. The AI owns routine engineering
 decisions, planning, implementation, verification, and project navigation.
 
+In a typical session, the AI:
+
+- understands the users, outcome, and constraints;
+- asks a question only when it cannot proceed safely without the answer;
+- chooses one practical stack and explains consequential decisions;
+- splits work into verifiable phases and takes usually 1–3 cohesive tasks;
+- runs appropriate tests, review, or QA and prepares the next prompt.
+
 ---
 
 # Start a new project
@@ -125,6 +133,34 @@ phase is complete, whether it is time for QA, or what should happen next.
 | Fix a bug | [`BUG_FIX.md`](prompts/BUG_FIX.md) |
 | Review and close a phase | [`REVIEW_CURRENT_PHASE.md`](prompts/REVIEW_CURRENT_PHASE.md) |
 | Recover a lost next step | [`GENERATE_NEXT_SESSION_PROMPT.md`](prompts/GENERATE_NEXT_SESSION_PROMPT.md) |
+| Create a deeper formal spec for a complex phase | [`ENABLE_ADVANCED_SPEC_MODE.md`](prompts/ENABLE_ADVANCED_SPEC_MODE.md) |
+
+---
+
+# For experienced users: how context stays small
+
+The AI routes tools instead of running everything at once.
+
+| Task | Preferred tool |
+|---|---|
+| “Where is logic X implemented?” / unfamiliar code | **Semble** |
+| Known symbol, references, diagnostics, or safe rename | **Serena** |
+| Tiny edit in a known file | native agent tools |
+| Tests, build, git, or noisy terminal output | **RTK** |
+
+```text
+Semble finds the relevant logic
+→ broad discovery stops
+→ Serena joins only for a symbol-level task
+→ RTK is used only for tool output
+```
+
+Do not rediscover the same code through Semble, Serena, and text search without a
+reason. Project Brief, Architecture, Roadmap, and phase files remain the project's
+long-term memory; tools do not create a second source of truth.
+
+For the complete model, fallback behavior, and ownership boundaries, see the
+[End-to-End Workflow](docs/WORKFLOW.md) and [Integrations](integrations/README.md).
 
 ---
 
@@ -146,6 +182,10 @@ Context7     → current API and library documentation
 > Canonical profile: [`integrations/PROFILES.md`](integrations/PROFILES.md).
 > Superpowers and Context7 may help immediately; the other tools are normally
 > added after code exists and their value is clear.
+
+The AI records installed, deferred, and skipped tooling in
+`docs/project/TOOLING_STATUS.md`. You normally need to help only with login/OAuth,
+a missing system runtime, or a global setting that would affect other projects.
 
 For the detailed context-routing model, see [Workflow](docs/WORKFLOW.md); for
 integration rules, see [Integrations](integrations/README.md). GitHub Spec Kit is
