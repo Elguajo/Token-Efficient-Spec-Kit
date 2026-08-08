@@ -23,6 +23,7 @@ Use for:
 Token-Efficient Spec Kit
 + Superpowers
 + Semble
++ Serena
 + RTK
 + gstack
 + Context7
@@ -58,15 +59,32 @@ systematic debugging
 verification
 ```
 
-**Semble — CODE CONTEXT**
+**Semble — CODE DISCOVERY**
 
 ```text
 semantic/hybrid code retrieval
+intent-based discovery
 small relevant snippets
 less grep + full-file reading
 ```
 
-Use when code discovery would otherwise require broad search/read cycles. Do not force it for tiny repositories or already-known small files.
+Use when the question is essentially **“where is the logic related to X?”** or code discovery would otherwise require broad search/read cycles.
+
+Do not force it for tiny repositories, known small files or already-known symbols.
+
+**Serena — SYMBOL / REFACTOR**
+
+```text
+symbol navigation
+references / implementations
+diagnostics
+semantic rename
+symbol-aware editing/refactoring
+```
+
+Use when the question is essentially **“what symbol is this, who uses it, or how can I change it safely?”**.
+
+Serena must not duplicate Semble's broad semantic discovery, shell execution or Token-Efficient project memory. See `SERENA.md` for the overlap-reduction policy.
 
 **RTK — TOOL OUTPUT**
 
@@ -143,6 +161,26 @@ Tier L / High Risk
 → add Advanced Spec Mode only when formal specification provides clear value
 ```
 
-The setup bootstrap may install Recommended tools once even if a particular session does not invoke all of them. Installed does not mean always loaded or always used.
+The setup bootstrap may install Recommended tools once even if a particular session does not invoke all of them.
+
+**Installed does not mean always loaded, always queried or queried together.**
+
+For code work route by question type:
+
+```text
+Intent / “where is this logic?”
+→ Semble
+
+Known symbol / references / implementations / rename / semantic edit
+→ Serena
+
+Tiny exact file/string edit
+→ native agent tools
+
+Verbose terminal output
+→ RTK
+```
+
+Do not make Semble and Serena independently rediscover the same code unless the first tool failed or the second tool needs the discovered symbol for a different operation.
 
 High Risk means stronger evidence and review, not automatically more frameworks.
