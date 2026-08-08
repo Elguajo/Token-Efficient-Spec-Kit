@@ -63,10 +63,14 @@ After applying:
 1. run the equivalent of prompts/AUDIT_WORKFLOW.md;
 2. verify internal paths used by main prompts;
 3. verify NEXT_SESSION / Session Handoff behavior still exists;
-4. verify Recommended profile remains Token-Efficient Spec Kit + Superpowers + gstack + Context7 unless the target release intentionally changes it;
-5. verify GitHub Spec Kit remains optional unless the target release explicitly documents a deliberate architecture change;
-6. record the installed workflow version only after successful application;
-7. do not modify application/business code merely to complete a framework update.
+4. verify the target release's documented Recommended profile; for v0.6.x this is Token-Efficient Spec Kit + Superpowers + Semble + RTK + gstack + Context7;
+5. verify Semble remains code-retrieval-only and RTK remains shell/tool-output-only;
+6. verify Semble/RTK graceful fallback still exists;
+7. verify GitHub Spec Kit remains optional unless the target release explicitly documents a deliberate architecture change;
+8. record the installed workflow version only after successful application;
+9. do not modify application/business code merely to complete a framework update.
+
+Do not silently install new global hooks or system runtimes merely because a newer framework version added an integration. Follow the target release's tooling setup policy and request approval when a global change affects unrelated projects.
 
 Return:
 
@@ -92,6 +96,9 @@ Merged sensitive files:
 Project-owned files modified:
 - NONE
 (or stop and explain why approval is required)
+
+Tooling migration:
+- None / ...
 
 Migration:
 - None / ...
