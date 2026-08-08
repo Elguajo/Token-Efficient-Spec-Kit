@@ -47,6 +47,7 @@ If tooling is not initialized, incomplete, stale, or belongs to another harness:
 2. automatically install/configure the default Recommended profile when safe:
    - Superpowers;
    - Semble;
+   - Serena;
    - RTK;
    - gstack;
    - Context7;
@@ -60,14 +61,16 @@ If tooling is not initialized, incomplete, stale, or belongs to another harness:
 Recommended token-efficiency layers:
 
 ```text
-Project/docs context → Token-Efficient Spec Kit
-Code retrieval       → Semble
-Shell/tool output     → RTK
-Fresh external docs  → Context7 on demand
+Project/docs context         → Token-Efficient Spec Kit
+Intent-based code discovery  → Semble
+Symbol semantics/refactoring → Serena
+Shell/tool output            → RTK
+Fresh external docs          → Context7 on demand
 ```
 
 Graceful fallback:
 - Semble unavailable → use native targeted search/read;
+- Serena unavailable/unsupported/stale → use Semble/native targeted search/refactor;
 - RTK unavailable/unsafe → use native shell commands with scoped output;
 - external tooling must not block product initialization unless the product itself requires it.
 
@@ -161,14 +164,34 @@ Do not implement future phases opportunistically.
 
 Context/tool ownership:
 - Token-Efficient Spec Kit = WHAT + orchestration + project/docs context + phases + convergence + handoff;
-- Semble = targeted CODE CONTEXT retrieval when useful;
+- Semble = intent-based CODE DISCOVERY when location is unknown;
+- Serena = SYMBOL / REFACTOR layer when a symbol/candidate area is known or semantic references/refactoring are needed;
 - RTK = compact SHELL/TOOL OUTPUT when safe;
 - Superpowers = HOW / TDD / debugging / implementation discipline;
 - gstack = selective challenge / review / QA;
 - Context7 = fresh external docs when needed;
 - GitHub Spec Kit = optional Advanced Spec Mode only.
 
-For unfamiliar or non-trivial code discovery, prefer Semble before broad grep + full-file reading when Semble is available.
+CODE-CONTEXT ROUTER:
+
+```text
+Question: “Where is the logic related to X?” / unfamiliar area
+→ Semble
+
+Question: “Who references this symbol?” / implementations / diagnostics / semantic rename/edit
+→ Serena
+
+Semble already found the exact relevant symbol
+→ do NOT make Serena rediscover the repository
+→ use Serena only for the distinct symbol-level operation
+
+Known tiny file/string edit
+→ native agent tools
+```
+
+Do not independently call Semble + Serena + grep for the same discovery question.
+Escalate only when the next capability answers a different question or the previous one failed.
+
 For verbose supported terminal commands, prefer RTK when its integration is verified safe.
 Correctness always outranks token savings; retrieve raw/full output when debugging requires it.
 
@@ -207,6 +230,7 @@ Tooling profile:
 
 Token-efficiency tooling:
 - Semble: READY / DEGRADED / NOT NEEDED
+- Serena: READY / DEGRADED / PENDING / NOT NEEDED
 - RTK: READY / DEGRADED / NOT NEEDED
 
 Key decisions:
