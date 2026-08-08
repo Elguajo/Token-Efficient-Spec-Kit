@@ -4,11 +4,11 @@
 
 ### A universal workflow for building software with AI coding agents
 
-**Describe the outcome. The AI chooses the stack, designs the architecture, works phase by phase, verifies quality, and tells you what to do next.**
+**Describe the outcome. The AI chooses the technical path, works phase by phase, keeps context small, and tells you what to do next.**
 
 `Idea → Architecture → Phases → 1–3 Tasks → Code → Verification → Next Prompt`
 
-**v0.5.0**
+**v0.6.0**
 
 [Русская версия](README.md) · [Usage Guide](docs/USAGE_GUIDE.md) · [Workflow](docs/WORKFLOW.md) · [Maintenance](docs/MAINTENANCE.md) · [Changelog](CHANGELOG.md)
 
@@ -25,8 +25,9 @@ You describe the product you want. The AI should then:
 - understand the product and users;
 - ask only true blocking questions;
 - choose one recommended stack;
-- design the architecture and roadmap;
+- design architecture and roadmap;
 - split work into verifiable phases;
+- use only the code/context needed now;
 - implement usually 1–3 cohesive tasks per session;
 - run relevant tests/reviews/QA;
 - decide the next engineering step;
@@ -43,19 +44,31 @@ git clone https://github.com/Elguajo/Token-Efficient-Spec-Kit.git my-project
 cd my-project
 ```
 
-Open the repository in a repository-aware AI coding agent such as Codex, Claude Code, or Cursor, then run:
+Open the repository in Codex, Claude Code, Cursor, or another repository-aware AI coding agent, then run:
 
 ```text
 prompts/START_NEW_PROJECT.md
 ```
 
-Replace only:
+Replace only `<WHAT_I_WANT>` with the product you want to build.
+
+On the first run, the agent checks `docs/project/TOOLING_STATUS.md` and automatically bootstraps Recommended tooling when needed.
+
+---
+
+## Automatic Recommended tooling
 
 ```text
-<WHAT_I_WANT>
+Superpowers  → implementation discipline / TDD / debugging
+Semble       → token-efficient code retrieval
+RTK          → compact terminal/test/build/git output
+gstack       → review / browser QA / release checks
+Context7     → fresh library/API documentation
 ```
 
-with the product you want to build.
+You do not need to install each tool manually.
+
+If a tool is already configured, it is not reinstalled. If Semble or RTK cannot be safely integrated, the workflow continues with native search/read/shell tools instead of blocking the project.
 
 ---
 
@@ -63,12 +76,16 @@ with the product you want to build.
 
 ```text
 User Outcome
+→ Tooling Bootstrap
 → Project Brief
 → Architecture
 → Roadmap
 → Current Phase
+→ Targeted Code Retrieval
 → 1–3 Tasks
-→ Implementation + Tests
+→ Implementation
+→ Compact Verification Output
+→ Review / QA
 → Convergence
 → NEXT SESSION PROMPT
 → Fresh Session
@@ -88,42 +105,22 @@ PHASE COMPLETE
 PROJECT COMPLETE
 ```
 
-Then it updates:
+Then it updates `docs/project/NEXT_SESSION.md` and returns a ready-to-copy `NEXT SESSION PROMPT`.
 
-```text
-docs/project/NEXT_SESSION.md
-```
-
-and returns a ready-to-copy:
-
-```text
-NEXT SESSION PROMPT
-```
-
-If the handoff is ever lost, use:
-
-```text
-prompts/GENERATE_NEXT_SESSION_PROMPT.md
-```
-
-[Session Handoff details →](docs/system/SESSION_HANDOFF.md)
+If the handoff is ever lost, use `prompts/GENERATE_NEXT_SESSION_PROMPT.md`.
 
 ---
 
-## Why it saves tokens
-
-A normal session reads only the smallest useful context:
+## Token-efficiency layers
 
 ```text
-Constitution
-+ Project Brief
-+ Architecture
-+ Current Phase
-+ relevant ADR
-+ relevant code/tests
+Project/docs context → Token-Efficient Spec Kit
+Code retrieval       → Semble
+Shell/tool output     → RTK
+Fresh external docs  → Context7 on demand
 ```
 
-It should not automatically reload every completed phase, every ADR, full chat history, or giant master specs.
+Semble should not be forced for a known tiny file. RTK should not be used when raw output is required for debugging. Correctness always outranks token savings.
 
 > **One fact, one canonical location. One session, usually 1–3 cohesive tasks.**
 
@@ -131,13 +128,12 @@ It should not automatically reload every completed phase, every ADR, full chat h
 
 ## Recommended profile
 
-Token-Efficient Spec Kit is the **core**.
-
-Recommended external tooling:
-
 | Tool | Role |
 |---|---|
+| **Token-Efficient Spec Kit** | Core orchestration, project/docs context, phases, convergence, handoff |
 | **Superpowers** | TDD, implementation discipline, systematic debugging |
+| **Semble** | Semantic/hybrid code retrieval with small relevant snippets |
+| **RTK** | Compact terminal/test/build/git output |
 | **gstack** | Engineering/design review, browser QA, release checks |
 | **Context7** | Fresh library/API documentation on demand |
 
