@@ -1,16 +1,14 @@
 <div align="center">
 
+<sub>AI ENGINEERING WORKFLOW</sub>
+
 # Token-Efficient Spec Kit
 
-### Понятный workflow для разработки с AI-агентами — от идеи до проверенного результата
+**От идеи до проверенного результата.**
 
-**Опиши результат. AI предложит продуктовый фокус, выберет технический путь, проведёт проект по фазам и в конце каждой сессии скажет, что делать дальше.**
+[Начать новый проект](prompts/START_NEW_PROJECT.md) · [Как пользоваться](docs/USAGE_GUIDE.md) · [English](README_EN.md)
 
-`Идея → Варианты → Архитектура → Фазы → Код → Проверка → Следующий prompt`
-
-**v0.8.2**
-
-[English](README_EN.md) · [Подробное руководство](docs/USAGE_GUIDE.md) · [Workflow](docs/WORKFLOW.md) · [Maintenance](docs/MAINTENANCE.md) · [Changelog](CHANGELOG.md)
+<sub>**v0.8.2** · [Workflow](docs/WORKFLOW.md) · [Maintenance](docs/MAINTENANCE.md) · [Changelog](CHANGELOG.md)</sub>
 
 </div>
 

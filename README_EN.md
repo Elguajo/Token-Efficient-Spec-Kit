@@ -1,16 +1,14 @@
 <div align="center">
 
+<sub>AI ENGINEERING WORKFLOW</sub>
+
 # Token-Efficient Spec Kit
 
-### A clear workflow for building software with AI agents — from idea to verified result
+**From idea to verified result.**
 
-**Describe the outcome. The AI frames the product, chooses the technical path, works phase by phase, and tells you what to do next.**
+[Start a new project](prompts/START_NEW_PROJECT.md) · [How to use it](docs/USAGE_GUIDE.md) · [Русская версия](README.md)
 
-`Idea → Options → Architecture → Phases → Code → Verification → Next Prompt`
-
-**v0.8.2**
-
-[Русская версия](README.md) · [Usage Guide](docs/USAGE_GUIDE.md) · [Workflow](docs/WORKFLOW.md) · [Maintenance](docs/MAINTENANCE.md) · [Changelog](CHANGELOG.md)
+<sub>**v0.8.2** · [Workflow](docs/WORKFLOW.md) · [Maintenance](docs/MAINTENANCE.md) · [Changelog](CHANGELOG.md)</sub>
 
 </div>
 
