@@ -21,8 +21,10 @@ Read:
 13. integrations/README.md
 14. integrations/PROFILES.md
 15. integrations/TOOLING_POLICY.md
-16. all main files under prompts/
-17. templates only where needed to validate current workflow behavior
+16. integrations/SEMBLE.md if present
+17. integrations/RTK.md if present
+18. all main files under prompts/
+19. templates only where needed to validate current workflow behavior
 
 Do NOT inspect all application source code unless a framework instruction directly depends on it.
 
@@ -30,15 +32,38 @@ Check:
 - ownership contradictions;
 - default-vs-optional tooling contradictions;
 - stale references to GitHub Spec Kit as a required default;
+- stale Recommended profiles that omit or misassign Semble/RTK;
 - duplicate planning/specification systems;
 - inconsistent phase/session handoff behavior;
+- places where the user is forced to manually install ordinary Recommended tooling without a real blocker;
 - places where the user is forced to decide routine engineering next steps;
 - instructions that cause unnecessary full-project context loading;
+- broad grep/full-file exploration where targeted code retrieval should be preferred;
+- verbose shell/test/build output where safe compact output is available;
+- any token-saving instruction that could hide critical diagnostics or change command semantics;
 - unsafe workflow-update behavior;
 - stale/nonexistent paths or documentation links;
 - VERSION / CHANGELOG inconsistency;
 - prompt instructions that conflict with Constitution or AGENTS.md;
 - unnecessary permanent documentation/context creep.
+
+Verify the current default token-efficiency architecture:
+
+Project/docs context → Token-Efficient Spec Kit
+Code retrieval       → Semble
+Shell/tool output     → RTK
+Fresh external docs  → Context7 on demand
+
+Verify Recommended profile unless a deliberate versioned change says otherwise:
+
+Token-Efficient Spec Kit
++ Superpowers
++ Semble
++ RTK
++ gstack
++ Context7
+
+Verify Semble and RTK both have graceful fallback and do not become blockers or sources of project truth.
 
 Classify findings:
 CRITICAL / HIGH / MEDIUM / LOW.
@@ -71,6 +96,9 @@ Low:
 - None / ...
 
 Token-efficiency findings:
+- ...
+
+Tooling-bootstrap findings:
 - ...
 
 Documentation/path findings:
