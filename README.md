@@ -1,6 +1,6 @@
 <div align="center">
 
-<sub>AI ENGINEERING WORKFLOW</sub>
+<sub>AI ENGINEERING WORKFLOW</sub> <br>
 <sub>От идеи до проверенного результата </sub>
 
 # Token-Efficient Spec Kit
