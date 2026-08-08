@@ -52,7 +52,10 @@ Token-Efficient Spec Kit
 → session handoff
 
 Semble
-→ targeted code retrieval
+→ intent-based semantic/hybrid code discovery
+
+Serena
+→ symbol semantics / references / implementations / diagnostics / semantic refactoring
 
 RTK
 → compact shell/tool output
@@ -75,8 +78,10 @@ GitHub Spec Kit
 Flag any file that:
 
 - reintroduces GitHub Spec Kit as a default dependency;
-- removes Semble/RTK from the documented Recommended profile without a deliberate versioned change;
-- lets Semble/RTK become project-level truth or planning owners;
+- omits Serena from the documented Recommended profile without a deliberate versioned change;
+- lets Semble and Serena independently own broad code discovery;
+- lets Serena memory become a second Project Brief / Architecture / Roadmap / NEXT_SESSION source;
+- lets Semble/Serena/RTK become project-level truth or planning owners;
 - creates duplicate canonical planning ownership.
 
 ### 2. User journey consistency
@@ -97,7 +102,7 @@ Flag instructions that make the user manually install ordinary Recommended tools
 
 ### 3. Session Handoff consistency
 
-All meaningful implementation/review entry points should preserve the rule:
+All meaningful implementation/review entry points should preserve:
 
 ```text
 IN PROGRESS / PHASE COMPLETE / PROJECT COMPLETE
@@ -114,7 +119,10 @@ Flag instructions that unnecessarily require:
 - reading all ADRs;
 - reading full chat history;
 - generating duplicate PRDs/specs/plans;
-- broad grep + full-file exploration when Semble/targeted retrieval would be appropriate;
+- broad grep + full-file exploration when Semble would answer the intent question;
+- using Serena for broad discovery already completed by Semble;
+- using Semble after an exact symbol is already known and Serena/native tools are cheaper;
+- running Semble + Serena + grep for the same discovery question without a failure/ambiguity/verification reason;
 - verbose terminal/test/build output when RTK can safely preserve the required signal;
 - running every installed tool on every task;
 - saving verbose status reports after every small action.
@@ -129,6 +137,7 @@ Recommended default should remain:
 Token-Efficient Spec Kit
 + Superpowers
 + Semble
++ Serena
 + RTK
 + gstack
 + Context7
@@ -139,8 +148,10 @@ unless a deliberate versioned framework change says otherwise.
 Check that:
 
 - `START_NEW_PROJECT.md` invokes setup automatically when needed;
-- `TOOLING_STATUS.md` tracks Semble and RTK;
-- Semble/RTK have graceful fallback;
+- `TOOLING_STATUS.md` tracks Semble, Serena and RTK;
+- Semble/Serena/RTK have graceful fallback;
+- Serena follows the overlap-reduction policy from `integrations/SERENA.md` when supported;
+- Serena generic file/search/shell/memory tools are not silently reintroduced as default competing capabilities;
 - global RTK hooks/instructions are not silently applied when they affect unrelated projects and no safe project-scoped option exists;
 - installer success is followed by real verification.
 
@@ -223,7 +234,8 @@ one canonical core
 clear optional tooling
 Recommended profile aligned
 small normal read set
-targeted code retrieval
+Semble/Serena responsibilities do not overlap
+one routed code-context tool first
 compact but recoverable tool output
 safe project-state boundaries
 mandatory useful handoff
