@@ -22,6 +22,8 @@ Use for:
 ```text
 Token-Efficient Spec Kit
 + Superpowers
++ Semble
++ RTK
 + gstack
 + Context7
 ```
@@ -55,6 +57,26 @@ implementation discipline
 systematic debugging
 verification
 ```
+
+**Semble — CODE CONTEXT**
+
+```text
+semantic/hybrid code retrieval
+small relevant snippets
+less grep + full-file reading
+```
+
+Use when code discovery would otherwise require broad search/read cycles. Do not force it for tiny repositories or already-known small files.
+
+**RTK — TOOL OUTPUT**
+
+```text
+compact shell output
+filtered test/build/lint/git output
+recoverable raw diagnostics when needed
+```
+
+RTK must preserve command semantics and failures. Disable/fallback if filtering is unsafe for the active harness or command.
 
 **gstack — Challenge / QA**
 
@@ -111,7 +133,7 @@ GitHub Spec Kit does not replace the project-level Brief, Architecture, Roadmap,
 
 ```text
 Tier S + Low Risk
-→ Minimal
+→ Minimal when external tooling adds little value
 
 Tier M
 → Recommended
@@ -120,5 +142,7 @@ Tier L / High Risk
 → Recommended + stronger quality gates
 → add Advanced Spec Mode only when formal specification provides clear value
 ```
+
+The setup bootstrap may install Recommended tools once even if a particular session does not invoke all of them. Installed does not mean always loaded or always used.
 
 High Risk means stronger evidence and review, not automatically more frameworks.
