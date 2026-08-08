@@ -6,7 +6,7 @@
 
 **От идеи до проверенного результата.**
 
-[Начать новый проект](prompts/START_NEW_PROJECT.md) · [Как пользоваться](docs/USAGE_GUIDE.md) · [English](README_EN.md)
+[Начать новый проект](prompts/START_NEW_PROJECT.md) · [Как пользоваться](docs/USAGE_GUIDE.md) · [Visual Guide](docs/VISUAL_GUIDE.md) · [English](README_EN.md)
 
 <sub>**v0.8.2** · [Workflow](docs/WORKFLOW.md) · [Maintenance](docs/MAINTENANCE.md) · [Changelog](CHANGELOG.md)</sub>
 
@@ -16,7 +16,7 @@
 
 ## Что это даёт
 
-Token-Efficient Spec Kit — это workflow для repository-aware AI-агентов: Codex,
+Token-Efficient Spec Kit — workflow для repository-aware AI-агентов: Codex,
 Claude Code, Cursor и совместимых инструментов. Он хранит решения в репозитории,
 а не в памяти одного чата, поэтому новый AI-сеанс может продолжить работу без
 повторного объяснения проекта.
@@ -32,14 +32,6 @@ Claude Code, Cursor и совместимых инструментов. Он х�
 
 Ты отвечаешь за желаемый результат и реальные ограничения. AI отвечает за обычные
 инженерные решения, план, реализацию, проверку и навигацию по проекту.
-
-В типичной сессии AI:
-
-- понимает пользователей, задачу и ограничения;
-- задаёт вопрос только когда без ответа нельзя безопасно продолжить;
-- выбирает один практичный stack и объясняет важные решения;
-- делит работу на проверяемые фазы и берёт обычно 1–3 связанные задачи;
-- запускает подходящие tests, review или QA и готовит следующий prompt.
 
 ---
 
@@ -63,7 +55,8 @@ workflow в существующий repository, смотри [Usage Guide](docs
 
 ## 3. Отправь одно сообщение с идеей
 
-Не открывай файл и не заменяй плейсхолдеры. В чате с AI-agent отправь, например:
+Не открывай prompt вручную и не заменяй плейсхолдеры. В чате с AI-agent отправь,
+например:
 
 ```text
 Запусти prompts/START_NEW_PROJECT.md.
@@ -78,44 +71,85 @@ database или хостинг.
 
 1. AI обычно предложит три содержательно разные product-направления.
 2. Он объяснит рекомендацию и продолжит с ней без отдельного выбора.
-3. Он попросит тебя выбрать вариант, только если различаются бюджет, безопасность,
-   compliance или другой необратимый product/business trade-off.
-4. AI создаст `PROJECT_BRIEF.md`, `ARCHITECTURE.md`, `ROADMAP.md` и фазы, затем
-   возьмёт первые 1–3 связанные задачи.
-5. В конце сессии он проверит результат и вернёт готовый `NEXT SESSION PROMPT`.
+3. Он попросит тебя выбрать вариант только при существенном business, budget,
+   safety, compliance или другом необратимом trade-off.
+4. AI создаст `PROJECT_BRIEF.md`, `ARCHITECTURE.md`, `ROADMAP.md` и фазы.
+5. Подключит только полезный tooling и возьмёт первые 1–3 связанные задачи.
+6. В конце проверит результат и вернёт готовый `NEXT SESSION PROMPT`.
+
+### Путь от идеи до следующей сессии
 
 ```text
-Твоя идея
-→ Product Directions (normally 3)
-→ Recommended Direction (default)
-→ Project Brief
-→ Architecture
-→ Roadmap
-→ Scoped Tooling Bootstrap
-→ Current Phase
-→ 1–3 задачи
-→ Реализация и проверка
-→ NEXT SESSION PROMPT
+┌───────────────────────────────┐
+│           ТВОЯ ИДЕЯ           │
+└───────────────┬───────────────┘
+                ▼
+      Product Directions
+                ↓
+      Recommended Direction
+                ↓
+ Project Brief → Architecture → Roadmap
+                ↓
+       Scoped Tooling Bootstrap
+                ↓
+┌───────────────────────────────┐
+│        CURRENT PHASE          │
+│       1–3 связанные задачи    │
+└───────────────┬───────────────┘
+                ▼
+      Implement → Verify
+                ↓
+       NEXT SESSION PROMPT
+                │
+                └────► новая AI-сессия ────► Current Phase
 ```
 
-```mermaid
-flowchart TD
-    A["Ты описываешь идею"] --> B["Варианты продукта"]
-    B --> C["Рекомендованный вариант"]
-    C --> D["Brief, Architecture и Roadmap"]
-    D --> E["Текущая фаза: 1–3 задачи"]
-    E --> F["Реализация и проверка"]
-    F --> G["NEXT SESSION PROMPT"]
-    G --> E
-```
+[Все визуальные схемы →](docs/VISUAL_GUIDE.md)
 
 ---
 
 # Продолжение работы
 
-После каждой meaningful coding/review session AI обязан обновить три связанных
-вещи: marker текущей фазы в `docs/project/ROADMAP.md`,
-`docs/project/NEXT_SESSION.md` и `NEXT SESSION PROMPT` в ответе.
+После каждой meaningful coding/review session AI обязан синхронно обновить:
+
+```text
+ROADMAP current-phase marker
+          +
+NEXT_SESSION.md
+          +
+NEXT SESSION PROMPT
+```
+
+### Session Handoff
+
+```text
+       IMPLEMENT / REVIEW
+              │
+              ▼
+       VERIFY / CONVERGE
+              │
+              ▼
+       ┌──────────────┐
+       │   STATUS?    │
+       └───┬────┬─────┘
+           │    │
+    ┌──────┘    └──────────────┐
+    ▼                          ▼
+IN PROGRESS              PHASE COMPLETE
+    │                          │
+    ▼                          ▼
+same phase                 next phase
+    │                          │
+    └──────────┬───────────────┘
+               ▼
+       NEXT SESSION PROMPT
+               │
+               ▼
+          FRESH SESSION
+```
+
+Если завершён весь roadmap, статус становится `PROJECT COMPLETE`, а следующий шаг
+ведёт в release/audit или future change request.
 
 В большинстве случаев просто скопируй последний prompt в новую сессию. Не нужно
 самому решать, закончена ли фаза, пора ли запускать QA или какой этап открывать.
@@ -133,9 +167,46 @@ flowchart TD
 
 ---
 
-# Для опытных пользователей: как экономится контекст
+# Для опытных пользователей
 
 AI маршрутизирует инструменты, а не запускает всё подряд.
+
+### Core architecture
+
+```text
+                         TOKEN-EFFICIENT SPEC KIT
+                              ORCHESTRATOR
+                                   │
+           ┌───────────────────────┼───────────────────────┐
+           │                       │                       │
+           ▼                       ▼                       ▼
+        Semble                  Serena                    RTK
+   find relevant code       symbols / references      compact output
+           │                  safe refactoring            │
+           └──────────────┬────────┘                       │
+                          ▼                                │
+                    Superpowers                            │
+                 implementation / TDD                      │
+                          │                                │
+                          └──────────────┬─────────────────┘
+                                         ▼
+                                  tests / evidence
+                                         │
+                                         ▼
+                                       gstack
+                                         │
+                                         ▼
+                                     convergence
+                                         │
+                                         ▼
+                                NEXT SESSION PROMPT
+```
+
+`Context7` подключается сбоку только когда нужны свежие API/library docs. GitHub
+Spec Kit не входит в обычный execution path и используется только как optional
+Advanced Spec Mode для отдельных сложных фаз.
+
+### Как выбирается инструмент
 
 | Задача | Предпочтительный инструмент |
 |---|---|
@@ -143,20 +214,22 @@ AI маршрутизирует инструменты, а не запускае
 | Известный symbol, references, diagnostics или безопасный rename | **Serena** |
 | Маленькая правка в известном файле | native tools агента |
 | Tests, build, git или шумный terminal output | **RTK** |
+| Нужны свежие API/library docs | **Context7** |
+| Implementation / TDD / systematic debugging | **Superpowers** |
+| Review / browser QA / release checks | **gstack** |
 
 ```text
-Semble находит релевантную логику
-→ broad discovery заканчивается
-→ Serena подключается только для symbol-level задачи
-→ RTK используется только для tool output
+One question → one cheapest adequate tool.
 ```
 
-Одну и ту же область кода не нужно заново искать Semble, Serena и text search без
-причины. Project Brief, Architecture, Roadmap и phase-файлы остаются долговременной
-памятью проекта; инструменты не создают второй источник правды.
+Semble заканчивает broad discovery, как только найдена нужная область. Serena
+подключается только для symbol-level задачи. Одну и ту же область не нужно заново
+искать Semble, Serena и text search без причины.
 
-Полная модель, правила fallback и границы ownership — в
-[End-to-End Workflow](docs/WORKFLOW.md) и [Integrations](integrations/README.md).
+Project Brief, Architecture, Roadmap и phase-файлы остаются долговременной памятью
+проекта; внешние инструменты не создают второй источник правды.
+
+[Полная карта tool routing →](docs/VISUAL_GUIDE.md#3-tool-router--какой-инструмент-выбрать)
 
 ---
 
@@ -184,11 +257,8 @@ AI сохраняет установленные, отложенные и про
 отсутствующего system runtime или глобальной настройки, которая затрагивает другие
 проекты.
 
-Если ты опытный пользователь, полная модель маршрутизации контекста описана в
-[Workflow](docs/WORKFLOW.md), а правила интеграций — в
-[Integrations](integrations/README.md). GitHub Spec Kit не является обязательным:
-он включается только как [Advanced Spec Mode](integrations/SPEC_KIT.md) для сложных
-фаз.
+GitHub Spec Kit не является обязательным: он включается только как
+[Advanced Spec Mode](integrations/SPEC_KIT.md) для сложных фаз.
 
 ---
 
@@ -197,6 +267,7 @@ AI сохраняет установленные, отложенные и про
 | Нужно… | Открыть |
 |---|---|
 | Пошаговое руководство со всеми сценариями | [Usage Guide](docs/USAGE_GUIDE.md) |
+| Быстро понять систему по схемам | [Visual Guide](docs/VISUAL_GUIDE.md) |
 | Понять внутреннюю модель workflow | [End-to-End Workflow](docs/WORKFLOW.md) |
 | Посмотреть следующий шаг текущего проекта | [NEXT_SESSION.md](docs/project/NEXT_SESSION.md) |
 | Настроить или понять интеграции | [Integrations](integrations/README.md) |
