@@ -29,8 +29,13 @@ Determine:
 - whether NEXT_SESSION is current or stale;
 - whether relevant tests/build/checks are passing, failing or unknown;
 - whether there is obvious documentation/workflow drift;
-- whether any optional tooling issue materially affects progress;
+- whether Recommended tooling is ready/degraded;
+- specifically whether Semble code retrieval and RTK shell-output compression are READY / DEGRADED / NOT CONFIGURED;
+- whether any tooling issue materially affects progress;
 - the single best next action.
+
+Tooling rule:
+Semble or RTK being DEGRADED/NOT CONFIGURED is normally not a product blocker because both have native fallbacks. Report the efficiency loss, but classify the project as BLOCKED only if the actual product work cannot proceed safely.
 
 If a deep framework consistency problem is suspected, recommend `prompts/AUDIT_WORKFLOW.md` rather than loading the entire framework automatically.
 
@@ -56,6 +61,10 @@ Checks:
 - Build: PASS / FAIL / NOT RUN / UNKNOWN
 - Tests: PASS / FAIL / NOT RUN / UNKNOWN
 - Other relevant checks: ...
+
+Token-efficiency tooling:
+- Semble: READY / DEGRADED / NOT CONFIGURED / N/A
+- RTK: READY / DEGRADED / NOT CONFIGURED / N/A
 
 Tooling/workflow:
 - OK / ...
